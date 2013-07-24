@@ -1,0 +1,11 @@
+# .htaccess file
+
+Options -Indexes  
+
+RewriteEngine On
+RewriteBase /
+
+# Rewrite Domain Name If No Guild Selected
+RewriteCond %{HTTP_HOST} .
+RewriteCond %{HTTP_HOST} !^www\.uguilds\.com$ [NC]
+RewriteRule (.*) http://www.uguilds.com/ [R=301]
