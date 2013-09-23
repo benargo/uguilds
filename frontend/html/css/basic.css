@@ -1,0 +1,48 @@
+@import url('../css/reset.css');
+@charset "UTF-8";
+@media screen {
+  html {
+    min-height: 400px;
+    background-color: #141e27;
+    background-image: url('../images/background.jpg');
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-attachment: scroll;
+  }
+  html body {
+    padding: 20px;
+    font-family: Helvetica, Arial, sans-serif;
+    color: #ffffff;
+  }
+  html body header {
+    height: 55px;
+  }
+  html body header hgroup a {
+    text-decoration: none;
+    color: #ffffff;
+  }
+}
+@media screen and (min-width: 1024px) {
+  html body {
+    margin: 60px auto;
+    width: 945px;
+    background-color: #07161b;
+    background-image: url('../images/body_1024.jpg');
+    background-repeat: no-repeat;
+    font-size: small;
+  }
+}
+@media screen and (max-width: 1023px) {
+  html body {
+    background-color: rgba(7, 22, 27, 0.8);
+    font-size: small;
+  }
+}
+@media screen and only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+  html body {
+    font-size: medium;
+  }
+}
+@media print {
+  
+}
