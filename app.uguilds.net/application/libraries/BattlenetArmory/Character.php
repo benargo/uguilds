@@ -1,4 +1,5 @@
 <?php
+namespace BattlenetArmory;
 
 class Character {
 	
@@ -540,5 +541,3 @@ class Character {
    	
    	
 }
-
-?>

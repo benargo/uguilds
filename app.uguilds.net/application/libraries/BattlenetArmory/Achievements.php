@@ -1,4 +1,5 @@
 <?php
+namespace BattlenetArmory;
 
 class Achievements {
 	
@@ -19,4 +20,3 @@ class Achievements {
    		return $this->datas[$id][$field];
    	}
 }
-?>

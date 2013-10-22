@@ -17,7 +17,6 @@ Copyright (C) 2009  Mickael Bailly
 
 */
 
-
 /**
 * CouchDB client class
 *

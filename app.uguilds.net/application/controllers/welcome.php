@@ -19,7 +19,7 @@ class Welcome extends CI_Controller {
 	 */
 	public function index()
 	{
-		print_r($this->battlenetarmory->);
+		print_r($this->uguilds->guild);
 		//$this->load->view('welcome_message');
 	}
 }

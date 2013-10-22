@@ -1,4 +1,5 @@
 <?php
+namespace BattlenetArmory;
 
 class Realms {
 	
@@ -54,4 +55,3 @@ class Realms {
    	
 }
 
-?>

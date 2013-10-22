@@ -1,4 +1,5 @@
 <?php
+namespace BattlenetArmory;
 
 class Item {
 	
@@ -105,5 +106,3 @@ class Item {
 
    	
 }
-
-?>

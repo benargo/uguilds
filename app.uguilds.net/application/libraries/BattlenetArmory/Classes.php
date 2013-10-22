@@ -1,4 +1,5 @@
 <?php
+namespace BattlenetArmory;
 
 class Classes {
 	
@@ -19,4 +20,3 @@ class Classes {
    		return $this->datas[$id][$field];
    	}
 }
-?>

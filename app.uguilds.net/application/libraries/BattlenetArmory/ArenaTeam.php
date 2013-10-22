@@ -1,4 +1,6 @@
 <?php
+namespace BattlenetArmory;
+
 class ArenaTeam {
 	
 	private $region, $realm, $teamsize, $teamname;
@@ -91,4 +93,3 @@ class ArenaTeam {
    		return $this->data;
    	}
 }
-?>

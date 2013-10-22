@@ -1,4 +1,5 @@
 <?php
+namespace BattlenetArmory;
 
 class Guild {
 	
@@ -370,4 +371,3 @@ class Guild {
 }
 
 
-?>

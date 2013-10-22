@@ -1,4 +1,5 @@
 <?php
+namespace BattlenetArmory;
 
 class WowHead {
 	
@@ -32,5 +33,3 @@ class WowHead {
 		return stripslashes($returnvalue);
 	}
 }
-
-?>

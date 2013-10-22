@@ -1,4 +1,4 @@
-<?PHP
+<?php
 /*
 Copyright (C) 2009  Mickael Bailly
 

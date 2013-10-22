@@ -1,4 +1,5 @@
 <?php
+namespace BattlenetArmory;
 
 class jsonConnect {
 	
@@ -210,5 +211,3 @@ class jsonConnect {
 		
 	}
 }
-
-?>

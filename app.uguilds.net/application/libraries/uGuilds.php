@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  *	Master class for the uGuilds application
  *	@author Ben Argo <ben@benargo.com>
@@ -6,11 +6,57 @@
  *	@version 1.0
  */
 
-//require_once APPPATH . 'libraries/uGuilds/guild.php';
+require_once APPPATH . 'libraries/uGuilds/Guild.php';
 
 class uGuilds {
 
+	protected $domain;
+	protected $guild;
+
 	function __construct() {
-		
+		$this->findGuildByDomain();
+	}
+
+	/**
+	 * getGuildByDomain
+	 * 
+	 * @access public
+	 */
+	protected function findGuildByDomain() {
+
+		// Look up the domain name
+		if(!isset($this->domain)) {
+			$this->calcDomain();
+		}
+
+		// Generate a new instance of a database
+		$db = new couchdb();
+
+		// Find the guild ID
+		$guild_id = $db->key($this->domain)->limit(1)->getView('find_guild','by_domain')->rows[0]->value;
+
+		// Create the new guild
+		$this->guild = new uGuilds\Guild($db->getDoc($guild_id));
+
+		// Close the database connection
+		$db->_disconnect();
+
+	}
+
+	/** 
+	 *	calcDomain
+	 *
+	 * @access private
+	 */
+	private function calcDomain() {
+
+		// Determine the domain name from SERVER_NAME
+		$this->domain = $_SERVER['SERVER_NAME'];
+
+		// If they're running on the application domain name, then return a 403 Forbidden error
+		if($this->domain === "app.uguilds.net") {
+			header('HTTP/1.0 403 Forbidden');
+			exit;
+		}
 	}
 }

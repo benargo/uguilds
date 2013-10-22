@@ -1,5 +1,7 @@
 <?php
-Class SafePDO extends PDO {
+namespace BattlenetArmory;
+
+Class SafePDO extends \PDO {
  /*
         public static function exception_handler($exception) {
             // Output the exception details
@@ -30,4 +32,3 @@ Class SafePDO extends PDO {
         }
 
 }
-?>

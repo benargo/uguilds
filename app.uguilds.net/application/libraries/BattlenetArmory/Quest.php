@@ -1,4 +1,5 @@
 <?php
+namespace BattlenetArmory;
 
 class Quest {
 	
@@ -18,4 +19,3 @@ class Quest {
    		return $this->datas;
 	}
 }
-?>

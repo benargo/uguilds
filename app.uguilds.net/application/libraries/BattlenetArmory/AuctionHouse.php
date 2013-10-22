@@ -1,4 +1,5 @@
 <?php
+namespace BattlenetArmory;
 
 class AuctionHouse {
 	
@@ -46,5 +47,3 @@ class AuctionHouse {
    	
    	
 }
-
-?>

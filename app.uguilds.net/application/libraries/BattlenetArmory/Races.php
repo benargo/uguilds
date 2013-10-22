@@ -1,4 +1,5 @@
 <?php
+namespace BattlenetArmory;
 
 class Races {
 	
@@ -18,4 +19,3 @@ class Races {
    		return $this->datas[$id][$field];
    	}
 }
-?>

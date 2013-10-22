@@ -1,4 +1,5 @@
 <?php
+namespace BattlenetArmory;
 
 class CacheControl {
 	
@@ -191,6 +192,3 @@ class CacheControl {
    	}
 }
 
-
-
-?>

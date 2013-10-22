@@ -1,4 +1,5 @@
 <?php
+namespace BattlenetArmory;
 
 class Perks {
 	
@@ -41,4 +42,3 @@ class Perks {
    		return FALSE;
    	}
 }
-?>

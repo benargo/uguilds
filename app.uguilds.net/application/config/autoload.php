@@ -52,7 +52,7 @@ $autoload['packages'] = array();
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('couchdb','BattlenetArmory');
+$autoload['libraries'] = array('Couchdb','BattlenetArmory','uGuilds');
 
 
 /*
