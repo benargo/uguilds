@@ -11,7 +11,7 @@ require_once APPPATH . 'libraries/uGuilds/Guild.php';
 class uGuilds {
 
 	protected $domain;
-	protected $guild;
+	public $guild;
 
 	function __construct() {
 		$this->findGuildByDomain();
@@ -36,17 +36,16 @@ class uGuilds {
 		$guild_id = $db->key($this->domain)->limit(1)->getView('find_guild','by_domain')->rows[0]->value;
 
 		// Create the new guild
-		$this->guild = new uGuilds\Guild($db->getDoc($guild_id));
-
-		// Close the database connection
-		$db->_disconnect();
+		//$this->guild = new uGuilds\Guild($db->getDoc($guild_id));
+		$this->guild = $db->getDoc($guild_id);
 
 	}
 
 	/** 
-	 *	calcDomain
+	 * calcDomain
 	 *
 	 * @access private
+	 * @return void
 	 */
 	private function calcDomain() {
 
@@ -58,5 +57,17 @@ class uGuilds {
 			header('HTTP/1.0 403 Forbidden');
 			exit;
 		}
+	}
+
+	/**
+	 * dump
+	 *
+	 * @access public
+	 */
+	public function dump($data) {
+		print "<pre>";
+		print_r($data);
+		print "</pre>";
+		exit;
 	}
 }
