@@ -1,4 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
 /**
  *	Master class for the uGuilds application
  *	@author Ben Argo <ben@benargo.com>
@@ -10,45 +11,60 @@ require_once APPPATH . 'libraries/uGuilds/Guild.php';
 
 class uGuilds {
 
+	/**
+	 * vars
+	 */
 	protected $domain;
 	public $guild;
+	public $theme;
 
-	function __construct() {
+	/**
+	 * __construct
+	 * 
+	 * @access public
+	 */
+	public function __construct() 
+	{
 		$this->findGuildByDomain();
+		$ci = get_instance();
+		$ci->battlenetarmory->setRegion($this->guild->region);
+		$ci->battlenetarmory->setRealm($this->guild->realm);
 	}
 
 	/**
 	 * getGuildByDomain
 	 * 
-	 * @access public
+	 * @access private
 	 */
-	protected function findGuildByDomain() {
-
+	private function findGuildByDomain() 
+	{
 		// Look up the domain name
 		if(!isset($this->domain)) {
-			$this->calcDomain();
+			$this->calculateDomain();
 		}
 
-		// Generate a new instance of a database
-		$db = new couchdb();
+		// Set up the database;
+		$ci = get_instance();
+		$db = $ci->couchdb;
 
 		// Find the guild ID
 		$guild_id = $db->key($this->domain)->limit(1)->getView('find_guild','by_domain')->rows[0]->value;
 
 		// Create the new guild
-		//$this->guild = new uGuilds\Guild($db->getDoc($guild_id));
-		$this->guild = $db->getDoc($guild_id);
+		//$this->guild = $db->asCouchDocuments()->getDoc($guild_id);
+		$this->guild = new uGuilds\Guild($db->asCouchDocuments()->getDoc($guild_id));
 
+		$this->setTheme();
 	}
 
 	/** 
-	 * calcDomain
+	 * calculateDomain
 	 *
 	 * @access private
 	 * @return void
 	 */
-	private function calcDomain() {
-
+	private function calculateDomain() 
+	{
 		// Determine the domain name from SERVER_NAME
 		$this->domain = $_SERVER['SERVER_NAME'];
 
@@ -60,14 +76,23 @@ class uGuilds {
 	}
 
 	/**
-	 * dump
+	 * setTheme
 	 *
-	 * @access public
+	 * @access private
+	 * @return void
 	 */
-	public function dump($data) {
-		print "<pre>";
-		print_r($data);
-		print "</pre>";
-		exit;
+	/**
+	 * setTheme
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function setTheme() 
+	{
+		if(!$this->guild->theme) {
+			$this->theme = 'default';
+			return;
+		}
+		$this->theme = $this->guild->theme;
 	}
 }

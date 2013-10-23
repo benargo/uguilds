@@ -70,7 +70,7 @@ class CacheControl {
 	   		foreach ($splitdata as $part => $datapart){
 	   			$sql = "REPLACE INTO ".$this->tblpre.$table." (ObjectID,Part,Timestamp,Data) VALUES ('$objectID',".$part.",'".time()."',:data)";
 		   		$sth = $this->db->prepare($sql);
-		   		$sth->bindParam(':data', $datapart, PDO::PARAM_STR);
+		   		$sth->bindParam(':data', $datapart, \PDO::PARAM_STR);
 		   		$sth->execute();
 	   		}
 	   	}

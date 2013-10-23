@@ -2,6 +2,24 @@
 
 class Welcome extends CI_Controller {
 
+
+
+	/**
+	 * Variables
+	 */
+	private $guild;
+
+	/**
+	 * Construction function
+	 *
+	 * @access public
+	 */
+	public function __construct() 
+	{
+		parent::__construct();
+		$this->guild = $this->battlenetarmory->getGuild($this->uguilds->guild->guildName);
+	}
+
 	/**
 	 * Index Page for this controller.
 	 *
@@ -19,8 +37,8 @@ class Welcome extends CI_Controller {
 	 */
 	public function index()
 	{
-		$this->uguilds->dump($this->uguilds->guild);
-		//$this->load->view('welcome_message');
+		dump($this->uguilds);
+		$this->load->view('welcome_message');
 	}
 }
 

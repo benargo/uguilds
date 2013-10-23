@@ -21,6 +21,22 @@
 	define('ENVIRONMENT', 'development');
 /*
  *---------------------------------------------------------------
+ * DUMPING
+ *---------------------------------------------------------------
+ *
+ * This is an improvement over print_r and best definied immediately.
+ */
+
+function dump($data,$exit=true) {
+	print "<pre>";
+	print_r($data);
+	print "</pre>";
+	if($exit) {
+		exit;
+	}
+}
+/*
+ *---------------------------------------------------------------
  * ERROR REPORTING
  *---------------------------------------------------------------
  *
