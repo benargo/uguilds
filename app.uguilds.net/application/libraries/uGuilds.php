@@ -8,6 +8,7 @@
  */
 
 require_once APPPATH . 'libraries/uGuilds/Guild.php';
+require_once APPPATH . 'libraries/uGuilds/Theme.php';
 
 class uGuilds {
 
@@ -81,18 +82,10 @@ class uGuilds {
 	 * @access private
 	 * @return void
 	 */
-	/**
-	 * setTheme
-	 *
-	 * @access private
-	 * @return void
-	 */
 	private function setTheme() 
 	{
-		if(!$this->guild->theme) {
-			$this->theme = 'default';
-			return;
+		if(empty($this->theme)) {
+			$this->theme = new uGuilds\Theme($this->guild->theme);
 		}
-		$this->theme = $this->guild->theme;
 	}
 }

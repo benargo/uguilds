@@ -46,5 +46,10 @@ class Guild {
 			// Set the variables
 			$this->$key = $guild_doc->$key;
 		}
+
+		// Failsafe in case there's no theme
+		if(is_null($this->theme)) {
+			$this->theme = 'default';
+		}
 	}
 }
