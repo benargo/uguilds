@@ -18,6 +18,7 @@ class uGuilds {
 	protected $domain;
 	public $guild;
 	public $theme;
+	public $locale;
 
 	/**
 	 * __construct
@@ -26,10 +27,12 @@ class uGuilds {
 	 */
 	public function __construct() 
 	{
-		$this->findGuildByDomain();
-		$ci = get_instance();
-		$ci->battlenetarmory->setRegion($this->guild->region);
-		$ci->battlenetarmory->setRealm($this->guild->realm);
+		// Find the guild
+		$this->findGuildByDomain();	
+
+		// Set the theme & locale
+		$this->setLocale(true);
+		$this->setTheme(true);
 	}
 
 	/**
@@ -40,7 +43,7 @@ class uGuilds {
 	private function findGuildByDomain() 
 	{
 		// Look up the domain name
-		if(!isset($this->domain)) {
+		if(is_null($this->domain)) {
 			$this->calculateDomain();
 		}
 
@@ -52,10 +55,27 @@ class uGuilds {
 		$guild_id = $db->key($this->domain)->limit(1)->getView('find_guild','by_domain')->rows[0]->value;
 
 		// Create the new guild
-		//$this->guild = $db->asCouchDocuments()->getDoc($guild_id);
 		$this->guild = new uGuilds\Guild($db->asCouchDocuments()->getDoc($guild_id));
 
-		$this->setTheme();
+		// Set the region and realm
+		$ci->battlenetarmory->setRegion($this->guild->region);
+		$ci->battlenetarmory->setRealm($this->guild->realm);
+	}
+
+	/**
+	 * getDomain()
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function getDomain()
+	{
+		if(is_null($this->domain))
+		{
+			$this->calculateDomain();
+		}
+
+		return $this->domain;
 	}
 
 	/** 
@@ -70,9 +90,25 @@ class uGuilds {
 		$this->domain = $_SERVER['SERVER_NAME'];
 
 		// If they're running on the application domain name, then return a 403 Forbidden error
-		if($this->domain === "app.uguilds.net") {
+		if($this->domain === "app.uguilds.net") 
+		{
 			header('HTTP/1.0 403 Forbidden');
 			exit;
+		}
+	}
+
+	/**
+	 * setLocale
+	 *
+	 * @access private
+	 * @var bool $override
+	 * @return void
+	 */
+	private function setLocale($override=false) 
+	{
+		if(empty($this->locale) || $override == true)
+		{
+			$this->locale = $this->guild->locale;
 		}
 	}
 
@@ -80,12 +116,15 @@ class uGuilds {
 	 * setTheme
 	 *
 	 * @access private
+	 * @var bool $override
 	 * @return void
 	 */
-	private function setTheme() 
+	private function setTheme($override=false) 
 	{
-		if(empty($this->theme)) {
-			$this->theme = new uGuilds\Theme($this->guild->theme);
+		if(empty($this->theme) || $override == true) 
+		{
+			$this->theme = new uGuilds\Theme();
+			$this->theme->findByName($this->guild->theme);
 		}
 	}
 }

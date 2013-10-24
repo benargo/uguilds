@@ -1,0 +1,15 @@
+{
+	"_id": "",
+	"_rev": "",
+	"name": "default",
+	"css": {
+		"0": {
+			"url": "example.css",
+			"media": "screen"
+		}
+	},
+	"javascript": {
+		// jQuery is built in
+		"0": "example.js"
+	}
+}

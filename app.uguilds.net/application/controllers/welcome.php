@@ -2,13 +2,6 @@
 
 class Welcome extends CI_Controller {
 
-
-
-	/**
-	 * Variables
-	 */
-	private $guild;
-
 	/**
 	 * Construction function
 	 *
@@ -17,7 +10,6 @@ class Welcome extends CI_Controller {
 	public function __construct() 
 	{
 		parent::__construct();
-		$this->guild = $this->battlenetarmory->getGuild($this->uguilds->guild->guildName);
 	}
 
 	/**
@@ -37,10 +29,27 @@ class Welcome extends CI_Controller {
 	 */
 	public function index()
 	{
-		dump($this->uguilds);
-		$this->load->view('welcome_message');
+		/**
+		 * @var array $data
+		 */
+		$data = array(
+			"page_title" => $this->uguilds->guild->guildName .' ('. $this->uguilds->guild->realm .')');
+
+		$this->load->view('includes/head', $data);
+		$this->load->view('themes/'. $this->uguilds->theme->_id .'/header');
+	}
+
+	/**
+	 * getLeadingArticle()
+	 * 
+	 * Gets the leading article from the database
+	 * 
+	 * @access private
+	 * @return \CouchDocument $article
+	 */
+	private function getLeadingArticle()
+	{
+
 	}
 }
 
-/* End of file welcome.php */
-/* Location: ./application/controllers/welcome.php */
