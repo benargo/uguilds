@@ -36,7 +36,9 @@ class Welcome extends CI_Controller {
 			"page_title" => $this->uguilds->guild->guildName .' ('. $this->uguilds->guild->realm .')');
 
 		$this->load->view('includes/head', $data);
-		$this->load->view('themes/'. $this->uguilds->theme->_id .'/header');
+		$this->uguilds->theme->loadHeader();
+
+	//	$this->uguilds->theme->loadFooter();
 	}
 
 	/**

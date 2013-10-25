@@ -1,1 +1,21 @@
-/* Screen.css */
+@charset "UTF-8";
+
+html
+{
+	background-color: #121c23;
+	background-image: url('../images/html.jpg');
+	background-position: top center;
+	background-repeat: no-repeat;
+	background-attachment: scroll;
+}
+
+body
+{
+	width:984px; min-width:984px;
+	margin:60px auto 0;
+	
+	background-color:#07161b;
+	background-image:url('../images/body.jpg');
+	background-position:center top;
+	background-repeat:no-repeat;
+}

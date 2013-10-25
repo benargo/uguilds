@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); ?>
 <!DOCTYPE html>
-<html>
 <html lang="<?php echo $this->uguilds->locale; ?>">
+<head>
 	<!-- META INFORMATION -->
 	<meta charset="UTF-8">
 	<meta name="author" content="Ben Argo">

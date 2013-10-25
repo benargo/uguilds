@@ -12,9 +12,9 @@ class Theme {
 	/**
 	 * variables
 	 */
-	public $_id;
+	private $_id;
 	private $_rev;
-	public $name;
+	private $name;
 	private $css;
 	private $javascript;
 	private $jquery_version = '2.0';
@@ -102,9 +102,6 @@ class Theme {
 	}
 
 	/**
-	 * 
-
-	/**
 	 * getCssFiles()
 	 *
 	 * @access public
@@ -120,6 +117,7 @@ class Theme {
 
 		// Create an empty array
 		$files = array(
+			'<link rel="stylesheet" media="all" href="/media/css/reset.css">'."\n\t",
 			$this->getControllerCss());
 
 		// Loop through each of the CSS files
@@ -134,7 +132,7 @@ class Theme {
 					$css->media = 'screen';
 				}
 
-				$files[] = '<link type="text/css" media="'. $css->media .'" src="/themes/'. $this->_id .'/css/'. $css->url .'">'."\n\t";
+				$files[] = '<link rel="stylesheet" media="'. $css->media .'" href="/themes/'. $this->_id .'/css/'. $css->url .'">'."\n\t";
 			}
 		}
 
@@ -159,7 +157,7 @@ class Theme {
 		
 		if(file_exists(FCPATH.'/media/css/controller/'. $controller_name .'.css'))
 		{
-			return '<link type="text/css" media="all" href="/media/css/controller/'. $controller_name .'.css">'."\n\t";
+			return '<link rel="stylesheet" media="all" href="/media/css/controller/'. $controller_name .'.css">'."\n\t";
 		}
 	}
 
@@ -233,4 +231,34 @@ class Theme {
 			return "\t".'<script src="/media/js/controller/'. $controller_name .'.js">'."\n";
 		}
 	}
+
+	/**
+	 * loadHeader()
+	 *
+	 * This loads the theme-specific header
+	 *
+	 * @access public
+	 * @return view
+	 */
+	public function loadHeader()
+	{
+		$ci = get_instance();
+		return $ci->load->view('themes/'. $this->_id .'/header');
+	}
+
+	/**
+	 * loadFooter()
+	 *
+	 * This loads the theme-specific footer
+	 *
+	 * @access public
+	 * @return view
+	 */
+	public function loadFooter()
+	{
+		$ci = get_instance();
+		return $ci->load->view('themes/'. $this->_id .'/footer');
+	}
+
 }
+
