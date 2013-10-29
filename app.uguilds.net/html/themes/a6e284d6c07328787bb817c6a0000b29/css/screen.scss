@@ -1,0 +1,143 @@
+/***************************************
+ * @author Ben Argo
+ * @image headerBG.jpg: http://cdn2.guildlaunch.net/guild/forums/templates/r14/images/WOWPanda/headerBG.jpg
+ * @image pageBG.jpg: http://cdn2.guildlaunch.net/guild/forums/templates/r14/images/WOWPanda/pageBG.jpg
+ * @copyright 2013 Ben Argo
+ ***************************************/
+
+$bg-color: rgba(7, 22, 27, 0.5);
+
+html {
+	background: url('../images/headerBG.jpg') center top no-repeat fixed, url('../images/pageBG.jpg') center top repeat;
+   	color: #ffffff;
+	font-family: Helvetica, Arial, sans-serif;
+	height: 100%;
+
+   	@media (min-width:1024px) {
+   		font-size: 16px;
+
+	    body {
+	    	padding: 0 30px;
+
+	    }
+
+	}
+
+	@media (max-width: 1023px) {
+		font-size: 12px;
+
+	}
+
+	@media (max-width: 640px) {
+		font-size: 10px;
+
+	}
+	        
+	.menu-bar {
+	    background: $bg-color;
+	    border: solid 0px #000000;
+
+	    @media (min-width: 1024px) {
+	    	-webkit-border-radius: 0px 0px 5px 5px;
+        	border-radius: 0px 0px 5px 5px;
+
+	    }
+
+       	@media (max-width: 640px) {
+			display: none;
+		}
+
+        & li {
+        	display: inline-block;
+
+        	& a {
+				display: inline-block;
+				color: #ffffff;
+				padding: 15px;
+				-webkit-border-radius: 5px;
+				border-radius: 5px;
+
+				&[rel="home"] {
+					padding: 15px 15px 15px 41px;
+					background: url('../images/home.svg') no-repeat;
+					background-position: 15px center;
+					background-size: 16px 16px;
+				}
+
+				&:hover {
+					background-color: rgba(7, 22, 27, 0.7);
+				}
+			}
+
+			&.login {
+				float: right;
+			}
+		}
+	}
+
+	& header {
+		margin: 20px 0;
+
+		& a {
+			display: block;
+			color: #ffffff;
+			vertical-align: middle;
+
+			&:hover {
+				color: #ffffff;
+			}
+
+			& span {
+				display: inline-block;
+				vertical-align: middle;
+
+				&.guild-name {
+					padding: 10px;
+					background-color: $bg-color;
+					-webkit-border-radius: 5px;
+					border-radius: 5px;
+					text-align: center;
+
+					& h1 {
+						font-size: 3em;
+					}
+
+					& h2 {
+						font-size: 1.2em;
+					}
+				}
+			}
+
+			& img {
+				padding: 0 30px 0 0;
+
+				@media (max-width: 1023px) {
+					width: 100px;
+				}  
+			}
+		}
+	}
+
+	h1,h2,h3,h4,h5,h6,p,section,code {
+		margin-bottom: 5px;
+		line-height: 1.3em;
+	}
+
+	h1 {
+		font-size: 1.6em;
+		font-weight: bold;
+	}
+
+	h2 {
+		font-size: 1.4em;
+	}
+
+	a {
+		color: #00A2F1;
+		text-decoration: none;
+
+		&:hover {
+			color: #fed000;
+		}
+	}
+}

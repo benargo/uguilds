@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1"
+	 id="svg2" inkscape:version="0.46" sodipodi:version="0.32" sodipodi:docname="dynaHouse.svg" inkscape:output_extension="org.inkscape.output.svg.inkscape" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="463.893px"
+	 height="438.877px" viewBox="0 0 463.893 438.877" enable-background="new 0 0 463.893 438.877" xml:space="preserve">
+<defs>
+	
+	
+		<inkscape:perspective  inkscape:vp_z="744.09448 : 526.18109 : 1" sodipodi:type="inkscape:persp3d" inkscape:vp_x="0 : 526.18109 : 1" inkscape:vp_y="0 : 1000 : 0" inkscape:persp3d-origin="372.04724 : 350.78739 : 1" id="perspective10">
+		</inkscape:perspective>
+</defs>
+<sodipodi:namedview  id="base" pagecolor="#ffffff" inkscape:zoom="1.4098083" bordercolor="#666666" borderopacity="1.0" gridtolerance="10000" guidetolerance="10" objecttolerance="10" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:cy="219.43852" inkscape:cx="231.94643" inkscape:document-units="px" inkscape:current-layer="layer1" showgrid="false" inkscape:window-width="1006" inkscape:window-height="954" inkscape:window-x="660" inkscape:window-y="43">
+	</sodipodi:namedview>
+<g id="layer1" transform="translate(-42.339286,-276.34171)" inkscape:groupmode="layer" inkscape:label="Layer 1">
+	<path id="rect2391" sodipodi:nodetypes="cccccccccccccccccc" fill="#FFFFFF" d="M437.145,499.437L437.145,499.437z
+		 M437.145,499.437L274.332,355.25L111.426,499.5v206.125c0,5.323,4.302,9.594,9.625,9.594h101.813v-90.375
+		c0-5.323,4.271-9.625,9.594-9.625h83.656c5.323,0,9.594,4.302,9.594,9.625v90.375h101.844c5.323,0,9.594-4.271,9.594-9.594V499.437
+		z M111.426,499.5L111.426,499.5z"/>
+	<path id="path2399" fill="#FFFFFF" d="M273.388,276.342L42.339,480.925l24.338,27.458l207.655-183.884l207.608,183.884
+		l24.291-27.458L275.231,276.342l-0.898,1.04L273.388,276.342z"/>
+	<path id="rect2404" sodipodi:nodetypes="ccccc" fill="#FFFFFF" d="M111.426,305.791h58.572l-0.511,34.691l-58.061,52.452V305.791z"
+		/>
+</g>
+</svg>

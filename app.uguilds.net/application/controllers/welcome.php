@@ -2,6 +2,9 @@
 
 class Welcome extends CI_Controller {
 
+	private $data = array();
+	private $content = array();
+
 	/**
 	 * Construction function
 	 *
@@ -10,6 +13,13 @@ class Welcome extends CI_Controller {
 	public function __construct() 
 	{
 		parent::__construct();
+		$this->_setPageTitle();
+		$this->_setPageAuthor();
+
+
+		// Load the header
+		$this->load->view('includes/head', $this->data);
+		$this->uguilds->theme->loadHeader();
 	}
 
 	/**
@@ -29,27 +39,61 @@ class Welcome extends CI_Controller {
 	 */
 	public function index()
 	{
-		/**
-		 * @var array $data
-		 */
-		$data = array(
-			"page_title" => $this->uguilds->guild->guildName .' ('. $this->uguilds->guild->realm .')');
 
-		$this->load->view('includes/head', $data);
-		$this->uguilds->theme->loadHeader();
+		
 
 	//	$this->uguilds->theme->loadFooter();
 	}
 
 	/**
-	 * getLeadingArticle()
+	 * _setPageTitle()
+	 *
+	 * Create a function that will set the page title to a variable,
+	 * which we can inject into the view
+	 * 
+	 * @access private
+	 */
+	private function _setPageTitle()
+	{
+		$this->data['page_title'] = $this->uguilds->guild->guildName .' ('. $this->uguilds->guild->realm .')';
+	}
+
+	/**
+	 * _setPageAuthor()
+	 * 
+	 * Sets the page author based on the leading article. 
+	 * If, for whatever reason, we can't find a leading article, then fall back on the guild name.
+	 *
+	 * @access private
+	 */
+	private function _setPageAuthor()
+	{
+		$this->data['page_author'] = $this->uguilds->guild->guildName;
+	}
+
+	/**
+	 * _getContent()
+	 *
+	 * Gets the content for this controller from couchdb
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function _getContent()
+	{
+//		$this->couchdb->key(array($this->uguilds->guild->))
+	}
+
+
+	/**
+	 * _getLeadingArticle()
 	 * 
 	 * Gets the leading article from the database
 	 * 
 	 * @access private
 	 * @return \CouchDocument $article
 	 */
-	private function getLeadingArticle()
+	private function _getLeadingArticle()
 	{
 
 	}

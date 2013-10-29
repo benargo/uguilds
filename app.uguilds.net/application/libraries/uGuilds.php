@@ -9,6 +9,7 @@
 
 require_once APPPATH . 'libraries/uGuilds/Guild.php';
 require_once APPPATH . 'libraries/uGuilds/Theme.php';
+require_once APPPATH . 'libraries/uGuilds/Account.php';
 
 class uGuilds {
 
@@ -19,6 +20,8 @@ class uGuilds {
 	public $guild;
 	public $theme;
 	public $locale;
+	private $controller_map = array("applications"	=> "#",
+									"roster"		=> "roster");
 
 	/**
 	 * __construct
@@ -123,8 +126,35 @@ class uGuilds {
 	{
 		if(empty($this->theme) || $override == true) 
 		{
-			$this->theme = new uGuilds\Theme();
+			$this->theme = new uGuilds\Theme;
 			$this->theme->findByName($this->guild->theme);
 		}
+	}
+
+	/**
+	 * getController()
+	 *
+	 * @access public
+	 * @var string $feature
+	 * @return string
+	 */
+	public function getController($feature)
+	{
+		if(isset($this->controller_map[$feature]))
+		{
+			return $this->controller_map[$feature];
+		}
+	}
+
+	/**
+	 * getPageTitle()
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function getPageTitle()
+	{
+		$ci = get_instance();
+		return $ci->getPageTitle();
 	}
 }

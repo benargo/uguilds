@@ -186,19 +186,19 @@ class Guild {
    	 * @param Integer $width Width of the emblem - max size is 215
    	 */
    	public function showEmblem($showlevel=TRUE, $width=215){
-		$finalimg = $this->createEmblem($showlevel,$width);
-   		if (!$GLOBALS['wowarmory']['debug']['emblem']){
-			header('Content-Type: image/png');
-			imagepng($finalimg);
-   		}		
-		imagedestroy($finalimg);
+		  if($finalimg = $this->createEmblem($showlevel,$width))
+      {
+        return true;
+      }
    	}
+
+  
    	
   	public function deleteEmblem(){
   	       if (!$this->emblemAdd) {
-            $imgfile = APPPATH . "/cache/BattlenetArmory/" . $this->region . '_' . $this->realm . '_' . $this->name . ".png";
+            $imgfile = APPPATH . "cache/BattlenetArmory/" . $this->region . '_' . $this->realm . '_' . $this->name . ".png";
         } else {
-            $imgfile = APPPATH . "/cache/BattlenetArmory/" . $this->region . '_' . $this->realm . '_' . $this->name . '_' . $this->emblemAdd . ".png";
+            $imgfile = APPPATH . "cache/BattlenetArmory/" . $this->region . '_' . $this->realm . '_' . $this->name . '_' . $this->emblemAdd . ".png";
         }
         if (is_file($imgfile)) {
             unlink($imgfile);
@@ -215,9 +215,9 @@ class Guild {
      */
     public function saveEmblem($dest) {
         if (!$this->emblemAdd) {
-            $imgfile = APPPATH . "/cache/BattlenetArmory/" . $this->region . '_' . $this->realm . '_' . $this->name . ".png";
+            $imgfile = APPPATH . "cache/BattlenetArmory/" . $this->region . '_' . $this->realm . '_' . $this->name . ".png";
         } else {
-            $imgfile = APPPATH . "/cache/BattlenetArmory/" . $this->region . '_' . $this->realm . '_' . $this->name . '_' . $this->emblemAdd . ".png";
+            $imgfile = APPPATH . "cache/BattlenetArmory/" . $this->region . '_' . $this->realm . '_' . $this->name . '_' . $this->emblemAdd . ".png";
         }
         if (!copy($imgfile, $dest)) {
             throw new Exception("Could Not be copied");
@@ -235,9 +235,9 @@ class Guild {
    	
    	private function createEmblem($showlevel=TRUE, $width=215){
    		if (!$this->emblemAdd){
-   			$imgfile = APPPATH."/cache/BattlenetArmory/".$this->region.'_'.$this->realm.'_'.$this->name.".png";
+   			$imgfile = APPPATH."cache/BattlenetArmory/".$this->region.'_'.$this->realm.'_'.$this->name.".png";
    		} else {
-   			$imgfile = APPPATH."/cache/BattlenetArmory/".$this->region.'_'.$this->realm.'_'.$this->name.'_'.$this->emblemAdd.".png";
+   			$imgfile = APPPATH."cache/BattlenetArmory/".$this->region.'_'.$this->realm.'_'.$this->name.'_'.$this->emblemAdd.".png";
    		}
    		#$imgfile = APPPATH."/cache/".$this->region.$this->realm.$this->name.".png";
    		#print $imgfile;

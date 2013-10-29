@@ -18,6 +18,8 @@ class Theme {
 	private $css;
 	private $javascript;
 	private $jquery_version = '2.0';
+	private $theme_data;
+
 	/**
 	 * __construct()
 	 *
@@ -26,7 +28,7 @@ class Theme {
 	 */
 	public function __construct()
 	{
-		
+
 	}
 
 	/**
@@ -258,6 +260,43 @@ class Theme {
 	{
 		$ci = get_instance();
 		return $ci->load->view('themes/'. $this->_id .'/footer');
+	}
+
+	/**
+	 * getPath()
+	 *
+	 * Gets the path for the theme files
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function getPath()
+	{
+		return "/themes/". $this->_id;
+	}
+
+	/**
+	 * renderAdminMenu()
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function renderAdminMenu()
+	{
+		$ci = get_instance();
+
+	}
+
+	/**
+	 * renderLoginLink()
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function renderLoginLink()
+	{
+		$ci = get_instance();
+
 	}
 
 }
