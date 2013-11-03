@@ -1,6 +1,6 @@
 .DS_Store
 codekit-config.json
-resources
+resources/
 app.uguilds.net/application/cache/
 app.uguilds.net/application/config/
 app.uguilds.net/application/logs/
