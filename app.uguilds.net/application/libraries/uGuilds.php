@@ -7,28 +7,29 @@
  *	@version 1.0
  */
 
+require_once APPPATH . 'libraries/uGuilds/Account.php';
 require_once APPPATH . 'libraries/uGuilds/Guild.php';
 require_once APPPATH . 'libraries/uGuilds/Theme.php';
-require_once APPPATH . 'libraries/uGuilds/Account.php';
+require_once APPPATH . 'libraries/uGuilds/ThemeData.php';
 
 class uGuilds {
 
 	/**
 	 * vars
 	 */
-	protected $domain;
-	public $guild;
-	public $theme;
-	public $locale;
+	private $domain;
+	private $guild;
+	private $theme;
+	private $locale;
 	private $controller_map = array("applications"	=> "#",
 									"roster"		=> "roster");
 
 	/**
-	 * __construct
+	 * __construct()
 	 * 
 	 * @access public
 	 */
-	public function __construct() 
+	function __construct() 
 	{
 		// Find the guild
 		$this->findGuildByDomain();	
@@ -36,6 +37,64 @@ class uGuilds {
 		// Set the theme & locale
 		$this->setLocale(true);
 		$this->setTheme(true);
+	}
+
+	/**
+	 * __get()
+	 * 
+	 * @access public
+	 * @var string $var
+	 * @return mixed
+	 */
+	function __get($var)
+	{
+		switch($var)
+		{
+			case "domain":
+				if(is_null($this->domain))
+				{
+					$this->calculateDomain();
+				}
+				return $this->domain;
+				break;
+
+			case "guild":
+				if(!$this->guild instanceof uGuilds\Guild)
+				{
+					$this->guild = $this->findGuildByDomain();
+				}
+				return $this->guild;
+				break;
+
+			case "theme":
+				if(!$this->theme instanceof uGuilds\Theme)
+				{
+					$this->theme = $this->setTheme();
+				}
+				return $this->theme;
+				break;
+
+			case "locale":
+				if(is_null($this->locale))
+				{
+					$this->setLocale();
+				}
+				return $this->locale;
+				break;
+		}
+	}
+
+	/**
+	 * load()
+	 * 
+	 * @access public
+	 * @static true
+	 * @return $this
+	 */
+	public static function load()
+	{
+		$ci = get_instance();
+		return $ci->uguilds;
 	}
 
 	/**
@@ -50,35 +109,17 @@ class uGuilds {
 			$this->calculateDomain();
 		}
 
-		// Set up the database;
-		$ci = get_instance();
-		$db = $ci->couchdb;
+		// Create the guild object
+		$this->guild = new uGuilds\Guild;
 
-		// Find the guild ID
-		$guild_id = $db->key($this->domain)->limit(1)->getView('find_guild','by_domain')->rows[0]->value;
-
-		// Create the new guild
-		$this->guild = new uGuilds\Guild($db->asCouchDocuments()->getDoc($guild_id));
-
-		// Set the region and realm
-		$ci->battlenetarmory->setRegion($this->guild->region);
-		$ci->battlenetarmory->setRealm($this->guild->realm);
-	}
-
-	/**
-	 * getDomain()
-	 *
-	 * @access public
-	 * @return string
-	 */
-	public function getDomain()
-	{
-		if(is_null($this->domain))
+		if($this->guild->findByDomain($this->domain))
 		{
-			$this->calculateDomain();
-		}
+			$ci = get_instance();
 
-		return $this->domain;
+			// Set the region and realm
+			$ci->battlenetarmory->setRegion($this->guild->region);
+			$ci->battlenetarmory->setRealm($this->guild->realm);
+		}
 	}
 
 	/** 
@@ -109,7 +150,7 @@ class uGuilds {
 	 */
 	private function setLocale($override=false) 
 	{
-		if(empty($this->locale) || $override == true)
+		if(is_null($this->locale) || $override == true)
 		{
 			$this->locale = $this->guild->locale;
 		}
@@ -124,10 +165,10 @@ class uGuilds {
 	 */
 	private function setTheme($override=false) 
 	{
-		if(empty($this->theme) || $override == true) 
+		if(empty($this->theme) || !$this->theme instanceof uGuilds\Theme || $override == true) 
 		{
 			$this->theme = new uGuilds\Theme;
-			$this->theme->findByName($this->guild->theme);
+			$this->theme->findByID($this->guild->theme);
 		}
 	}
 

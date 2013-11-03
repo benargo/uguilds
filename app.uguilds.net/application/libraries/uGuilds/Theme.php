@@ -9,16 +9,17 @@ if (!defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Theme {
 
+	const DEFAULT_THEME = 'a6e284d6c07328787bb817c6a0000b29';
+
 	/**
 	 * variables
 	 */
 	private $_id;
-	private $_rev;
 	private $name;
-	private $css;
+	private $css = array();
 	private $javascript;
-	private $jquery_version = '2.0';
-	private $theme_data;
+	private $jquery_version = '2.0.0';
+	private $themeData;
 
 	/**
 	 * __construct()
@@ -26,39 +27,69 @@ class Theme {
 	 * @access public
 	 * @return void
 	 */
-	public function __construct()
+	function __construct()
 	{
-
+		$this->themeData = new ThemeData;
 	}
 
 	/**
-	 * findByName()
+	 * __get()
 	 *
 	 * @access public
-	 * @param string $name
-	 * @return void
+	 * @param $var
+	 * @return mixed
 	 */
-	public function findByName($name) 
+	function __get($var)
 	{
-		// Get a copy of the database
+		switch($var)
+		{
+			case "id":
+				return $this->_id;
+				break;
+
+			case "name":
+				return $this->name;
+				break;
+
+			case "css":
+				return $this->getCssFiles();
+				break;
+
+			case "javascript":
+				return $this->getJavaScriptFiles();
+				break;
+
+			case "jquery_version": /* preferred */
+			case "jQuery":
+				return $this->jquery_version;
+
+			case "data": /* preferred */
+			case "themeData":
+				return $this->themeData;
+		}
+	}
+
+	/**
+	 * load()
+	 * 
+	 * @access public
+	 * @static true
+	 * @return $this
+	 */
+	public static function load()
+	{
 		$ci = get_instance();
-		$db = $ci->couchdb;
-
-		// Find the theme ID
-		$this->_id = $db->startkey($name)->limit(1)->getView('find_theme', 'by_name')->rows[0]->value;
-
-		// Find the theme
-		$this->findByID();
+		return $ci->uguilds->theme;
 	}
 
 	/** 
 	 * findByID()
 	 *
-	 * @access private
+	 * @access public
 	 * @param string $_id
 	 * @return void
 	 */
-	private function findByID($id = NULL) 
+	public function findByID($id = NULL) 
 	{
 		// Check if we've passed an ID in. 
 		// If we have, this is an override
@@ -67,21 +98,13 @@ class Theme {
 			$this->_id = $id;
 		}
 
-		// Get a copy of the database
-		$ci = get_instance();
-		$db = $ci->couchdb;
-
-		// Create the new Theme
-		$doc = $db->asCouchDocuments()->getDoc($this->_id);
-
-		foreach($doc->getFields() as $key => $value) 
+		if(file_exists(FCPATH .'/themes/'. $this->_id .'/theme.json'))
 		{
-			if(empty($doc->$key)) 
+			$theme_json = json_decode(file_get_contents(FCPATH .'/themes/'. $this->_id .'/theme.json'));
+			foreach($theme_json as $key => $value)
 			{
-				continue;
+				$this->$key = $value;
 			}
-
-			$this->$key = $doc->$key;
 		}
 	}
 
@@ -90,17 +113,13 @@ class Theme {
 	 *
 	 * A function which we can call if we need to fall back on the default theme
 	 * @access private
-	 * @param function $functionName
-	 * @return result of another function
+	 * @return $this
 	 */
-	private function reset($functionName = NULL) 
+	private function reset() 
 	{
-		$this->findByName('default');
+		$this->findByID(self::DEFAULT_THEME);
 
-		if($functionName)
-		{
-			return $this->{$functionName}();
-		}
+		return $this;
 	}
 
 	/**
@@ -118,9 +137,8 @@ class Theme {
 		}
 
 		// Create an empty array
-		$files = array(
-			'<link rel="stylesheet" media="all" href="/media/css/reset.css">'."\n\t",
-			$this->getControllerCss());
+		$files  = '<link rel="stylesheet" media="all" href="/media/css/uGuilds.css">' . "\n\t";
+		$files .= $this->getControllerCss();
 
 		// Loop through each of the CSS files
 		foreach($this->css as $css) 
@@ -134,7 +152,7 @@ class Theme {
 					$css->media = 'screen';
 				}
 
-				$files[] = '<link rel="stylesheet" media="'. $css->media .'" href="/themes/'. $this->_id .'/css/'. $css->url .'">'."\n\t";
+				$files .= '<link rel="stylesheet" media="'. $css->media .'" href="/themes/'. $this->_id .'/css/'. $css->url .'">'."\n\t";
 			}
 		}
 
@@ -156,7 +174,7 @@ class Theme {
 	{
 		$ci = get_instance();
 		$controller_name = get_class($ci);
-		
+
 		if(file_exists(FCPATH.'/media/css/controller/'. $controller_name .'.css'))
 		{
 			return '<link rel="stylesheet" media="all" href="/media/css/controller/'. $controller_name .'.css">'."\n\t";
@@ -180,20 +198,22 @@ class Theme {
 
 		$ci = get_instance();
 
-		$files = array(
-			// jQuery
-			'<script src="//ajax.googleapis.com/ajax/libs/jquery/'. $this->jquery_version .'/jquery.min.js"></script>'."\n",
-			// Controller JS
-			$this->getControllerJS(),
-			// Google Analytics
-			"\t<script><!--\n".
-			"\t\t/* Google Analytics */\n".
-			"\t\tvar _gaq = _gaq || [];\n".
-  			"\t\t_gaq.push(['_setAccount', 'UA-45138102-1']);\n".
-  			"\t\t_gaq.push(['_setDomainName', '". $ci->uguilds->getDomain() ."']);\n".
-  			"\t\t_gaq.push(['_setAllowLinker', true]);".
-  			"\t\t_gaq.push(['_trackPageview']);\n".
-  			"\t--></script>\n");
+		// jQuery
+		$files  = '<script src="//ajax.googleapis.com/ajax/libs/jquery/'. $this->jquery_version .'/jquery.min.js"></script>'."\n\t";
+		$files .= '<script src="/media/js/jquery.history.js"></script>'."\n";
+		
+		// Controller JS
+		$files .= $this->getControllerJS();
+		
+		// Google Analytics
+		$files .= 	"\t<script><!--\n".
+					"\t\t/* Google Analytics */\n".
+					"\t\tvar _gaq = _gaq || [];\n".
+  					"\t\t_gaq.push(['_setAccount', 'UA-45138102-1']);\n".
+  					"\t\t_gaq.push(['_setDomainName', '". $ci->uguilds->domain ."']);\n".
+  					"\t\t_gaq.push(['_setAllowLinker', true]);".
+  					"\t\t_gaq.push(['_trackPageview']);\n".
+  					"\t--></script>\n";
 
 		// Failsafe in case of no JavaScript
 		if(empty($this->javascript))
@@ -207,7 +227,7 @@ class Theme {
 			// If the file exists, keep going
 			if(file_exists(FCPATH .'/themes/'. $this->_id .'/js/'. $js))
 			{
-				$files[] = "\t".'<script src="/themes/'. $this->_id .'/js/'. $js .'"></script>'."\n";
+				$files .= "\t".'<script src="/themes/'. $this->_id .'/js/'. $js .'"></script>'."\n";
 			}
 		}
 
@@ -245,7 +265,7 @@ class Theme {
 	public function loadHeader()
 	{
 		$ci = get_instance();
-		return $ci->load->view('themes/'. $this->_id .'/header');
+		return $ci->load->view('themes/'. $this->_id .'/header', $this->data);
 	}
 
 	/**
@@ -259,7 +279,7 @@ class Theme {
 	public function loadFooter()
 	{
 		$ci = get_instance();
-		return $ci->load->view('themes/'. $this->_id .'/footer');
+		return $ci->load->view('themes/'. $this->_id .'/footer', $this->data);
 	}
 
 	/**
@@ -274,30 +294,5 @@ class Theme {
 	{
 		return "/themes/". $this->_id;
 	}
-
-	/**
-	 * renderAdminMenu()
-	 *
-	 * @access public
-	 * @return string
-	 */
-	public function renderAdminMenu()
-	{
-		$ci = get_instance();
-
-	}
-
-	/**
-	 * renderLoginLink()
-	 *
-	 * @access public
-	 * @return string
-	 */
-	public function renderLoginLink()
-	{
-		$ci = get_instance();
-
-	}
-
 }
 

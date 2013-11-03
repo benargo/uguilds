@@ -1,28 +1,30 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); ?>
 <!DOCTYPE html>
-<html lang="<?php echo $this->uguilds->locale; ?>">
+<html lang="<?php echo $locale; ?>">
 <head>
+	<!--
+	I apologise for the fact the HTML isn't as pretty as I'd like
+	it to be. However, it does look very pretty in CodeIgniter.
+	-->
+
 	<!-- META INFORMATION -->
 	<meta charset="UTF-8">
-	<meta name="author" content="<?php echo $page_author; ?>">
-	<meta name="keywords" content="<?php echo $this->uguilds->guild->guildName; ?>, <?php echo $this->uguilds->guild->realm; ?>, guild, website, world, warcraft, wow, mists, pandaria, mop">
-	<meta name="description" content="World of Warcraft guild <?php echo $this->uguilds->guild->guildName; ?> on <?php echo $this->uguilds->guild->realm . ' ' . $this->uguilds->guild->region; ?>">
-	<title><?php echo $page_title; ?></title>
+	<meta name="author" content="<?php echo $theme->data->page_author; ?>">
+	<meta name="application-name" content="uGuilds" />
+	<meta name="generator" content="CodeIgniter" />
+	<meta name="keywords" content="<?php echo $guild->guildName; ?>, <?php echo $guild->realm; ?>, guild, website, world, warcraft, wow, mists, pandaria, mop">
+	<meta name="description" content="World of Warcraft guild <?php echo $guild->guildName; ?> on <?php echo $guild->realm . ' ' . $guild->region; ?>">
+	<meta name="apple-mobile-web-app-title" content="My Guild">
+	<title><?php echo $theme->data->page_title; ?></title>
 
 	<!-- CSS -->
-	<?php foreach($this->uguilds->theme->getCssFiles() as $css_file)
-	{
-		echo $css_file;
-	} ?>
+	<?php echo $theme->css; ?>
 
 	<!-- JAVASCRIPT -->
-	<?php foreach($this->uguilds->theme->getJavaScriptFiles() as $js_file)
-	{
-		echo $js_file;
-	} ?>
+	<?php echo $theme->javascript; ?>
 
 	<!-- SHORTCUT ICONS -->
-	<!--<link type="image/x-icon" rel="shortcut icon" href="/media/images/favicon.ico" />
-	<link rel="apple-touch-icon" href="/media/images/iphone-icon.png" />-->
+	<!--<link type="image/x-icon" rel="shortcut icon" href="/media/images/favicon.ico" />-->
+	<link rel="apple-touch-icon" href="<?php echo $guild->getEmblem(FALSE, 60); ?>" />
 </head>
 <body>

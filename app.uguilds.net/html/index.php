@@ -1,6 +1,22 @@
 <?php
 
 /*
+	 * dump()
+	 * 
+	 * @access public
+	 * @static true
+	 * @return a dump
+	 */
+function dump($data,$exit=true) {
+	print "<pre>";
+	print_r($data);
+	print "</pre>";
+	if($exit) {
+		exit;
+	}
+}
+
+/*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT
  *---------------------------------------------------------------
@@ -19,22 +35,7 @@
  *
  */
 	define('ENVIRONMENT', 'development');
-/*
- *---------------------------------------------------------------
- * DUMPING
- *---------------------------------------------------------------
- *
- * This is an improvement over print_r and best definied immediately.
- */
 
-function dump($data,$exit=true) {
-	print "<pre>";
-	print_r($data);
-	print "</pre>";
-	if($exit) {
-		exit;
-	}
-}
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING
@@ -88,7 +89,7 @@ if (defined('ENVIRONMENT'))
  * NO TRAILING SLASH!
  *
  */
-	$application_folder = '../application';
+	$application_folder = dirname(__DIR__) . '/application';
 
 /*
  * --------------------------------------------------------------------

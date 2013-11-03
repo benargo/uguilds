@@ -10,19 +10,6 @@ if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 class Guild {
 
-	private $dbFields = array(
-		"_id",
-		"_rev",
-		"type",
-		"region",
-		"realm",
-		"guildName",
-		"domainName",
-		"ranks",
-		"theme",
-		"locale",
-		"features");
-
 	private $_id;
 	private $region;
 	private $realm;
@@ -42,26 +29,12 @@ class Guild {
 	/**
 	 * __construct()
 	 *
-	 * @param \couchDocument
 	 * @access public
 	 * @return void
 	 */
-	function __construct(\couchDocument $guild_doc) 
+	function __construct() 
 	{
-		foreach($guild_doc->getFields() as $key => $value) 
-		{
-			// Check if the guild is valid
-			if(!in_array($key,$this->dbFields)) 
-			{
-				throw new \Exception("Invalid guild! Field missing was: ".$key);
-			}
-			
-			// Set the variables
-			if(property_exists($this, $key))
-			{
-				$this->$key = $guild_doc->$key;
-			}
-		}
+
 	}
 
 	/**
@@ -87,8 +60,8 @@ class Guild {
 				return ucwords($this->realm);
 				break;
 
+			case "guildName": /* preferred */
 			case "name":
-			case "guildName":
 				return ucwords($this->guildName);
 				break;
 
@@ -107,7 +80,7 @@ class Guild {
 			case "locale":
 				if(!preg_match("/([a-z]+)_([A-Z]+)/", $this->locale))
 				{
-					$this->locale = "en_GB";
+					$this->locale = $this->getBattlenetGuild();
 				}
 
 				return $this->locale;
@@ -116,6 +89,64 @@ class Guild {
 			case "features":
 				return $this->getFeatures();
 				break;
+		}
+	}
+
+	/**
+	 * load()
+	 * 
+	 * @access public
+	 * @static true
+	 * @return $this
+	 */
+	public static function load()
+	{
+		$ci = get_instance();
+		return $ci->uguilds->guild;
+	}
+
+	/**
+	 * findByDomain()
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function findByDomain($domain)
+	{
+		$ci = get_instance();
+
+		$query = $ci->db->query("SELECT 	`_id`,
+								`region`,
+								`realm`,
+								`guildName`,
+								`domainName`,
+								`theme`,
+								`locale`
+						FROM `ug_Guilds`
+						WHERE `domainName` = '$domain'
+						LIMIT 0, 1");
+
+		// Check we got a result
+		if ($query->num_rows() > 0)
+		{
+			// Loop through the rows (there should only be one)
+  			foreach ($query->result() as $row)
+   			{
+   				// Loop through the columns
+    			foreach($row as $key => $value)
+    			{
+    				$this->$key = $value;
+    			}
+
+    			$ci->session->set_userdata('guild_id', $this->_id);
+
+    			// We only want to do this once!
+    			break;
+   			}
+		} 
+		else
+		{
+			return false;
 		}
 	}
 
@@ -146,9 +177,9 @@ class Guild {
 	public function getEmblem($showlevel=TRUE, $width=215)
 	{
 		$this->getBattlenetGuild()->showEmblem($showlevel, $width);
-		$this->getBattlenetGuild()->saveEmblem(FCPATH . 'media/BattlenetArmory/emblem_'. $this->_id .'_'. $width .'.png');
+		$this->getBattlenetGuild()->saveEmblem(FCPATH . 'media/BattlenetArmory/emblem_'. $this->region .'_'. preg_replace('/\ /', '_', $this->realm) .'_'. preg_replace('/\ /', '_', $this->guildName) .'_'. $width .'.png');
 
-		return '/media/BattlenetArmory/emblem_'. $this->_id .'_'. $width .'.png';
+		return '/media/BattlenetArmory/emblem_'. $this->region .'_'. preg_replace('/\ /', '_', $this->realm) .'_'. preg_replace('/\ /', '_', $this->guildName) .'_'. $width .'.png';
 	}
 
 	/**
