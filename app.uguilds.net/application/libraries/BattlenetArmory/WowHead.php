@@ -1,7 +1,11 @@
 <?php
 namespace BattlenetArmory;
 
+<<<<<<< HEAD
 class WowHead extends Battlenet {
+=======
+class WowHead {
+>>>>>>> 5af9f32bb5f3bda4af2a91f727efec67c9b3e595
 	
    	private $cacheEnabled = TRUE;
    	private $cache;
@@ -10,7 +14,11 @@ class WowHead extends Battlenet {
 	private $rawdata;
 	
 	function __construct() {
+<<<<<<< HEAD
 		$this->cacheEnabled = $this->config()['cachestatus'];
+=======
+		$this->cacheEnabled = $GLOBALS['wowarmory']['cachestatus'];
+>>>>>>> 5af9f32bb5f3bda4af2a91f727efec67c9b3e595
 		if ($this->cacheEnabled){
 	   		$this->cache = new CacheControl();
 		}

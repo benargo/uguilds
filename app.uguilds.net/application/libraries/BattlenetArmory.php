@@ -6,6 +6,7 @@
  * @version 3.5.1
  */
 
+
 require_once APPPATH . 'libraries/BattlenetArmory/Battlenet.php';
 require_once APPPATH . 'libraries/BattlenetArmory/CacheControl.php';
 require_once APPPATH . 'libraries/BattlenetArmory/SafePDO.php';
@@ -43,6 +44,7 @@ class BattlenetArmory {
 
          $ci = get_instance();
          $this->config = $ci->config->item('battle.net');
+
    	}
    	
    	/**
@@ -50,6 +52,7 @@ class BattlenetArmory {
    	 * @param Integer $locale The locale you want to use. Set to FALSE to reset back to default
    	 */
    	public function setLocale($locale = FALSE){
+
    		$this->config['locale'] = $locale;
    	}
    	

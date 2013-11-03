@@ -1,7 +1,11 @@
 <?php
 namespace BattlenetArmory;
 
+<<<<<<< HEAD
 class jsonConnect extends Battlenet {
+=======
+class jsonConnect {
+>>>>>>> 5af9f32bb5f3bda4af2a91f727efec67c9b3e595
 	
 	private $regions				= array('us'=>'us.battle.net',
 											'eu'=>'eu.battle.net',
@@ -24,6 +28,7 @@ class jsonConnect extends Battlenet {
 	private $rawdata;
 	
 	function __construct() {
+<<<<<<< HEAD
 		$this->cacheEnabled = $this->config()['cachestatus'];
 		if ($this->cacheEnabled){
 	   		$this->cache = new CacheControl();
@@ -34,6 +39,18 @@ class jsonConnect extends Battlenet {
 			}
 		}
 		$this->utf8 = $this->config()['UTF8'];
+=======
+		$this->cacheEnabled = $GLOBALS['wowarmory']['cachestatus'];
+		if ($this->cacheEnabled){
+	   		$this->cache = new CacheControl();
+		}
+		if (isset($GLOBALS['wowarmory']['keys']['private']) AND isset($GLOBALS['wowarmory']['keys']['public'])){
+			if (strlen($GLOBALS['wowarmory']['keys']['private']) > 1 AND strlen($GLOBALS['wowarmory']['keys']['public'] > 1)){
+				$this->useKeys = TRUE;
+			}
+		}
+		$this->utf8 = $GLOBALS['wowarmory']['UTF8'];
+>>>>>>> 5af9f32bb5f3bda4af2a91f727efec67c9b3e595
    	}
    
    	
@@ -139,8 +156,13 @@ class jsonConnect extends Battlenet {
 	}
 
 	private function getData($url, $fields, $region, $type = FALSE, $id_list = FALSE) {
+<<<<<<< HEAD
 		if ($this->config()['locale'] != FALSE){
 			$url .= '?locale='.$this->config()['locale'];
+=======
+		if ($GLOBALS['wowarmory']['locale'] != FALSE){
+			$url .= '?locale='.$GLOBALS['wowarmory']['locale'];
+>>>>>>> 5af9f32bb5f3bda4af2a91f727efec67c9b3e595
 	   		$objectID = md5($url);
 	   		$url .= '&';
 		} else {
@@ -185,8 +207,13 @@ class jsonConnect extends Battlenet {
 	}
 	
 	private function getByKeys($url,$region){
+<<<<<<< HEAD
 		$pubkey = $this->config()['keys']['public'];
 		$privkey = $this->config()['keys']['private'];
+=======
+		$pubkey = $GLOBALS['wowarmory']['keys']['public'];
+		$privkey = $GLOBALS['wowarmory']['keys']['private'];
+>>>>>>> 5af9f32bb5f3bda4af2a91f727efec67c9b3e595
 		$url = preg_replace('/^http/', 'https', $url);
 		$date = date('D, d M Y G:i:s T',time());
 		$stringtosign = "GET\n".$date."\n".$url."\n";

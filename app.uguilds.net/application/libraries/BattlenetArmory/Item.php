@@ -1,7 +1,11 @@
 <?php
 namespace BattlenetArmory;
 
+<<<<<<< HEAD
 class Item extends Battlenet {
+=======
+class Item {
+>>>>>>> 5af9f32bb5f3bda4af2a91f727efec67c9b3e595
 	
 	private $itemData;
 	private $statID;
