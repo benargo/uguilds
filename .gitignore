@@ -1,3 +1,8 @@
 .DS_Store
-app.uguilds.net/application/cache/*
-app.uguilds.net/html/media/BattlenetArmory/*
+resources
+app.uguilds.net/application/cache/
+app.uguilds.net/application/config/
+app.uguilds.net/application/logs/
+app.uguilds.net/user_guide/
+app.uguilds.net/html/media/BattlenetArmory/
+app.uguilds.net/html/.htaccess
