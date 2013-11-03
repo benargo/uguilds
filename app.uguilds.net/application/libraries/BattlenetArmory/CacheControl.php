@@ -1,11 +1,7 @@
 <?php
 namespace BattlenetArmory;
 
-<<<<<<< HEAD
 class CacheControl extends Battlenet {
-=======
-class CacheControl {
->>>>>>> 5af9f32bb5f3bda4af2a91f727efec67c9b3e595
 	
 	private $db;
 	private $CharactersTTL = 600;
@@ -20,7 +16,6 @@ class CacheControl {
 	
 	
    	function __construct() {
-<<<<<<< HEAD
 		$this->GuildsTTL 		= $this->config()['GuildsTTL'];
 		$this->CharactersTTL 	= $this->config()['CharactersTTL'];
 		$this->WowHeadTTL 		= $this->config()['WowHeadTTL'];
@@ -32,19 +27,6 @@ class CacheControl {
 		$this->ClassesTTL		= $this->config()['ClassesTTL'];
 		$this->PerksTTL			= $this->config()['PerksTTL'];
 		$this->QuestsTTL		= $this->config()['QuestsTTL'];
-=======
-		$this->GuildsTTL 		= $GLOBALS['wowarmory']['GuildsTTL'];
-		$this->CharactersTTL 	= $GLOBALS['wowarmory']['CharactersTTL'];
-		$this->WowHeadTTL 		= $GLOBALS['wowarmory']['WowHeadTTL'];
-		$this->AuctionHouseTTL 	= $GLOBALS['wowarmory']['AuctionHouseTTL'];
-		$this->ItemsTTL 		= $GLOBALS['wowarmory']['ItemsTTL'];
-		$this->AchievementsTTL	= $GLOBALS['wowarmory']['AchievementsTTL'];
-		$this->ArenaTeamsTTL	= $GLOBALS['wowarmory']['ArenaTeamsTTL'];
-		$this->RacesTTL			= $GLOBALS['wowarmory']['RacesTTL'];
-		$this->ClassesTTL		= $GLOBALS['wowarmory']['ClassesTTL'];
-		$this->PerksTTL			= $GLOBALS['wowarmory']['PerksTTL'];
-		$this->QuestsTTL		= $GLOBALS['wowarmory']['QuestsTTL'];
->>>>>>> 5af9f32bb5f3bda4af2a91f727efec67c9b3e595
 		$this->openDatabase();
 		$this->initTables();
    	}
