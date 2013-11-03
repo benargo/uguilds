@@ -1,7 +1,7 @@
 <?php
 namespace BattlenetArmory;
 
-class Achievements {
+class Achievements extends Battlenet {
 	
 	private $data;
 	private $datas;

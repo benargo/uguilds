@@ -1,7 +1,7 @@
 <?php
 namespace BattlenetArmory;
 
-class Realms {
+class Realms extends Battlenet {
 	
 	private $region;
 	private $realm;

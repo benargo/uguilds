@@ -1,7 +1,7 @@
 <?php
 namespace BattlenetArmory;
 
-class jsonConnect {
+class jsonConnect extends Battlenet {
 	
 	private $regions				= array('us'=>'us.battle.net',
 											'eu'=>'eu.battle.net',
@@ -24,16 +24,16 @@ class jsonConnect {
 	private $rawdata;
 	
 	function __construct() {
-		$this->cacheEnabled = $GLOBALS['wowarmory']['cachestatus'];
+		$this->cacheEnabled = $this->config()['cachestatus'];
 		if ($this->cacheEnabled){
 	   		$this->cache = new CacheControl();
 		}
-		if (isset($GLOBALS['wowarmory']['keys']['private']) AND isset($GLOBALS['wowarmory']['keys']['public'])){
-			if (strlen($GLOBALS['wowarmory']['keys']['private']) > 1 AND strlen($GLOBALS['wowarmory']['keys']['public'] > 1)){
+		if (isset($this->config()['keys']['private']) AND isset($this->config()['keys']['public'])){
+			if (strlen($this->config()['keys']['private']) > 1 AND strlen($this->config()['keys']['public'] > 1)){
 				$this->useKeys = TRUE;
 			}
 		}
-		$this->utf8 = $GLOBALS['wowarmory']['UTF8'];
+		$this->utf8 = $this->config()['UTF8'];
    	}
    
    	
@@ -139,8 +139,8 @@ class jsonConnect {
 	}
 
 	private function getData($url, $fields, $region, $type = FALSE, $id_list = FALSE) {
-		if ($GLOBALS['wowarmory']['locale'] != FALSE){
-			$url .= '?locale='.$GLOBALS['wowarmory']['locale'];
+		if ($this->config()['locale'] != FALSE){
+			$url .= '?locale='.$this->config()['locale'];
 	   		$objectID = md5($url);
 	   		$url .= '&';
 		} else {
@@ -185,8 +185,8 @@ class jsonConnect {
 	}
 	
 	private function getByKeys($url,$region){
-		$pubkey = $GLOBALS['wowarmory']['keys']['public'];
-		$privkey = $GLOBALS['wowarmory']['keys']['private'];
+		$pubkey = $this->config()['keys']['public'];
+		$privkey = $this->config()['keys']['private'];
 		$url = preg_replace('/^http/', 'https', $url);
 		$date = date('D, d M Y G:i:s T',time());
 		$stringtosign = "GET\n".$date."\n".$url."\n";

@@ -1,7 +1,7 @@
 <?php
 namespace BattlenetArmory;
 
-class ArenaTeam {
+class ArenaTeam extends Battlenet {
 	
 	private $region, $realm, $teamsize, $teamname;
 	private $data;

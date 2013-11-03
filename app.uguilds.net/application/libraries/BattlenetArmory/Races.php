@@ -1,7 +1,7 @@
 <?php
 namespace BattlenetArmory;
 
-class Races {
+class Races extends Battlenet {
 	
 	private $datas;
 

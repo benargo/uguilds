@@ -1,7 +1,7 @@
 <?php
 namespace BattlenetArmory;
 
-class Perks {
+class Perks extends Battlenet {
 	
 	private $datas;
 	private $guildlevel;
@@ -12,7 +12,7 @@ class Perks {
    		$count = count($data['perks']);
    		for ($i=0; $i < $count; $i++){
    			$this->datas[$data['perks'][$i]['guildLevel']] = $data['perks'][$i];
-   			$this->datas[$data['perks'][$i]['guildLevel']]['wowhead'] = $GLOBALS['wowarmory']['urls']['perk'].'='.$data['perks'][$i]['spell']['id']; 
+   			$this->datas[$data['perks'][$i]['guildLevel']]['wowhead'] = $this->config()['urls']['perk'].'='.$data['perks'][$i]['spell']['id']; 
    		}
    		$this->guildlevel = $guildlevel;
    		$data = null;

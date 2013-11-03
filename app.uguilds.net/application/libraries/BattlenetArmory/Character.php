@@ -1,7 +1,7 @@
 <?php
 namespace BattlenetArmory;
 
-class Character {
+class Character extends Battlenet  {
 	
 	private $name;
 	private $region;
@@ -80,7 +80,7 @@ class Character {
    	 */
    	public function getItemSlot($slot){
    		if ($this->checkItemSlot($slot)){
-   			$this->characterData['items'][$slot]['wowhead'] = $GLOBALS['wowarmory']['urls']['item']."=".$this->characterData['items'][$slot]['id'];
+   			$this->characterData['items'][$slot]['wowhead'] = $this->config()['urls']['item']."=".$this->characterData['items'][$slot]['id'];
    			return $this->characterData['items'][$slot];
    		}
    		return FALSE;
@@ -308,7 +308,7 @@ class Character {
    			// Build the new array to return
    			$achievement[$i]['id']=$achievements['achievementsCompleted'][$i];
    			$achievement[$i]['timestamp']=$achievements['achievementsCompletedTimestamp'][$i];
-   			$achievement[$i]['url'] = $GLOBALS['wowarmory']['urls']['achievement']."=".$achievements['achievementsCompleted'][$i];
+   			$achievement[$i]['url'] = $this->config()['urls']['achievement']."=".$achievements['achievementsCompleted'][$i];
 
    			$achievement[$i]['url'] .= "&who=".$this->name."&when=".$achievement[$i]['timestamp'];
    			$id_list .= $achievement[$i]['id'].',';
@@ -343,7 +343,7 @@ class Character {
    		for ($i = 0; $i < count($quests); $i++){
    			// Build the new array to return
    			$quest[$i]['id'] = $quests[$i];
-   			$quest[$i]['url'] = $GLOBALS['wowarmory']['urls']['quest']."=".$quests[$i];
+   			$quest[$i]['url'] = $this->config()['urls']['quest']."=".$quests[$i];
 
    			// Get name of achievement
    			$questdata = new Quest($this->region, $quests[$i]);

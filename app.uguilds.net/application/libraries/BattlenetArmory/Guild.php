@@ -1,7 +1,7 @@
 <?php
 namespace BattlenetArmory;
 
-class Guild {
+class Guild extends Battlenet {
 	
 	private $name;
 	private $region;
@@ -94,7 +94,7 @@ class Guild {
    			// Build the new array to return
    			$achievement[$i]['id']=$achievements['achievementsCompleted'][$i];
    			$achievement[$i]['timestamp']=$achievements['achievementsCompletedTimestamp'][$i];
-   			$achievement[$i]['url'] = $GLOBALS['wowarmory']['urls']['achievement']."=".$achievements['achievementsCompleted'][$i];
+   			$achievement[$i]['url'] = $this->config()['urls']['achievement']."=".$achievements['achievementsCompleted'][$i];
 
    			// Get name of achievement
    			#$achievement[$i]['name'] = $wowhead->getData($achievement[$i]['url'], 'name');

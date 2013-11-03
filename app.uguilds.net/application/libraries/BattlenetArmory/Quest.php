@@ -1,7 +1,7 @@
 <?php
 namespace BattlenetArmory;
 
-class Quest {
+class Quest extends Battlenet {
 	
 	private $datas;
 

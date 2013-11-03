@@ -80,7 +80,7 @@ $autoload['helper'] = array();
 |
 */
 
-$autoload['config'] = array('battle.net');
+$autoload['config'] = array();
 
 
 /*

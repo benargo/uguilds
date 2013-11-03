@@ -9,18 +9,21 @@ Class SafePDO extends \PDO {
         }
  */
         public function __construct() {
+
+            $ci = get_instance();
+            $config = $ci->config->item('battle.net');
 /*
             // Temporarily change the PHP exception handler while we . . .
             set_exception_handler(array(__CLASS__, 'exception_handler'));
 */
             // . . . create a PDO object
-            $driver = $GLOBALS['wowarmory']['db']['driver'];
-            $host = $GLOBALS['wowarmory']['db']['hostname'];
-            $dbname = $GLOBALS['wowarmory']['db']['dbname'];
-            $username = $GLOBALS['wowarmory']['db']['username'];
-            $password = $GLOBALS['wowarmory']['db']['password'];
-            if (isset($GLOBALS['wowarmory']['db']['port'])){
-            	$port = $GLOBALS['wowarmory']['db']['port'];
+            $driver = $config['db']['driver'];
+            $host = $config['db']['hostname'];
+            $dbname = $config['db']['dbname'];
+            $username = $config['db']['username'];
+            $password = $config['db']['password'];
+            if (isset($config['db']['port'])){
+            	$port = $config['db']['port'];
             	$dsn = $driver.':host='.$adress.';port='.$port.';dbname='.$dbname;
             } else {
             	$dsn = $driver.':host='.$host.';dbname='.$dbname;
