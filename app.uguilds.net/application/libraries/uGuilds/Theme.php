@@ -137,7 +137,7 @@ class Theme {
 		}
 
 		// Create an empty array
-		$files  = '<link rel="stylesheet" media="all" href="/media/css/uGuilds.css">' . "\n\t";
+		$files  = '<link rel="stylesheet" media="all" href="/media/css/uGuilds.css">' . "\n";
 		$files .= $this->getControllerCss();
 
 		// Loop through each of the CSS files
@@ -152,7 +152,7 @@ class Theme {
 					$css->media = 'screen';
 				}
 
-				$files .= '<link rel="stylesheet" media="'. $css->media .'" href="/themes/'. $this->_id .'/css/'. $css->url .'">'."\n\t";
+				$files .= "\t".'<link rel="stylesheet" media="'. $css->media .'" href="/themes/'. $this->_id .'/css/'. $css->url .'">'."\n";
 			}
 		}
 
@@ -208,8 +208,14 @@ class Theme {
 		$ci = get_instance();
 
 		// jQuery
-		$files  = '<script src="//ajax.googleapis.com/ajax/libs/jquery/'. $this->jquery_version .'/jquery.min.js"></script>'."\n";
+		$files  = '<script src="//ajax.googleapis.com/ajax/libs/jquery/'. $this->jquery_version .'/jquery.min.js"></script>'."\n\t";
 		
+		// jQuery Migrate
+		if(version_compare($this->jquery_version, '1.9.0', '>='))
+		{
+			$files .= '<script src="/media/js/migrate.js"></script>'."\n";
+		}
+
 		// Controller JS
 		$files .= $this->getControllerJS();
 		
@@ -257,14 +263,18 @@ class Theme {
 		$controller_name = get_class($ci);
 		$return = '';
 
-		if(is_dir(FCPATH .'media/js/controller'. $controller_name))
+		if(is_dir(FCPATH .'media/js/controller/'. $controller_name .'/'))
 		{
-			$files = scandir(FCPATH .'/media/js/controller/'. $controller_name .'/');
-			$files = preg_grep('/\.min\.js$/', $files);
+			$files = scandir(FCPATH .'media/js/controller/'. $controller_name .'/');
+			$files = preg_grep('/\.min\.js/', $files);
 			foreach($files as $file)
 			{
 				$return .= "\t".'<script src="/media/js/controller/'. $controller_name .'/'. $file .'"></script>'."\n";
 			}
+		}
+		else 
+		{
+
 		}
 
 		return $return;

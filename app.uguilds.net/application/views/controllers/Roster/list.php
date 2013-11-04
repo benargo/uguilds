@@ -32,7 +32,7 @@
 		<td class="level"><?php echo $member['character']['level']; ?></td>
 
 		<!-- Guild Rank -->
-		<td class="guild-rank" data-rank-id="<?php echo $member['rank']; ?>">
+		<td class="guild-rank" data-id="<?php echo $member['rank']; ?>">
 			<a href="/roster/filter?rank=<?php echo $member['rank']; ?>"><?php echo $member['rank']; ?></a>
 		</td>
 

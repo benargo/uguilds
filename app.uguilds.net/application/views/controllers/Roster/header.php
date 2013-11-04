@@ -72,7 +72,7 @@
 			</span>-->
 		</form>
 		<!-- Roster table -->
-		<table class="guild-roster">
+		<table class="guild-roster tablesorter">
 			<thead>
 				<tr>
 					<th class="sortable character-name">Name</th>
