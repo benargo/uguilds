@@ -35,16 +35,19 @@ class Roster extends UG_Controller {
 
 		// Load the header
 		$this->_loadHeader();
-		$this->load->view('controllers/Roster/header.php', $this->data());
 
 		$races = new BattlenetArmory\Races(strtolower($this->uguilds->guild->region));
 		$classes = new BattlenetArmory\Classes(strtolower($this->uguilds->guild->region));
 
-		// Load the table
 		$custom_data = array("races"   => $races,
 							 "classes" => $classes,
-							 "members" => $this->uguilds->guild->getBattlenetGuild()->getMembers('rank'));
+							 "members" => $this->uguilds->guild->getMembers('name'));
 
+		// Load the roster table header and filter system
+		$this->load->view('controllers/Roster/header.php', $this->data($custom_data));
+
+		// Load the roster list
+		$custom_data['members'] = $this->uguilds->guild->getMembers('rank');
 		$this->load->view('controllers/Roster/list.php', $this->data($custom_data));
 		unset($races, $classes, $custom_data);
 

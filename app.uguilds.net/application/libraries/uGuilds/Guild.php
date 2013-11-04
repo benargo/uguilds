@@ -8,23 +8,14 @@ if (!defined('BASEPATH')) exit('No direct script access allowed');
  * @author Ben Argo <ben@benargo.com>
  */
 
-class Guild {
+class Guild extends \BattlenetArmory\Guild {
 
 	private $_id;
-	private $region;
-	private $realm;
-	private $guildName;
 	private $domainName;
 	private $ranks;
 	private $theme = 'default';
 	private $locale = 'en_GB';
 	private $features = array();
-
-	/**
-	 * @access private
-	 * @var \BattlenetArmory\Guild;
-	 */
-	private $_BattlenetArmoryGuild;
 
 	/**
 	 * __construct()
@@ -34,7 +25,6 @@ class Guild {
 	 */
 	function __construct() 
 	{
-
 	}
 
 	/**
@@ -62,7 +52,7 @@ class Guild {
 
 			case "guildName": /* preferred */
 			case "name":
-				return ucwords($this->guildName);
+				return ucwords($this->name);
 				break;
 
 			case "domainName":
@@ -80,7 +70,7 @@ class Guild {
 			case "locale":
 				if(!preg_match("/([a-z]+)_([A-Z]+)/", $this->locale))
 				{
-					$this->locale = $this->getBattlenetGuild();
+					$this->locale = 'en_GB';
 				}
 
 				return $this->locale;
@@ -118,7 +108,7 @@ class Guild {
 		$query = $ci->db->query("SELECT 	`_id`,
 								`region`,
 								`realm`,
-								`guildName`,
+								`name`,
 								`domainName`,
 								`theme`,
 								`locale`
@@ -140,6 +130,8 @@ class Guild {
 
     			$ci->session->set_userdata('guild_id', $this->_id);
 
+    			$this->_load(strtolower($this->region), $this->realm, $this->name);
+
     			// We only want to do this once!
     			break;
    			}
@@ -158,12 +150,7 @@ class Guild {
 	 */
 	public function getBattlenetGuild() 
 	{
-		if(is_null($this->_BattlenetArmoryGuild)) 
-		{
-			$ci = get_instance();
-			$this->_BattlenetArmoryGuild = $ci->battlenetarmory->getGuild($this->guildName,$this->realm);
-		}
-		return $this->_BattlenetArmoryGuild;
+		return $this;
 	}
 
 	/**
@@ -176,8 +163,8 @@ class Guild {
 	 */
 	public function getEmblem($showlevel=TRUE, $width=215)
 	{
-		$this->getBattlenetGuild()->showEmblem($showlevel, $width);
-		$this->getBattlenetGuild()->saveEmblem(FCPATH . 'media/BattlenetArmory/emblem_'. $this->region .'_'. preg_replace('/\ /', '_', $this->realm) .'_'. preg_replace('/\ /', '_', $this->guildName) .'_'. $width .'.png');
+		$this->showEmblem($showlevel, $width);
+		$this->saveEmblem(FCPATH . 'media/BattlenetArmory/emblem_'. $this->region .'_'. preg_replace('/\ /', '_', $this->realm) .'_'. preg_replace('/\ /', '_', $this->guildName) .'_'. $width .'.png');
 
 		return '/media/BattlenetArmory/emblem_'. $this->region .'_'. preg_replace('/\ /', '_', $this->realm) .'_'. preg_replace('/\ /', '_', $this->guildName) .'_'. $width .'.png';
 	}
@@ -215,14 +202,48 @@ class Guild {
 		return array_key_exists($feature, $this->_getFeatures());
 	}
 
+
 	/**
-	 * areApplicationsEnabled()
+	 * getLowestLevelMember()
 	 *
-	 * @return bool
 	 * @access public
+	 * @return int
 	 */
-	public function areApplicationsEnabled()
+	public function getLowestLevelMember()
 	{
-		return (bool) $this->features->applications;
+		// Theoretical lowest level is 95
+		$level = 95;
+
+		foreach($this->getData()['members'] as $member)
+		{
+			if($member['character']['level'] < $level)
+			{
+				$level = $member['character']['level'];
+			}
+		}
+
+		return (int) $level;
+	}
+
+	/**
+	 * getHighestLevelMember()
+	 *
+	 * @access public
+	 * @return int
+	 */
+	public function getHighestLevelMember()
+	{
+		// Theoretical highest level is 1
+		$level = 1;
+
+		foreach($this->getData()['members'] as $member)
+		{
+			if($member['character']['level'] > $level)
+			{
+				$level = $member['character']['level'];
+			}
+		}
+
+		return (int) $level;
 	}
 }

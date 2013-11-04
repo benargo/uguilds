@@ -12,7 +12,7 @@ html {
 	background: url('../images/headerBG.jpg') center top no-repeat fixed, url('../images/pageBG.jpg') center top repeat;
    	color: #ffffff;
 	font-family: Helvetica, Arial, sans-serif;
-   	font-size: 16px;
+   	font-size: 12pt;
 
    	@media (min-width:1024px) {
 	    body {
@@ -22,11 +22,11 @@ html {
 	}
 
 	@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-		font-size: 40px;
+		font-size: 18pt;
 	}
 
 	@media (max-width: 640px) {
-		font-size: 16px;
+		font-size: 10pt;
 
 	}  
 
@@ -108,7 +108,7 @@ html {
 						}
 
 						@media (max-width: 640px) {
-							font-size: 1.4em;
+							font-size: 2em;
 						}
 					}
 
@@ -153,7 +153,7 @@ html {
 	    	}
 	    }
 
-	    & #guild-roster {
+	    & .guild-roster {
 	    	& .race a, & .class a {
 	    		background-color: $bg-color;
 	    		-webkit-border-radius: 3px;
@@ -165,10 +165,7 @@ html {
 	    	}
 
 	    	@media (max-width: 640px), (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-	    		& .spec {
-	    			display: none;
-	    		}
-	    		& .optional {
+	    		& .spec, & .achievements > img {
 	    			display: none;
 	    		}
 	    	}

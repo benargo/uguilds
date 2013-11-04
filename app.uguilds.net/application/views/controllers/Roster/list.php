@@ -22,7 +22,7 @@
 					alt="<?php echo $classes->getClass($member['character']['class'], 'name'); ?>" width="18" />
 				<?php if(array_key_exists('spec', $member['character']))
 					{
-						?><img src="//media.blizzard.com/wow/icons/18/<?php echo $member['character']['spec']['icon']; ?>.jpg" 
+						?><img src="<?php echo $guild->getIcon($member['character']['spec']['icon']); ?>" 
 					alt="<?php echo $member['character']['spec']['name']; ?>" width="18" class="spec" /><?php
 				} ?>
 			</a>
@@ -32,7 +32,7 @@
 		<td class="level"><?php echo $member['character']['level']; ?></td>
 
 		<!-- Guild Rank -->
-		<td class="guild-rank">
+		<td class="guild-rank" data-rank-id="<?php echo $member['rank']; ?>">
 			<a href="/roster/filter?rank=<?php echo $member['rank']; ?>"><?php echo $member['rank']; ?></a>
 		</td>
 

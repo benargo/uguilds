@@ -174,11 +174,20 @@ class Theme {
 	{
 		$ci = get_instance();
 		$controller_name = get_class($ci);
+		$return = '';
 
-		if(file_exists(FCPATH.'/media/css/controller/'. $controller_name .'.css'))
+
+		if(is_dir(FCPATH .'media/css/controller/'. $controller_name))
 		{
-			return '<link rel="stylesheet" media="all" href="/media/css/controller/'. $controller_name .'.css">'."\n\t";
+			$files = scandir(FCPATH .'media/css/controller/'. $controller_name .'/');
+			$files = preg_grep('/\.css$/', $files);
+			foreach($files as $file)
+			{
+				$return .= "\t".'<link rel="stylesheet" media="all" href="/media/css/controller/'. $controller_name .'/'. $file .'" />'."\n";
+			}
 		}
+
+		return $return;
 	}
 
 	/**
@@ -199,8 +208,7 @@ class Theme {
 		$ci = get_instance();
 
 		// jQuery
-		$files  = '<script src="//ajax.googleapis.com/ajax/libs/jquery/'. $this->jquery_version .'/jquery.min.js"></script>'."\n\t";
-		$files .= '<script src="/media/js/jquery.history.js"></script>'."\n";
+		$files  = '<script src="//ajax.googleapis.com/ajax/libs/jquery/'. $this->jquery_version .'/jquery.min.js"></script>'."\n";
 		
 		// Controller JS
 		$files .= $this->getControllerJS();
@@ -247,11 +255,19 @@ class Theme {
 	{
 		$ci = get_instance();
 		$controller_name = get_class($ci);
-		
-		if(file_exists(FCPATH.'/media/js/controller/'. $controller_name .'.js'))
+		$return = '';
+
+		if(is_dir(FCPATH .'media/js/controller'. $controller_name))
 		{
-			return "\t".'<script src="/media/js/controller/'. $controller_name .'.js">'."\n";
+			$files = scandir(FCPATH .'/media/js/controller/'. $controller_name .'/');
+			$files = preg_grep('/\.min\.js$/', $files);
+			foreach($files as $file)
+			{
+				$return .= "\t".'<script src="/media/js/controller/'. $controller_name .'/'. $file .'"></script>'."\n";
+			}
 		}
+
+		return $return;
 	}
 
 	/**

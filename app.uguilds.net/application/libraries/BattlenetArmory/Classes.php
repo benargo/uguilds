@@ -30,4 +30,24 @@ class Classes extends Battlenet {
 
          return '/media/images/classes/class_'. $id .'.jpg';
       }
+
+      public function getAll()
+      {
+         $classes = array();
+         foreach($this->datas as $class)
+         {
+            $classes[$class['id']] = $class['name'];
+         }
+
+         // Sort the races by name
+         asort($classes);
+
+         // Generate the return
+         $return = array();
+         foreach($classes as $id => $name)
+         {
+            $return[] = $this->datas[$id];
+         }
+         return $return;
+      }
 }

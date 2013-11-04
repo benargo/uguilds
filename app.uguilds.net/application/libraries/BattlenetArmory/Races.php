@@ -31,4 +31,47 @@ class Races extends Battlenet {
 
          return '/media/images/races/race_'. $id .'_'. $gender .'.jpg';
       }
+
+      public function getAll($side = 'both')
+      {
+         switch($side)
+         {
+            case 0:
+               $side = 'alliance';
+               break;
+
+            case 1:
+               $side = 'horde';
+
+            case 'both':
+            default:
+               unset($side);
+               break;
+         }
+
+         
+         $races = '';
+
+         foreach($this->datas as $race)
+         {
+            if(isset($side) && $race['side'] == $side)
+            {
+               $races[$race['id']] = $race['name'];
+               continue;
+            }
+
+            $races[$race['id']] = $race['name'];
+         }
+
+         // Sort the races by name
+         asort($races);
+
+         // Generate the return
+         $return = array();
+         foreach($races as $id => $name)
+         {
+            $return[] = $this->datas[$id];
+         }
+         return $return;
+      }
 }

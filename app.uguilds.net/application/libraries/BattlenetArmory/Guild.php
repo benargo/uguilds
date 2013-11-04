@@ -14,20 +14,27 @@ class Guild extends Battlenet {
 	private $perks;
 	private $guildRankTitles;
 	
-   	function __construct($region, $realm, $name) {
-   		$this->region = strtolower($region);
-   		$this->realm = $realm;
-   		$this->name = $name;
-		$jsonConnect = new jsonConnect();
-		$this->guildData = $jsonConnect->getGuild($name, $realm, $region, implode(",",$this->fields));
-		if ($this->isValid()){
-			$this->perks = new Perks($region,$this->guildData['level']);
-			$this->setThumbnails();
-		}
-		#print_r($this->guildData);
-   	}
+   	function __construct()
+    {
+
+    }
+
+    protected function _load($region, $realm, $name) 
+    {
+        $this->region = strtolower($region);
+        $this->realm = $realm;
+        $this->name = $name;
+        $jsonConnect = new jsonConnect();
+        $this->guildData = $jsonConnect->getGuild($name, $realm, $region, implode(",",$this->fields));
+        if ($this->isValid())
+        {
+            $this->perks = new Perks($region,$this->guildData['level']);
+            $this->setThumbnails();
+        }
+    }
    	
-   	private function setThumbnails(){
+   	protected function setThumbnails()
+    {
    		$members = $this->guildData['members'];
    		foreach ($members as $key => $member){
    			$this->guildData['members'][$key]['character']['thumbnailURL'] = 'http://' .$this->region. '.battle.net/static-render/' .$this->region. '/' . $member['character']['thumbnail']; 
@@ -38,7 +45,8 @@ class Guild extends Battlenet {
    	 * Get the guild perks achieved
    	 * @return Returns an array with the next perk possible, returns FALSE if there are no more.
    	 */
-   	public function getNextPerk(){
+   	public function getNextPerk()
+    {
    		return $this->perks->getNextPerk();
    	}
    	
@@ -46,11 +54,13 @@ class Guild extends Battlenet {
    	 * Get the guild perks achieved
    	 * @return Returns an array with the perks achieved, returns FALSE if there are none.
    	 */
-   	public function getPerks(){
+   	public function getPerks()
+    {
    		return $this->perks->getPerks();
    	}
    	
-   	public function setEmblemHideRing($value){
+   	public function setEmblemHideRing($value)
+    {
    		$this->emblemHideRing = $value;
    	}
    	
@@ -58,7 +68,8 @@ class Guild extends Battlenet {
    	 * Test if guild is valid and loaded.
    	 * @return Returns TRUE if valid, else FALSE
    	 */
-   	public function isValid(){
+   	public function isValid()
+    {
    		return $this->testGuild();
    	}
    	
@@ -66,8 +77,10 @@ class Guild extends Battlenet {
    	 * Test if guild is valid and loaded.
    	 * @return Returns TRUE if valid, else FALSE
    	 */
-   	public function testGuild(){
-   		if (!$this->guildData){
+   	public function testGuild()
+    {
+   		if (!$this->guildData)
+        {
    			return FALSE;
    		}
    		return TRUE;
@@ -77,7 +90,8 @@ class Guild extends Battlenet {
    	 * Extract all guild data
    	 * @return A large array with all raw information
    	 */
-	public function getData() {
+	public function getData() 
+    {
    		return $this->guildData;
    	}
    	
@@ -86,11 +100,13 @@ class Guild extends Battlenet {
    	 * @param String $sort Define what the list should be sorted by: timestamp|id|name
    	 * @param String $sortFlag Can be asc|desc
    	 */
-   	public function getAchievements($sort=FALSE,$sortFlag='asc'){
+   	public function getAchievements($sort=FALSE,$sortFlag='asc')
+    {
    		$achievements['achievementsCompleted'] = $this->guildData['achievements']['achievementsCompleted'];
    		$achievements['achievementsCompletedTimestamp'] = $this->guildData['achievements']['achievementsCompletedTimestamp'];
    		$id_list = '';
-   		for ($i = 0; $i < count($achievements['achievementsCompleted']); $i++){
+   		for ($i = 0; $i < count($achievements['achievementsCompleted']); $i++)
+        {
    			// Build the new array to return
    			$achievement[$i]['id']=$achievements['achievementsCompleted'][$i];
    			$achievement[$i]['timestamp']=$achievements['achievementsCompletedTimestamp'][$i];
@@ -101,18 +117,21 @@ class Guild extends Battlenet {
    			$achievement[$i]['url'] .= "&who=".$this->name."&when=".$achievement[$i]['timestamp'];
    			$id_list .= $achievement[$i]['id'].',';
    		}
+
    		$id_list = substr($id_list, 0,-1);
    		$achievementdata = new Achievements($id_list,'guild',$this->region);
 		$id_list = null;
 
-   		for ($i = 0; $i < count($achievements['achievementsCompleted']); $i++){
+   		for ($i = 0; $i < count($achievements['achievementsCompleted']); $i++)
+        {
    			$achievement[$i]['name'] = $achievementdata->getAchievement($achievement[$i]['id'],'title');
    		}
 		
    		$achievements = null;
    		$achievementdata = null;
 
-   		if ($sort){
+   		if ($sort)
+        {
 			return $this->sortAchievements($achievement, $sort, $sortFlag);
    		}
    		
@@ -124,13 +143,17 @@ class Guild extends Battlenet {
    	 * @param $sort String Define what the list should be sorted by: name|class|race|gender|level|rank
    	 * @param $sortFlag String Can be asc|desc
    	 */
-   	public function getMembers($sort=FALSE,$sortFlag='asc'){
+   	public function getMembers($sort=FALSE,$sortFlag='asc')
+    {
    		$members = $this->guildData['members'];
-   		if ($sort){
+   		if ($sort)
+        {
 			$members = $this->sort($this->guildData['members'], $sort, $sortFlag);
    		}
-   		if (isset($this->guildRankTitles)){
-   			foreach ($members as $key=>$member){
+   		if (isset($this->guildRankTitles))
+        {
+   			foreach ($members as $key=>$member)
+            {
    				$members[$key]['rankname'] = $this->guildRankTitles[$member['rank']];
    			}
    		}
@@ -142,42 +165,59 @@ class Guild extends Battlenet {
 	 * @param Array $guildRankTitles An array containing the textual description of each guild rank using array key as rank id and value as rank name, and it will add a rankname when you get guild members.
 	 * @return void
 	 */
-	public function setGuildRankTitles($guildRankTitles){
+	public function setGuildRankTitles($guildRankTitles)
+    {
 	    if(is_array($guildRankTitles))
 	    $this->guildRankTitles = $guildRankTitles;
 	}
    	
-   	private function sort($array,$sortkey,$sortFlag){
+    protected function sort($array,$sortkey,$sortFlag)
+    {
    		$arraysize = count($array);
-   		foreach(array_keys($array) as $key){
-   			if ($sortkey == 'rank'){
+   		foreach(array_keys($array) as $key)
+        {
+   			if ($sortkey == 'rank')
+            {
    				$temp_array[$key] = $array[$key][$sortkey];
-   			}else{
+   			}
+            else
+            {
    				$temp_array[$key] = $array[$key]['character'][$sortkey];
    			}
    		}
+
    		natsort($temp_array);
-   		if ($sortFlag == 'desc'){
+   		if ($sortFlag == 'desc')
+        {
    			$temp_array = array_reverse($temp_array,TRUE);
    		}
-   		foreach(array_keys($temp_array) as $key){
+   		foreach(array_keys($temp_array) as $key)
+        {
    			$return_array[] = $array[$key]; 
    		}
+
    		return $return_array;
    	}
 
-   	private function sortAchievements($array,$sortkey,$sortFlag){
+   	protected function sortAchievements($array,$sortkey,$sortFlag)
+    {
    		$arraysize = count($array);
-   		foreach(array_keys($array) as $key){
+   		foreach(array_keys($array) as $key)
+        {
   			$temp_array[$key] = $array[$key][$sortkey];
   		}
+
    		natsort($temp_array);
-   		if ($sortFlag == 'desc'){
+   		if ($sortFlag == 'desc')
+        {
    			$temp_array = array_reverse($temp_array,TRUE);
    		}
-   		foreach(array_keys($temp_array) as $key){
+
+   		foreach(array_keys($temp_array) as $key)
+        {
    			$return_array[] = $array[$key]; 
    		}
+
    		return $return_array;
    	}
    	
@@ -185,25 +225,33 @@ class Guild extends Battlenet {
    	 * Generated and display an guild emblem image/png
    	 * @param Integer $width Width of the emblem - max size is 215
    	 */
-   	public function showEmblem($showlevel=TRUE, $width=215){
-		  if($finalimg = $this->createEmblem($showlevel,$width))
-      {
-        return true;
-      }
+   	public function showEmblem($showlevel=TRUE, $width=215)
+    {
+	  	if($finalimg = $this->createEmblem($showlevel,$width))
+        {
+        	return true;
+    	}
    	}
 
   
    	
-  	public function deleteEmblem(){
-  	       if (!$this->emblemAdd) {
-            $imgfile = APPPATH . "cache/BattlenetArmory/" . $this->region . '_' . $this->realm . '_' . $this->name . ".png";
-        } else {
-            $imgfile = APPPATH . "cache/BattlenetArmory/" . $this->region . '_' . $this->realm . '_' . $this->name . '_' . $this->emblemAdd . ".png";
+  	public function deleteEmblem()
+  	{
+  	    if (!$this->emblemAdd) 
+  	    {
+        	$imgfile = APPPATH . "cache/BattlenetArmory/" . $this->region . '_' . $this->realm . '_' . $this->name . ".png";
+        } 
+        else 
+        {
+        	$imgfile = APPPATH . "cache/BattlenetArmory/" . $this->region . '_' . $this->realm . '_' . $this->name . '_' . $this->emblemAdd . ".png";
         }
-        if (is_file($imgfile)) {
+
+        if (is_file($imgfile)) 
+        {
             unlink($imgfile);
             return TRUE;
         }
+
         return FALSE;
     }
    	
@@ -213,7 +261,8 @@ class Guild extends Battlenet {
      * @author magic-mouse
      * @param String $dest The destination folder of the file.
      */
-    public function saveEmblem($dest) {
+    public function saveEmblem($dest) 
+    {
         if (!$this->emblemAdd) {
             $imgfile = APPPATH . "cache/BattlenetArmory/" . $this->region . '_' . $this->realm . '_' . $this->name . ".png";
         } else {
@@ -229,24 +278,32 @@ class Guild extends Battlenet {
      * Used for adding a string in the guild emblem file name. Useless for most people except me ;)
      * @param String $text Value you eant added to file name
      */
-   	public function setEmblemFileAdd($text){
+   	public function setEmblemFileAdd($text)
+   	{
    		$this->emblemAdd = $text;
    	}
    	
-   	private function createEmblem($showlevel=TRUE, $width=215){
-   		if (!$this->emblemAdd){
+   	private function createEmblem($showlevel=TRUE, $width=215)
+   	{
+   		if (!$this->emblemAdd)
+   		{
    			$imgfile = APPPATH."cache/BattlenetArmory/".$this->region.'_'.$this->realm.'_'.$this->name.".png";
-   		} else {
+   		} 
+   		else 
+   		{
    			$imgfile = APPPATH."cache/BattlenetArmory/".$this->region.'_'.$this->realm.'_'.$this->name.'_'.$this->emblemAdd.".png";
    		}
-   		#$imgfile = APPPATH."/cache/".$this->region.$this->realm.$this->name.".png";
-   		#print $imgfile;
-   		if (file_exists($imgfile) AND $width==(imagesx(imagecreatefrompng($imgfile))) AND (filemtime($imgfile)+86000) > time()) {
+
+   		if (file_exists($imgfile) AND $width==(imagesx(imagecreatefrompng($imgfile))) AND (filemtime($imgfile)+86000) > time()) 
+   		{
    			$finalimg = imagecreatefrompng($imgfile);
 			imagesavealpha($finalimg,true);
 			imagealphablending($finalimg, true);
-   		} else {
-	   		if ($width > 1 AND $width < 215){
+   		} 
+   		else
+   		{
+	   		if ($width > 1 AND $width < 215)
+	   		{
 				$height = ($width/215)*230;
 				$finalimg = imagecreatetruecolor($width, $height);
 				$trans_colour = imagecolorallocatealpha($finalimg, 0, 0, 0, 127);
@@ -255,9 +312,12 @@ class Guild extends Battlenet {
 				imagealphablending($finalimg, true);
 	   		}
 			
-	   		if ($this->guildData['side'] == 0){
+	   		if ($this->guildData['side'] == 0)
+	   		{
 	   			$ring = 'alliance';
-	   		} else {
+	   		} 
+	   		else 
+	   		{
 	   			$ring = 'horde';
 	   		}
 	   		
@@ -317,9 +377,11 @@ class Guild extends Battlenet {
 			$x = 20;
 			$y = 23;
 			
-			if (!$this->emblemHideRing){
+			if (!$this->emblemHideRing)
+			{
 				imagecopy($imgOut,$ring,0,0,0,0, $ring_size[0],$ring_size[1]);
 			}
+
 			$size = getimagesize($shadowURL);
 			imagecopy($imgOut,$shadow,$x,$y,0,0, $size[0],$size[1]);
 			imagecopy($imgOut,$bg,$x,$y,0,0, $bg_size[0],$bg_size[1]);
@@ -330,11 +392,15 @@ class Guild extends Battlenet {
 			$size = getimagesize($hooksURL);
 			imagecopy($imgOut,$hooks,$x-2,$y,0,0, $size[0],$size[1]);
 			
-			if ($showlevel){
+			if ($showlevel)
+			{
 				$level = $this->guildData['level'];
-				if ($level < 10){
+				if ($level < 10)
+				{
 					$levelIMG = imagecreatefrompng($levelURL.$level.".png");
-				} else {
+				} 
+				else 
+				{
 					$digit[1] = substr($level,0,1);
 					$digit[2] = substr($level,1,1);
 					$digit1 = imagecreatefrompng($levelURL.$digit[1].".png");
@@ -350,6 +416,7 @@ class Guild extends Battlenet {
 					imagecopy($levelIMG,$digit2,$digitwidth-12,0,0,0, $digitwidth, $digitheight);
 					imagecopy($levelIMG,$digit1,12,0,0,0, $digitwidth, $digitheight);
 				}
+
 				$size[0] = imagesx($levelIMG);
 				$size[1] = imagesy($levelIMG);
 				$levelemblem = imagecreatefrompng($ringURL);
@@ -359,15 +426,17 @@ class Guild extends Battlenet {
 				imagecopyresampled($imgOut, $levelemblem, 143, 150,0,0, 215/3, 215/3, 215, 215);
 			}
 			
-			if ($width > 1 AND $width < 215){
+			if ($width > 1 AND $width < 215)
+			{
 				imagecopyresampled($finalimg, $imgOut, 0, 0, 0, 0, $width, $height, 215, 230);
-			} else {
+			} 
+			else 
+			{
 				$finalimg = $imgOut;
 			}
+
 			imagepng($finalimg,$imgfile);
    		}
    		return $finalimg;
    	}
 }
-
-
