@@ -269,7 +269,7 @@ class Guild extends Battlenet {
             $imgfile = APPPATH . "cache/BattlenetArmory/" . $this->region . '_' . $this->realm . '_' . $this->name . '_' . $this->emblemAdd . ".png";
         }
         if (!copy($imgfile, $dest)) {
-            throw new Exception("Could Not be copied");
+            throw new \Exception("Could Not be copied");
         }
     }
    	
