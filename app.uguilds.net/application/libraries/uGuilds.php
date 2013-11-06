@@ -12,7 +12,7 @@ require_once APPPATH . 'libraries/uGuilds/Guild.php';
 require_once APPPATH . 'libraries/uGuilds/Theme.php';
 require_once APPPATH . 'libraries/uGuilds/ThemeData.php';
 
-class uGuilds {
+class Uguilds {
 
 	/**
 	 * vars
