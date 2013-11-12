@@ -269,7 +269,7 @@ class Guild extends Battlenet {
             $imgfile = APPPATH . "cache/BattlenetArmory/" . $this->region . '_' . $this->realm . '_' . $this->name . '_' . $this->emblemAdd . ".png";
         }
         if (!copy($imgfile, $dest)) {
-            throw new Exception("Could Not be copied");
+            throw new \Exception("Could Not be copied");
         }
     }
    	
@@ -322,7 +322,6 @@ class Guild extends Battlenet {
 	   		}
 	   		
 			$imgOut = imagecreatetruecolor(215, 230);
-			
 			$emblemURL = dirname(__FILE__)."/img/emblems/emblem_".sprintf("%02s",$this->guildData['emblem']['icon']).".png";
 			$borderURL = dirname(__FILE__)."/img/borders/border_".sprintf("%02s",$this->guildData['emblem']['border']).".png";
 			$ringURL = dirname(__FILE__)."/img/static/ring-".$ring.".png";

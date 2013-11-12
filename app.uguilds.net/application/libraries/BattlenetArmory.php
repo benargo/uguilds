@@ -30,7 +30,7 @@ class BattlenetArmory {
 	private $realm;
 	private $cacheEnabled = TRUE;
 	private $characterExcludeFields = FALSE;
-   private $config;
+   public $config;
 
 	/**
 	 * This will load the main armory class but only the realm and region will be set and no connections will be made until a get function is called.

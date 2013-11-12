@@ -36,8 +36,8 @@ class Roster extends UG_Controller {
 		// Load the header
 		$this->_loadHeader();
 
-		$races = new BattlenetArmory\Races(strtolower($this->uguilds->guild->region));
-		$classes = new BattlenetArmory\Classes(strtolower($this->uguilds->guild->region));
+		$races = new uGuilds\Races(strtolower($this->uguilds->guild->region));
+		$classes = new uGuilds\Classes(strtolower($this->uguilds->guild->region));
 
 		$custom_data = array("races"   => $races,
 							 "classes" => $classes,

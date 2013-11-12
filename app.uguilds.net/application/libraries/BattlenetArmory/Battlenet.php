@@ -37,12 +37,18 @@ abstract class Battlenet {
 	 * @access public
 	 * @return image/jpeg
 	 */
-	public function getIcon($string)
+	public function getIcon($string, $size = '56')
 	{
 		if(!file_exists(FCPATH .'media/images/icons/'. strtolower($string)))
 		{
-			$image = imagecreatefromjpeg('http://media.blizzard.com/wow/icons/56/'. strtolower($string) .'.jpg');
-			imagejpeg($image, FCPATH .'media/images/icons/'. strtolower($string) .'.jpg', 100);
+			if($image = imagecreatefromjpeg('http://media.blizzard.com/wow/icons/'. (int) $size .'/'. strtolower($string) .'.jpg'))
+			{	
+				imagejpeg($image, FCPATH .'media/images/icons/'. strtolower($string) .'.jpg', 100);
+			}
+			else
+			{
+				throw new \Exception('Sorry, Blizzard doesn\'t have an icon of name '. strtolower($string) .' or size '. $size);
+			}
 		}
 
 		return '/media/images/icons/'. strtolower($string) .'.jpg';

@@ -9,6 +9,8 @@
 
 require_once APPPATH . 'libraries/uGuilds/Account.php';
 require_once APPPATH . 'libraries/uGuilds/Guild.php';
+require_once APPPATH . 'libraries/uGuilds/Races.php';
+require_once APPPATH . 'libraries/uGuilds/Classes.php';
 require_once APPPATH . 'libraries/uGuilds/Theme.php';
 require_once APPPATH . 'libraries/uGuilds/ThemeData.php';
 

@@ -102,13 +102,23 @@ class Guild extends \BattlenetArmory\Guild {
 	 * @return void
 	 */
 	public function findByDomain($domain)
-	{
+	{	
 		$ci = get_instance();
+
+		/*
+		if(file_exists(APPPATH . 'cache/uGuilds/guild_objects/'. $domain .'.json') 
+			&& filemtime(APPPATH . 'cache/uGuilds/guild_objects/'. $domain .'.json') >= time() - $ci->battlenetarmory->config['GuildsTTL'])
+		{
+			$cache = json_decode(file_get_contents(APPPATH . 'cache/uGuilds/guild_objects/'. $domain .'.json'));
+			dump()
+		}
+		*/
 
 		$query = $ci->db->query("SELECT 	`_id`,
 								`region`,
 								`realm`,
 								`name`,
+								'faction',
 								`domainName`,
 								`theme`,
 								`locale`
