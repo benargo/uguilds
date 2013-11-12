@@ -3,16 +3,16 @@ namespace BattlenetArmory;
 
 class Guild extends Battlenet {
 	
-	private $name;
-	private $region;
-	private $realm;
-	private $guildData;
-	private $fields = array('members','achievements');
-	private $cache;
-	private $emblemAdd = FALSE;
-	private $emblemHideRing = FALSE;
-	private $perks;
-	private $guildRankTitles;
+	protected $name;
+	protected $region;
+	protected $realm;
+	protected $guildData;
+	protected $fields = array('members','achievements');
+	protected $cache;
+	protected $emblemAdd = FALSE;
+	protected $emblemHideRing = FALSE;
+	protected $perks;
+	protected $guildRankTitles;
 	
    	function __construct()
     {

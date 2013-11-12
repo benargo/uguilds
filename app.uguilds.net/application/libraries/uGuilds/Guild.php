@@ -83,19 +83,6 @@ class Guild extends \BattlenetArmory\Guild {
 	}
 
 	/**
-	 * load()
-	 * 
-	 * @access public
-	 * @static true
-	 * @return $this
-	 */
-	public static function load()
-	{
-		$ci = get_instance();
-		return $ci->uguilds->guild;
-	}
-
-	/**
 	 * findByDomain()
 	 *
 	 * @access public
@@ -105,20 +92,22 @@ class Guild extends \BattlenetArmory\Guild {
 	{	
 		$ci = get_instance();
 
-		/*
-		if(file_exists(APPPATH . 'cache/uGuilds/guild_objects/'. $domain .'.json') 
-			&& filemtime(APPPATH . 'cache/uGuilds/guild_objects/'. $domain .'.json') >= time() - $ci->battlenetarmory->config['GuildsTTL'])
+		// Check if there's a cache file for this guild and it's valid
+		if(file_exists(APPPATH . 'cache/uGuilds/guild_objects/'. $domain .'.txt') 
+			&& filemtime(APPPATH . 'cache/uGuilds/guild_objects/'. $domain .'.txt') >= time() - $ci->config->item('battle.net')['GuildsTTL'])
 		{
-			$cache = json_decode(file_get_contents(APPPATH . 'cache/uGuilds/guild_objects/'. $domain .'.json'));
-			dump()
+			$cache = unserialize(file_get_contents(APPPATH . 'cache/uGuilds/guild_objects/'. $domain .'.txt'));
+			foreach($cache as $key => $value)
+			{
+				$this->$key = $value;
+			}
 		}
-		*/
-
-		$query = $ci->db->query("SELECT 	`_id`,
+		else // No cache file, generate one from the database
+		{
+			$query = $ci->db->query("SELECT 	`_id`,
 								`region`,
 								`realm`,
 								`name`,
-								'faction',
 								`domainName`,
 								`theme`,
 								`locale`
@@ -126,29 +115,35 @@ class Guild extends \BattlenetArmory\Guild {
 						WHERE `domainName` = '$domain'
 						LIMIT 0, 1");
 
-		// Check we got a result
-		if ($query->num_rows() > 0)
-		{
-			// Loop through the rows (there should only be one)
-  			foreach ($query->result() as $row)
-   			{
-   				// Loop through the columns
-    			foreach($row as $key => $value)
-    			{
-    				$this->$key = $value;
-    			}
+			// Check we got a result
+			if ($query->num_rows() > 0)
+			{
+				// Loop through the rows (there should only be one)
+  				foreach ($query->result() as $row)
+   				{
+	   				// Loop through the columns
+	    			foreach($row as $key => $value)
+	    			{
+	    				$this->$key = $value;
+	    			}
 
-    			$ci->session->set_userdata('guild_id', $this->_id);
+	    			// Set the session
+	    			$ci->session->set_userdata('guild_id', $this->_id);
 
-    			$this->_load(strtolower($this->region), $this->realm, $this->name);
+	    			// Load the full guild from battle.net
+	    			$this->_load(strtolower($this->region), $this->realm, $this->name);
 
-    			// We only want to do this once!
-    			break;
-   			}
-		} 
-		else
-		{
-			return false;
+	    			// We only want to do this once!
+	    			break;
+   				}
+
+   				// Encode this object and store it in the cache
+   				file_put_contents(APPPATH .'cache/uGuilds/guild_objects/'. $this->domainName .'.txt', serialize($this));
+			}
+			else // No result from the database, this guild must not exist
+			{
+				throw new \Exception('This guild does not exist');
+			}
 		}
 	}
 
