@@ -322,7 +322,6 @@ class Guild extends Battlenet {
 	   		}
 	   		
 			$imgOut = imagecreatetruecolor(215, 230);
-			
 			$emblemURL = dirname(__FILE__)."/img/emblems/emblem_".sprintf("%02s",$this->guildData['emblem']['icon']).".png";
 			$borderURL = dirname(__FILE__)."/img/borders/border_".sprintf("%02s",$this->guildData['emblem']['border']).".png";
 			$ringURL = dirname(__FILE__)."/img/static/ring-".$ring.".png";
