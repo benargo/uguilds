@@ -14,7 +14,7 @@ require_once APPPATH . 'libraries/uGuilds/Classes.php';
 require_once APPPATH . 'libraries/uGuilds/Theme.php';
 require_once APPPATH . 'libraries/uGuilds/ThemeData.php';
 
-class Uguilds {
+class uGuilds {
 
 	/**
 	 * vars
