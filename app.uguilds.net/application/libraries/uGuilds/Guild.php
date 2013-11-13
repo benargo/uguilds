@@ -104,7 +104,8 @@ class Guild extends \BattlenetArmory\Guild {
 		}
 		else // No cache file, generate one from the database
 		{
-			$query = $ci->db->query("SELECT 	`_id`,
+			$query = $ci->db->query("SELECT 	
+								`_id`,
 								`region`,
 								`realm`,
 								`name`,

@@ -213,7 +213,7 @@ class Theme {
 		// jQuery Migrate
 		if(version_compare($this->jquery_version, '1.9.0', '>='))
 		{
-			$files .= '<script src="/media/js/migrate.js"></script>'."\n";
+			$files .= '<script src="/media/js/migrate.min.js"></script>'."\n";
 		}
 
 		// Controller JS

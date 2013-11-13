@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(function() {
     // On Resize Events
     $(window).on('resize', function() {
         if($(window).width() <= '640')
@@ -12,27 +12,7 @@ $(document).ready(function() {
         }
     });
 
-    // Table Sorter
-/*    $.tablesorter.addParser({
-        // set a unique id 
-        id: 'ranks',
-        is: function(s) {
-            // return false so this parser is not auto detected 
-            return false;
-        },
-        format: function(s) {
-            // format your data for normalization 
-            return s.data('id');
-        },
-        // set type, either numeric or text 
-        type: 'numeric'
-    }); */
-
-    $("table.guild-roster").tablesorter(/*{
-        headers: {
-            4: {
-                sorter:'ranks'
-            }
-        }
-    }*/);
+    $('select[name="characterName"]').combobox();
+    $('select[name="minLevel"]').combobox();
+    $('select[name="maxLevel"]').combobox();
 });

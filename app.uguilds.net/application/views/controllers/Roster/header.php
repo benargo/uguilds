@@ -43,8 +43,8 @@
 
 			<!-- Level Range -->
 			<span class="field">
-				<label for="min-level">Level</label>
-				<select name="min-level">
+				<label for="minLevel">Level</label>
+				<select name="minLevel">
 			<?php 	for($i = $guild->getLowestLevelMember(); $i <= $guild->getHighestLevelMember(); $i++)
 					{
 						?>		<option name="<?php echo $i; ?>"><?php echo $i; ?></option>
@@ -53,7 +53,7 @@
 				?>
 				</select>
 				&ndash;
-				<select name="max-level">
+				<select name="maxLevel">
 			<?php 	for($i = $guild->getLowestLevelMember(); $i <= $guild->getHighestLevelMember(); $i++)
 					{
 						?>		<option name="<?php echo $i; ?>"<?php echo ($i == $guild->getHighestLevelMember() ? ' selected="true"' : ''); ?>><?php echo $i; ?></option>
