@@ -11,3 +11,4 @@ app.uguilds.net/html/index.php
 app.uguilds.net/html/media/BattlenetArmory/
 app.uguilds.net/html/media/images/
 app.uguilds.net/html/media/icons/
+*.min.js
