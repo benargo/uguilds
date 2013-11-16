@@ -18,11 +18,11 @@
 		<!-- Class -->
 		<td class="class">
 			<a href="/roster/filter?class=<?php echo strtolower(preg_replace('/\ /', '-', $classes->getClass($member['character']['class'], 'name'))); ?>">
-				<img src="<?php echo $classes->getIcon($member['character']['class']); ?>"
+				<img src="<?php echo $classes->getIcon($member['character']['class'], 18); ?>"
 					alt="<?php echo $classes->getClass($member['character']['class'], 'name'); ?>" width="18" />
 				<?php if(array_key_exists('spec', $member['character']))
 					{
-						?><img src="<?php echo $guild->getIcon($member['character']['spec']['icon']); ?>" 
+						?><img src="<?php echo $guild->getIcon($member['character']['spec']['icon'], 18); ?>" 
 					alt="<?php echo $member['character']['spec']['name']; ?>" width="18" class="spec" /><?php
 				} ?>
 			</a>
@@ -33,7 +33,8 @@
 
 		<!-- Guild Rank -->
 		<td class="guild-rank" data-id="<?php echo $member['rank']; ?>">
-			<a href="/roster/filter?rank=<?php echo $member['rank']; ?>"><?php echo $member['rank']; ?></a>
+			<a href="/roster/filter?rank=<?php echo (array_key_exists('rankname', $member) ? $member['rankname'] : $member['rank']); ?>"><?php 
+			echo (array_key_exists('rankname', $member) ? $member['rankname'] : $member['rank']); ?></a>
 		</td>
 
 		<!-- Achievement Points -->

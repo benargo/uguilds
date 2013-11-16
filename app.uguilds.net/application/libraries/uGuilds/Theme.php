@@ -78,7 +78,7 @@ class Theme {
 	 */
 	public static function load()
 	{
-		$ci = get_instance();
+		$ci =& get_instance();
 		return $ci->uguilds->theme;
 	}
 
@@ -172,7 +172,7 @@ class Theme {
 	 */
 	private function getControllerCss() 
 	{
-		$ci = get_instance();
+		$ci =& get_instance();
 		$controller_name = get_class($ci);
 		$return = '';
 
@@ -205,7 +205,7 @@ class Theme {
 		 * - Google Analytics
 		 */
 
-		$ci = get_instance();
+		$ci =& get_instance();
 
 		// jQuery
 		$files  = '<script src="//ajax.googleapis.com/ajax/libs/jquery/'. $this->jquery_version .'/jquery.min.js"></script>'."\n\t";
@@ -259,7 +259,7 @@ class Theme {
 	 */
 	private function getControllerJS()
 	{
-		$ci = get_instance();
+		$ci =& get_instance();
 		$controller_name = get_class($ci);
 		$return = '';
 
@@ -290,7 +290,7 @@ class Theme {
 	 */
 	public function loadHeader()
 	{
-		$ci = get_instance();
+		$ci =& get_instance();
 		return $ci->load->view('themes/'. $this->_id .'/header', $this->data);
 	}
 
@@ -304,7 +304,7 @@ class Theme {
 	 */
 	public function loadFooter()
 	{
-		$ci = get_instance();
+		$ci =& get_instance();
 		return $ci->load->view('themes/'. $this->_id .'/footer', $this->data);
 	}
 

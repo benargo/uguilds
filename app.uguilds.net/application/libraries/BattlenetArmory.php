@@ -42,7 +42,7 @@ class BattlenetArmory {
          $this->region = strtolower($region);
       	$this->realm  = $realm;
 
-         $ci = get_instance();
+         $ci =& get_instance();
          $this->config = $ci->config->item('battle.net');
 
    	}

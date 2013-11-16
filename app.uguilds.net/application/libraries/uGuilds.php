@@ -34,11 +34,11 @@ class uGuilds {
 	function __construct() 
 	{
 		// Find the guild
-		$this->findGuildByDomain();	
+		$this->_findGuild();	
 
 		// Set the theme & locale
-		$this->setLocale(true);
-		$this->setTheme(true);
+		$this->_setLocale(true);
+		$this->_setTheme(true);
 	}
 
 	/**
@@ -55,7 +55,7 @@ class uGuilds {
 			case "domain":
 				if(is_null($this->domain))
 				{
-					$this->calculateDomain();
+					$this->_setDomain();
 				}
 				return $this->domain;
 				break;
@@ -63,7 +63,7 @@ class uGuilds {
 			case "guild":
 				if(!$this->guild instanceof uGuilds\Guild)
 				{
-					$this->guild = $this->findGuildByDomain();
+					$this->guild = $this->_findGuild();
 				}
 				return $this->guild;
 				break;
@@ -71,7 +71,7 @@ class uGuilds {
 			case "theme":
 				if(!$this->theme instanceof uGuilds\Theme)
 				{
-					$this->theme = $this->setTheme();
+					$this->theme = $this->_setTheme();
 				}
 				return $this->theme;
 				break;
@@ -79,7 +79,7 @@ class uGuilds {
 			case "locale":
 				if(is_null($this->locale))
 				{
-					$this->setLocale();
+					$this->_setLocale();
 				}
 				return $this->locale;
 				break;
@@ -87,50 +87,39 @@ class uGuilds {
 	}
 
 	/**
-	 * load()
-	 * 
-	 * @access public
-	 * @static true
-	 * @return $this
-	 */
-	public static function load()
-	{
-		$ci = get_instance();
-		return $ci->uguilds;
-	}
-
-	/**
 	 * getGuildByDomain
 	 * 
 	 * @access private
 	 */
-	private function findGuildByDomain() 
+	private function _findGuild() 
 	{
+		$ci =& get_instance();
+
 		// Look up the domain name
-		if(is_null($this->domain)) {
-			$this->calculateDomain();
+		if(is_null($this->domain)) 
+		{
+			$this->_setDomain();
 		}
 
-		// Create the guild object
-		$this->guild = new uGuilds\Guild;
-
-		if($this->guild->findByDomain($this->domain))
+		// Check if there's a cache file for this guild and it's valid
+		if(file_exists(APPPATH . 'cache/uGuilds/guild_objects/'. $this->domain .'.txt') 
+			&& filemtime(APPPATH . 'cache/uGuilds/guild_objects/'. $this->domain .'.txt') >= time() - $ci->config->item('battle.net')['GuildsTTL'])
 		{
-			$ci = get_instance();
-
-			// Set the region and realm
-			$ci->battlenetarmory->setRegion($this->guild->region);
-			$ci->battlenetarmory->setRealm($this->guild->realm);
+			$this->guild = unserialize(file_get_contents(APPPATH . 'cache/uGuilds/guild_objects/'. $this->domain .'.txt'));
+		}
+		else // No cache file, generate one from the database
+		{
+			$this->guild = new uGuilds\Guild($this->domain);
 		}
 	}
 
 	/** 
-	 * calculateDomain
+	 * _setDomain()
 	 *
 	 * @access private
 	 * @return void
 	 */
-	private function calculateDomain() 
+	private function _setDomain() 
 	{
 		// Determine the domain name from SERVER_NAME
 		$this->domain = $_SERVER['SERVER_NAME'];
@@ -144,13 +133,13 @@ class uGuilds {
 	}
 
 	/**
-	 * setLocale
+	 * _setLocale()
 	 *
 	 * @access private
 	 * @var bool $override
 	 * @return void
 	 */
-	private function setLocale($override=false) 
+	private function _setLocale($override = false) 
 	{
 		if(is_null($this->locale) || $override == true)
 		{
@@ -159,13 +148,13 @@ class uGuilds {
 	}
 
 	/**
-	 * setTheme
+	 * _setTheme()
 	 *
 	 * @access private
 	 * @var bool $override
 	 * @return void
 	 */
-	private function setTheme($override=false) 
+	private function _setTheme($override = false) 
 	{
 		if(empty($this->theme) || !$this->theme instanceof uGuilds\Theme || $override == true) 
 		{
@@ -197,7 +186,7 @@ class uGuilds {
 	 */
 	public function getPageTitle()
 	{
-		$ci = get_instance();
+		$ci =& get_instance();
 		return $ci->getPageTitle();
 	}
 }

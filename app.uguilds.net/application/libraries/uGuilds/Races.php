@@ -13,15 +13,15 @@ class Races extends \BattlenetArmory\Races {
 	 * @param bool $gender
 	 * @return string
 	 */
-	public function getIcon($id, $gender) 
+	public function getIcon($id, $gender = 0, $size = 18) 
       {
-         if(!file_exists(FCPATH .'media/images/races/race_'. $id . '_'. $gender .'.jpg'))
+         if(!file_exists(FCPATH .'media/images/races/race_'. $id . '_'. $gender .'_'. $size .'.jpg'))
          {
-            $image = imagecreatefromjpeg('http://media.blizzard.com/wow/icons/18/race_'. $id .'_'. $gender .'.jpg');
-            imagejpeg($image, FCPATH .'media/images/races/race_'. $id .'_'. $gender .'.jpg', 100);
+            $image = imagecreatefromjpeg('http://media.blizzard.com/wow/icons/'. $size .'/race_'. $id .'_'. $gender .'.jpg');
+            imagejpeg($image, FCPATH .'media/images/races/race_'. $id .'_'. $gender .'_'. $size .'.jpg', 100);
          }
 
-         return '/media/images/races/race_'. $id .'_'. $gender .'.jpg';
+         return '/media/images/races/race_'. $id .'_'. $gender .'_'. $size .'.jpg';
       }
 
     /**

@@ -10,21 +10,31 @@ if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 class Guild extends \BattlenetArmory\Guild {
 
+	const MINLEVEL = 1;
+	const MAXLEVEL = 100;
+
 	private $_id;
 	private $domainName;
 	private $ranks;
 	private $theme = 'default';
 	private $locale = 'en_GB';
 	private $features = array();
+	private $levelRange = array('min' => self::MAXLEVEL,
+								'max' => self::MINLEVEL);
 
 	/**
 	 * __construct()
 	 *
 	 * @access public
+	 * @param string $domain
 	 * @return void
 	 */
-	function __construct() 
+	function __construct($domain = NULL) 
 	{
+		if($domain)
+		{
+			$this->_load($domain);
+		}
 	}
 
 	/**
@@ -83,28 +93,17 @@ class Guild extends \BattlenetArmory\Guild {
 	}
 
 	/**
-	 * findByDomain()
+	 * load()
 	 *
-	 * @access public
-	 * @return void
+	 * @access private
+	 * @param string $domain
+	 * @return uGuilds\Guild object
 	 */
-	public function findByDomain($domain)
-	{	
-		$ci = get_instance();
+	protected function _load($domain)
+	{
+		$ci =& get_instance();
 
-		// Check if there's a cache file for this guild and it's valid
-		if(file_exists(APPPATH . 'cache/uGuilds/guild_objects/'. $domain .'.txt') 
-			&& filemtime(APPPATH . 'cache/uGuilds/guild_objects/'. $domain .'.txt') >= time() - $ci->config->item('battle.net')['GuildsTTL'])
-		{
-			$cache = unserialize(file_get_contents(APPPATH . 'cache/uGuilds/guild_objects/'. $domain .'.txt'));
-			foreach($cache as $key => $value)
-			{
-				$this->$key = $value;
-			}
-		}
-		else // No cache file, generate one from the database
-		{
-			$query = $ci->db->query("SELECT 	
+		$query = $ci->db->query("SELECT 	
 								`_id`,
 								`region`,
 								`realm`,
@@ -116,47 +115,37 @@ class Guild extends \BattlenetArmory\Guild {
 						WHERE `domainName` = '$domain'
 						LIMIT 0, 1");
 
-			// Check we got a result
-			if ($query->num_rows() > 0)
-			{
-				// Loop through the rows (there should only be one)
-  				foreach ($query->result() as $row)
-   				{
-	   				// Loop through the columns
-	    			foreach($row as $key => $value)
-	    			{
-	    				$this->$key = $value;
-	    			}
+		// Check we got a result
+		if($query->num_rows() > 0)
+		{
+			// Loop through the rows (there should only be one)
+  			foreach ($query->result() as $row)
+   			{
+	   			// Loop through the columns
+	    		foreach($row as $key => $value)
+	    		{
+	    			$this->$key = $value;
+	    		}
 
-	    			// Set the session
-	    			$ci->session->set_userdata('guild_id', $this->_id);
+	    		// Set the session
+	    		$ci->session->set_userdata('guild_id', $this->_id);
 
-	    			// Load the full guild from battle.net
-	    			$this->_load(strtolower($this->region), $this->realm, $this->name);
+	    		// Load the full guild from battle.net
+	    		parent::_load(strtolower($this->region), $this->realm, $this->name);
 
-	    			// We only want to do this once!
-	    			break;
-   				}
+	    		// Load the levels and ranks
+	    		$this->_setLowestLevelMember();
+	    		$this->_setHighestLevelMember();
+	    		$this->setGuildRankTitles();
+   			}
 
-   				// Encode this object and store it in the cache
-   				file_put_contents(APPPATH .'cache/uGuilds/guild_objects/'. $this->domainName .'.txt', serialize($this));
-			}
-			else // No result from the database, this guild must not exist
-			{
-				throw new \Exception('This guild does not exist');
-			}
+   			// Encode this object and store it in the cache
+   			file_put_contents(APPPATH .'cache/uGuilds/guild_objects/'. $this->domainName .'.txt', serialize($this));
 		}
-	}
-
-	/**
-	 * getBattlenetGuild
-	 *
-	 * @access public
-	 * @return \BattlenetArmory\Guild object
-	 */
-	public function getBattlenetGuild() 
-	{
-		return $this;
+		else // No result from the database, this guild must not exist
+		{
+			throw new \Exception('This guild does not exist');
+		}
 	}
 
 	/**
@@ -208,7 +197,6 @@ class Guild extends \BattlenetArmory\Guild {
 		return array_key_exists($feature, $this->_getFeatures());
 	}
 
-
 	/**
 	 * getLowestLevelMember()
 	 *
@@ -217,39 +205,83 @@ class Guild extends \BattlenetArmory\Guild {
 	 */
 	public function getLowestLevelMember()
 	{
-		// Theoretical lowest level is 95
-		$level = 95;
+		return (int) $this->levelRange['min'];
+	}
 
+	/**
+	 * _setLowestLevelMember()
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function _setLowestLevelMember()
+	{
+		// Loop through each of the members
 		foreach($this->getData()['members'] as $member)
 		{
-			if($member['character']['level'] < $level)
+			// If this member has a lower level than the max level
+			if($member['character']['level'] < $this->levelRange['min'])
 			{
-				$level = $member['character']['level'];
+				$this->levelRange['min'] = $member['character']['level'];
 			}
 		}
-
-		return (int) $level;
 	}
 
 	/**
 	 * getHighestLevelMember()
-	 *
+	 * 
 	 * @access public
 	 * @return int
 	 */
 	public function getHighestLevelMember()
 	{
-		// Theoretical highest level is 1
-		$level = 1;
+		return (int) $this->levelRange['max'];
+	}
 
+	/**
+	 * _setHighestLevelMember()
+	 *
+	 * @access private
+	 * @return int
+	 */
+	private function _setHighestLevelMember()
+	{
+		// Loop through each of the members
 		foreach($this->getData()['members'] as $member)
 		{
-			if($member['character']['level'] > $level)
+			// If the member has a higher level than the minimum level
+			if($member['character']['level'] > $this->levelRange['max'])
 			{
-				$level = $member['character']['level'];
+				$this->levelRange['max'] = $member['character']['level'];
 			}
 		}
+	}
 
-		return (int) $level;
+	/**
+	 * _setGuildRankTitles()
+	 *
+	 * @access protected
+	 * @return void
+	 */
+	protected function setGuildRankTitles()
+	{
+		$ci =& get_instance();
+
+		$query = $ci->db->query("SELECT
+								`position`,
+								`title`
+								FROM `ug_GuildRanks`
+								WHERE `guild_id` = '". $this->_id ."'
+								ORDER BY `position`");
+
+		if($query->num_rows() > 0)
+		{
+			$ranks = array();
+			foreach($query->result() as $row)
+			{
+				$ranks[$row->position] = $row->title;
+			}
+			parent::setGuildRankTitles($ranks);
+		}
 	}
 }

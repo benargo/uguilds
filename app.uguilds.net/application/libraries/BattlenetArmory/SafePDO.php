@@ -9,7 +9,7 @@ Class SafePDO extends \PDO {
         }
  */
         public function __construct() {
-            $ci = get_instance();
+            $ci =& get_instance();
             $config = $ci->config->item('battle.net');
 /*
             // Temporarily change the PHP exception handler while we . . .

@@ -103,7 +103,7 @@ class ThemeData {
 	 */
 	public function getController($name)
 	{
-		$ci = get_instance();
+		$ci =& get_instance();
 		return $ci->uguilds->getController($name);
 	}
 

@@ -165,7 +165,7 @@ class Guild extends Battlenet {
 	 * @param Array $guildRankTitles An array containing the textual description of each guild rank using array key as rank id and value as rank name, and it will add a rankname when you get guild members.
 	 * @return void
 	 */
-	public function setGuildRankTitles($guildRankTitles)
+	protected function setGuildRankTitles($guildRankTitles)
     {
 	    if(is_array($guildRankTitles))
 	    $this->guildRankTitles = $guildRankTitles;
