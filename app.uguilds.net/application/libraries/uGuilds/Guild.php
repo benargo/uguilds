@@ -89,6 +89,10 @@ class Guild extends \BattlenetArmory\Guild {
 			case "features":
 				return $this->getFeatures();
 				break;
+
+			case "data":
+				return $this->getData();
+				break;
 		}
 	}
 

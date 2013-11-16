@@ -25,6 +25,8 @@ class uGuilds {
 	private $locale;
 	private $controller_map = array("applications"	=> "#",
 									"roster"		=> "roster");
+	private $races;
+	private $classes;
 
 	/**
 	 * __construct()
@@ -34,7 +36,10 @@ class uGuilds {
 	function __construct() 
 	{
 		// Find the guild
-		$this->_findGuild();	
+		$this->_findGuild();
+
+		$this->races = new uGuilds\Races(strtolower($this->guild->region));
+		$this->classes = new uGuilds\Classes(strtolower($this->guild->region));	
 
 		// Set the theme & locale
 		$this->_setLocale(true);
