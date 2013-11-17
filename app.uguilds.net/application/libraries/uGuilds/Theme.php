@@ -137,8 +137,7 @@ class Theme {
 		}
 
 		// Create an empty array
-		$files  = '<link rel="stylesheet" media="all" href="/media/css/uGuilds.css">' . "\n";
-		$files .= $this->getControllerCss();
+		$files = $this->getControllerCss();
 
 		// Loop through each of the CSS files
 		foreach($this->css as $css) 
@@ -206,18 +205,13 @@ class Theme {
 		 */
 
 		$ci =& get_instance();
-
-		// jQuery
-		$files  = '<script src="//ajax.googleapis.com/ajax/libs/jquery/'. $this->jquery_version .'/jquery.min.js"></script>'."\n\t";
-		
+		$files = '';
+	
 		// jQuery Migrate
 		if(version_compare($this->jquery_version, '1.9.0', '>='))
 		{
 			$files .= '<script src="/media/js/migrate.min.js"></script>'."\n";
 		}
-
-		// Controller JS
-		$files .= $this->getControllerJS();
 		
 		// Google Analytics
 		$files .= 	"\t<script><!--\n".
@@ -228,6 +222,10 @@ class Theme {
   					"\t\t_gaq.push(['_setAllowLinker', true]);".
   					"\t\t_gaq.push(['_trackPageview']);\n".
   					"\t--></script>\n";
+
+  		
+		// Controller JS
+		$files .= $this->getControllerJS();
 
 		// Failsafe in case of no JavaScript
 		if(empty($this->javascript))

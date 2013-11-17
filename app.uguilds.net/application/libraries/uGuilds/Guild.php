@@ -15,9 +15,9 @@ class Guild extends \BattlenetArmory\Guild {
 
 	private $_id;
 	private $domainName;
-	private $ranks;
 	private $theme = 'default';
 	private $locale = 'en_GB';
+	private $ranks = array();
 	private $features = array();
 	private $levelRange = array('min' => self::MAXLEVEL,
 								'max' => self::MINLEVEL);
@@ -162,9 +162,12 @@ class Guild extends \BattlenetArmory\Guild {
 	 */
 	public function getEmblem($showlevel=TRUE, $width=215)
 	{
-		$this->showEmblem($showlevel, $width);
-		$this->saveEmblem(FCPATH . 'media/BattlenetArmory/emblem_'. $this->region .'_'. preg_replace('/\ /', '_', $this->realm) .'_'. preg_replace('/\ /', '_', $this->guildName) .'_'. $width .'.png');
-
+		if(!file_exists(APPPATH .'html/media/BattlenetArmory/emblem_'. $this->region .'_'. preg_replace('/\ /', '_', $this->realm) .'_'. preg_replace('/\ /', '_', $this->guildName) .'_'. $width .'.png'))
+		{
+			$this->showEmblem($showlevel, $width);
+			$this->saveEmblem(FCPATH . 'media/BattlenetArmory/emblem_'. $this->region .'_'. preg_replace('/\ /', '_', $this->realm) .'_'. preg_replace('/\ /', '_', $this->guildName) .'_'. $width .'.png');
+		}
+		
 		return '/media/BattlenetArmory/emblem_'. $this->region .'_'. preg_replace('/\ /', '_', $this->realm) .'_'. preg_replace('/\ /', '_', $this->guildName) .'_'. $width .'.png';
 	}
 
@@ -280,12 +283,11 @@ class Guild extends \BattlenetArmory\Guild {
 
 		if($query->num_rows() > 0)
 		{
-			$ranks = array();
 			foreach($query->result() as $row)
 			{
-				$ranks[$row->position] = $row->title;
+				$this->ranks[$row->position] = $row->title;
 			}
-			parent::setGuildRankTitles($ranks);
+			parent::setGuildRankTitles($this->ranks);
 		}
 	}
 }

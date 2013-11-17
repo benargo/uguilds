@@ -5,13 +5,15 @@
 			
 			<!-- Character Name -->
 			<span class="field">
-				<label for="characterName">Character Name
+				<label for="characterName">Character Name</label>
 				<select name="characterName">
-			<?php	foreach($members as $member)
+					<option value="">Select One...</option><?php	
+
+					foreach($members as $member)
 					{
-						?><option name="<?php echo strtolower($member['character']['name']); ?>"><?php echo $member['character']['name']; ?></option><?php
+						echo "\n\t\t<option value=\"". strtolower($member['character']['name']) ."\">". $member['character']['name'] ."</option>";
 					}
-			?>
+				?>
 				</select>
 			</span>
 
@@ -19,12 +21,13 @@
 			<span class="field">
 				<label for="race">Race</label>
 				<select name="race">
-			<?php	foreach($races->getAll($guild->getData()['side']) as $race)
+					<option value="">Select One...</option><?php	
+
+					foreach($races->getAll($guild->getData()['side']) as $race)
 					{
-						?>		<option name="<?php echo strtolower($race['name']); ?>" data-image="/media/images/races/race_<?php echo $race['id']; ?>_0.jpg"><?php echo $race['name']; ?></option>
-			<?php
+						echo "\n\t\t<option value=\"". strtolower($race['name']) ."\" data-image=\"/media/images/races/race_". $race['id'] ."_0.jpg\">". $race['name'] ."</option>";
 					}
-			?>
+				?>
 				</select>
 			</span>
 
@@ -32,12 +35,13 @@
 			<span class="field">
 				<label for="class">Class</label>
 				<select name="class">
-			<?php 	foreach($classes->getAll() as $class)
+					<option value="">Select One...</option><?php 
+
+					foreach($classes->getAll() as $class)
 					{
-						?>		<option name="<?php echo strtolower($class['name']); ?>" data-image="/media/images/classes/class_<?php echo $class['id']; ?>.jpg"><?php echo $class['name']; ?></option>
-			<?php
+						echo "\n\t\t<option value=\"". strtolower($class['name']) ."\" data-image=\"/media/images/classes/class_". $class['id'] .".jpg\">". $class['name'] ."</option>";	
 					}
-			?>
+				?>
 				</select>
 			</span>
 
@@ -45,31 +49,39 @@
 			<span class="field">
 				<label for="minLevel">Level</label>
 				<select name="minLevel">
-			<?php 	for($i = $guild->getLowestLevelMember(); $i <= $guild->getHighestLevelMember(); $i++)
+					<option value="">Select One...</option><?php 
+
+					for($i = $guild->getLowestLevelMember(); $i <= $guild->getHighestLevelMember(); $i++)
 					{
-						?>		<option name="<?php echo $i; ?>"><?php echo $i; ?></option>
-				<?php
+						echo "\n\t\t<option value=\"". $i ."\">". $i ."</option>";
 					}
 				?>
 				</select>
 				&ndash;
 				<select name="maxLevel">
-			<?php 	for($i = $guild->getLowestLevelMember(); $i <= $guild->getHighestLevelMember(); $i++)
+					<option value="">Select One...</option><?php 
+
+					for($i = $guild->getLowestLevelMember(); $i <= $guild->getHighestLevelMember(); $i++)
 					{
-						?>		<option name="<?php echo $i; ?>"<?php echo ($i == $guild->getHighestLevelMember() ? ' selected="true"' : ''); ?>><?php echo $i; ?></option>
-				<?php
+						echo "\n\t\t<option value=\"". $i ."\"". ($i == $guild->getHighestLevelMember() ? ' selected="true"' : '') .">". $i ."</option>";
 					}
 				?>
 				</select>
 			</span>
 
-			<!-- Guild Rank : TODO
+			<!-- Guild Rank -->
 			<span class="field">
 				<label for="rank">Guild Rank</label>
 				<select name="rank">
+					<option value="">Select One...</option><?php 
 
+					foreach($guild->ranks as $position => $title)
+					{
+						echo "\n\t\t<option value=\"". $position ."\">". $title ."</option>";
+					} 
+				?>
 				</select>
-			</span>-->
+			</span>
 		</form>
 		<!-- Roster table -->
 		<table class="guild-roster tablesorter">

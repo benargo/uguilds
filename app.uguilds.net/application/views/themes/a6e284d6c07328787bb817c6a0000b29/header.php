@@ -12,8 +12,8 @@
 		<a href="/" rel="home">
 			<span><img src="<?php echo $this->uguilds->guild->getEmblem(TRUE,150); ?>" alt="<?php echo $this->uguilds->guild->guildName; ?> guild emblem" width="150" /></span>
 			<span class="guild-name"><h1><?php echo $this->uguilds->guild->name; ?></h1>
-				<h2><?php echo $this->uguilds->guild->realm; ?> 
-					<?php echo $this->uguilds->guild->region; ?></h2></span>
+				<h2><?php echo $this->uguilds->guild->realm; ?> <?php 
+						  echo $this->uguilds->guild->region; ?></h2></span>
 		</a>
 	</header>
 	<!-- End Header -->
