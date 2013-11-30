@@ -1,0 +1,265 @@
+/***************************************
+ * @author: Ben Argo
+ * @image: headerBG.jpg: http://cdn2.guildlaunch.net/guild/forums/templates/r14/images/WOWPanda/headerBG.jpg
+ * @image: pageBG.jpg: http://cdn2.guildlaunch.net/guild/forums/templates/r14/images/WOWPanda/pageBG.jpg
+ * @copyright: Ben Argo
+ ***************************************/
+
+$bg-color: rgba(7, 22, 27, 0.7);
+$link-active: #fed000;
+
+html {
+	background: url('../images/headerBG.jpg') center top no-repeat fixed, url('../images/pageBG.jpg') center top repeat;
+   	color: #ffffff;
+	font-family: Helvetica, Arial, sans-serif;
+   	font-size: 12pt;
+
+   	@media (min-width:1024px) {
+	    body {
+	    	padding: 0 30px;
+
+	    }
+	}
+
+	@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+		font-size: 18pt;
+	}
+
+	@media (max-width: 640px) {
+		font-size: 10pt;
+
+	}  
+
+	.is-sticky .menu-bar {
+		margin: 0 -30px;
+
+		& ul {
+			margin: 0 30px 20px;
+		}
+	}
+
+	.menu-bar {
+		width: 100%;
+		
+	    & ul {
+	    	margin: 0;
+	    	background: $bg-color;
+	    	border: solid 0px #000000;
+			-webkit-border-radius: 0 0 5px 5px;
+			border-radius: 0 0 5px 5px;
+	    }
+
+        & li {
+        	display: inline-block;
+
+        	& a {
+				display: inline-block;
+				color: #ffffff;
+				padding: 15px;
+				-webkit-border-radius: 5px;
+				border-radius: 5px;
+				border: none;
+
+				&[rel="home"] {
+					padding: 15px 15px 15px 41px;
+					background: url('../images/home.svg') no-repeat;
+					background-position: 15px center;
+					background-size: 16px 16px;
+				}
+
+				&:hover {
+					background-color: rgba(7, 22, 27, 0.7);
+				}
+			}
+
+			&.right {
+				float: right;
+			}
+		}
+	}
+
+	& header {
+		margin: 20px 0;
+
+		& a {
+			display: inline-block;
+			color: #ffffff;
+			vertical-align: middle;
+			border: solid 0px transparent;
+
+			&:hover {
+				color: #ffffff;
+			}
+
+			& span {
+				display: inline-block;
+				vertical-align: middle;
+
+				&.guild-name {
+					padding: 10px;
+					background-color: $bg-color;
+					-webkit-border-radius: 5px;
+					border-radius: 5px;
+					text-align: center;
+
+					& h1 {
+						@media (min-width: 641px) {
+							font-size: 3em;
+						}
+
+						@media (max-width: 640px) {
+							font-size: 2em;
+						}
+					}
+
+					& h2 {
+						font-size: 1.2em;
+					}
+				}
+			}
+
+			& img {
+				padding: 0 30px 0 0;
+
+				@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+					width: 150px;
+				}
+
+				@media (max-width: 1023px) {
+					width: 100px;
+				}  
+			}
+		}
+	}
+
+	& article {
+		clear: both;
+		margin: 20px 0;
+		padding: 15px;
+		background: $bg-color;
+		-webkit-border-radius: 5px;
+	    border-radius: 5px;
+
+	    @media (max-width: 640px) {
+	    	h1 {
+	    		font-size: 1.2em;
+	    	}
+	    }
+
+	    & tbody {
+
+	    	& tr:nth-child(even) {
+	    		background-color: rgba(7, 22, 27, 0.3);
+	    	}
+	    }
+
+	    & .guild-roster {
+	    	& .race a, & .class a {
+	    		background-color: $bg-color;
+	    		-webkit-border-radius: 3px;
+	    		border-radius: 3px;
+
+	    		&:hover {
+	    			background-color: $link-active;
+	    		}
+	    	}
+
+	    	@media (max-width: 640px), (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+	    		& .spec, & .achievements > img {
+	    			display: none;
+	    		}
+	    	}
+	    }
+	}
+
+	& footer {
+		clear: both;
+		margin: 20px 0;
+		padding: 15px;
+		background: $bg-color;
+		-webkit-border-radius: 5px;
+	    border-radius: 5px;
+
+	    & nav, & p {
+	    	margin: 0 0 10px;
+
+	    	@media (min-width: 641px), (-webkit-max-device-pixel-ratio: 1), (max-resolution: 96dpi) {
+	    		font-size: 0.6em;
+
+				li {
+		    		display: inline;
+		    	}
+
+		    	&.links {
+					li:before {
+		    			content: "// ";
+		    		}
+
+		    		li:first-child:before {
+		    			content: none;
+		    		}
+		    	}
+	    	}
+
+	    	@media (max-width: 640px), (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+		    	font-size: 0.7em;
+		    	text-align: center;
+		    }
+
+
+	    	&.logo {
+	    		margin: 0;
+	    		text-align: center;
+
+	    		& a {
+	    			display: inline-block;
+	    			margin: -5px;
+	    			padding: 5px;
+	    			color: #ffffff;
+	    			border: solid 1px transparent;
+	    			-webkit-border-radius: 3px;
+	    			border-radius: 3px;
+
+	    			&:hover {
+	    				border-color: $link-active;
+	    			}
+	    		}
+	    	}
+	    }
+	}
+
+	h1,h2,h3,h4,h5,h6,p,section,code {
+		margin-bottom: 5px;
+		line-height: 1.3em;
+	}
+
+	h1 {
+		font-size: 1.6em;
+		font-weight: bold;
+	}
+
+	h2 {
+		font-size: 1.4em;
+	}
+
+	a {
+		color: #00A2F1;
+		text-decoration: none;
+		border-bottom: dotted 1px #00A2F1;
+
+		&! > img {
+			border: none;
+		}
+
+		&:active {
+			border: none;
+			color: $link-active;
+		}
+
+		&:hover {
+			color: $link-active;
+			border-bottom-color: $link-active;
+			border-bottom-style: solid;
+		}
+	}
+}

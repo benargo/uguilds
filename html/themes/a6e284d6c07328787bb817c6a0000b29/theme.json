@@ -1,0 +1,15 @@
+{
+   "_id": "a6e284d6c07328787bb817c6a0000b29",
+   "name": "default",
+   "css": {
+       "0": {
+           "url": "screen.css",
+           "media": "screen"
+       }
+   },
+   "javascript": {
+       "0": "jquery.sticky.js",
+       "1": "theme.js"
+   },
+   "jquery_version": "2.0.3"
+}
