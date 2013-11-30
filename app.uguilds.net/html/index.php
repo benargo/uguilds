@@ -1,12 +1,12 @@
 <?php
 
 /*
-	 * dump()
-	 * 
-	 * @access public
-	 * @static true
-	 * @return a dump
-	 */
+ * dump()
+ * 
+ * @access public
+ * @static true
+ * @return a dump
+ */
 function dump($data,$exit=true) {
 	print "<pre>";
 	print_r($data);

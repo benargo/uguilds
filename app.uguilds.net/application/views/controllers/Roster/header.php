@@ -6,22 +6,14 @@
 			<!-- Character Name -->
 			<span class="field">
 				<label for="characterName">Character Name</label>
-				<select name="characterName">
-					<option value="">Select One...</option><?php	
-
-					foreach($members as $member)
-					{
-						echo "\n\t\t<option value=\"". strtolower($member['character']['name']) ."\">". $member['character']['name'] ."</option>";
-					}
-				?>
-				</select>
+				<input type="text" name="characterName" placeholder="e.g. <?php echo $members[0]['character']['name']; ?>" maxlength="2" />
 			</span>
 
 			<!-- Race -->
 			<span class="field">
 				<label for="race">Race</label>
 				<select name="race">
-					<option value="">Select One...</option><?php	
+					<option value="" selected disabled>Select One...</option><?php	
 
 					foreach($races->getAll($guild->getData()['side']) as $race)
 					{
@@ -35,7 +27,7 @@
 			<span class="field">
 				<label for="class">Class</label>
 				<select name="class">
-					<option value="">Select One...</option><?php 
+					<option value="" selected disabled>Select One...</option><?php 
 
 					foreach($classes->getAll() as $class)
 					{
@@ -48,32 +40,16 @@
 			<!-- Level Range -->
 			<span class="field">
 				<label for="minLevel">Level</label>
-				<select name="minLevel">
-					<option value="">Select One...</option><?php 
-
-					for($i = $guild->getLowestLevelMember(); $i <= $guild->getHighestLevelMember(); $i++)
-					{
-						echo "\n\t\t<option value=\"". $i ."\">". $i ."</option>";
-					}
-				?>
-				</select>
+				<input type="number" name="minLevel" min="<?php echo $guild->getLowestLevelMember(); ?>" max="<?php echo $guild->getHighestLevelMember(); ?>" placeholder="<?php echo $guild->getLowestLevelMember(); ?>" />
 				&ndash;
-				<select name="maxLevel">
-					<option value="">Select One...</option><?php 
-
-					for($i = $guild->getLowestLevelMember(); $i <= $guild->getHighestLevelMember(); $i++)
-					{
-						echo "\n\t\t<option value=\"". $i ."\"". ($i == $guild->getHighestLevelMember() ? ' selected="true"' : '') .">". $i ."</option>";
-					}
-				?>
-				</select>
+				<input type="number" name="maxLevel" min="<?php echo $guild->getLowestLevelMember(); ?>" max="<?php echo $guild->getHighestLevelMember(); ?>" placeholder="<?php echo $guild->getHighestLevelMember(); ?>" />
 			</span>
 
 			<!-- Guild Rank -->
 			<span class="field">
 				<label for="rank">Guild Rank</label>
 				<select name="rank">
-					<option value="">Select One...</option><?php 
+					<option value="" selected disabled>Select One...</option><?php 
 
 					foreach($guild->ranks as $position => $title)
 					{
