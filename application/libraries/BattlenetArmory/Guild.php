@@ -341,7 +341,7 @@ class Guild extends Battlenet {
 			
 			$emblem = imagecreatefrompng($emblemURL);
 			$emblem_size = getimagesize($emblemURL);
-			\imagelayereffect($emblem, IMG_EFFECT_OVERLAY);
+			imagelayereffect($emblem, IMG_EFFECT_OVERLAY);
 			$emblemcolor = preg_replace('/^ff/i','',$this->guildData['emblem']['iconColor']);
 			$color_r = hexdec(substr($emblemcolor,0,2));
 			$color_g = hexdec(substr($emblemcolor,2,2));

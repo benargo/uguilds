@@ -40,6 +40,9 @@
 
 $route['default_controller'] = "welcome";
 $route['404_override'] = '';
+$route['roster'] = "roster";
+$route['roster/race/([\w]+)'] = "roster/filter";
+$route['roster/class/([\w]+)'] = "roster/filter";
 
 
 /* End of file routes.php */

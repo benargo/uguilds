@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<theme id="59c0c3f2-a8ba-4df2-be56-34392ec45e5e" xmlns="http://www.uguilds.net/xml-schema">
+	<name>Default</name>
+	<version>1.0</version>
+	<creationDate>2013-12-01</creationDate>
+	<author>uGuilds</author>
+	<copyright>GPL v3</copyright>
+	<authorEmail>support@uguilds.com</authorEmail>
+	<authorURL>http://www.uguilds.com</authorURL>
+	<description>Default template using Mists of Pandaria styling for uGuilds</description>
+	<files>
+		<file>theme.xml</file>
+		<file>css/screen.css</file>
+		<file>js/jquery.sticky.js</file>
+		<file>js/theme.js</file>
+		<file>images/headerBG.jpg</file>
+		<file>images/home.svg</file>
+		<file>images/pageBG.jpg</file>
+	</files>
+</theme>

@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); ?>
 <!DOCTYPE html>
-<html lang="<?php echo $locale; ?>">
+<html lang="<?php echo $locale; ?>" manifest="/manifest">
 <head>
 
 	<!-- META INFORMATION -->
