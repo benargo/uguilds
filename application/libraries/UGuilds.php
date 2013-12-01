@@ -127,7 +127,6 @@ class UGuilds {
 		if($this->domain === "app.uguilds.net") 
 		{
 			header('HTTP/1.0 403 Forbidden');
-			exit;
 		}
 	}
 
