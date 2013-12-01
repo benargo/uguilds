@@ -3,7 +3,7 @@
 /**
  *	Master class for the uGuilds application
  *	@author Ben Argo <ben@benargo.com>
- *	@copyright Copyright 2013 Ben Argo & University of the West of England
+ *	@copyright Copyright 2013 Ben Argo
  *	@version 1.0
  */
 
@@ -14,7 +14,8 @@ require_once APPPATH . 'libraries/uGuilds/Classes.php';
 require_once APPPATH . 'libraries/uGuilds/Theme.php';
 require_once APPPATH . 'libraries/uGuilds/ThemeData.php';
 
-class uGuilds {
+// Remember library class names need to be capitalised.
+class UGuilds {
 
 	/**
 	 * vars
@@ -23,8 +24,6 @@ class uGuilds {
 	private $guild;
 	private $theme;
 	private $locale;
-	private $controller_map = array("applications"	=> "#",
-									"roster"		=> "roster");
 
 	/**
 	 * __construct()
@@ -161,32 +160,5 @@ class uGuilds {
 			$this->theme = new uGuilds\Theme;
 			$this->theme->findByID($this->guild->theme);
 		}
-	}
-
-	/**
-	 * getController()
-	 *
-	 * @access public
-	 * @var string $feature
-	 * @return string
-	 */
-	public function getController($feature)
-	{
-		if(isset($this->controller_map[$feature]))
-		{
-			return $this->controller_map[$feature];
-		}
-	}
-
-	/**
-	 * getPageTitle()
-	 *
-	 * @access public
-	 * @return string
-	 */
-	public function getPageTitle()
-	{
-		$ci =& get_instance();
-		return $ci->getPageTitle();
 	}
 }

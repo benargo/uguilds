@@ -2,10 +2,6 @@
 <!DOCTYPE html>
 <html lang="<?php echo $locale; ?>">
 <head>
-	<!--
-	I apologise for the fact the HTML isn't as pretty as I'd like
-	it to be. However, it does look very pretty in CodeIgniter.
-	-->
 
 	<!-- META INFORMATION -->
 	<meta charset="UTF-8">
