@@ -56,8 +56,8 @@ class Manifest extends UG_Controller {
 		$iterator = new RecursiveDirectoryIterator(FCPATH.'media');
 		foreach (new RecursiveIteratorIterator($iterator) as $filename => $file) 
 		{
-			if(preg_match('/\.{css|eot|svg|ttf|woff|jpe?g|gif|png|tiff|min\.js}$/', $file->getFileName())
-				&& !preg_match('/\/BattlenetArmory\//', $file->getPathname()))
+			if(preg_match_all('/\.css|\.eot|\.svg|\.ttf|\.woff|\.jpe?g|\.gif|\.png|\.tiff|\.min\.js$/', $file->getFileName())
+				&& !preg_match_all('/\/BattlenetArmory\//', $file->getPathname()))
 			{
 				$this->files[] = preg_replace('/'.str_replace('/','\/',FCPATH).'/','/',$file->getPathname());
 			}
