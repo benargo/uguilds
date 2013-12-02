@@ -128,6 +128,15 @@
     });
 })( jQuery );
 
+$.ajax({
+    url: '/ajax/roster/all',
+    type: 'GET',
+    dataType: 'json',
+    ifModified: true
+}).done(function(data) {
+    window.localStorage.setItem('roster', JSON.stringify(data));
+});
+
 $(function() {
     // On Resize Events
     $(window).on('resize', function() {
@@ -142,10 +151,43 @@ $(function() {
         }
     });
 
-    $('select[name="maxLevel"] option').removeAttr('selected');
+    $('.nojs input').remove();
+    var roster = JSON.parse(window.localStorage['roster']);
     $('select[name="characterName"], select[name="minLevel"], select[name="maxLevel"]').combobox();
 
     $('input[name="characterName"]').keyup(function(event) {
-        
+        var val = $(this).val();
+
+        roster.members.filter(function(element){
+            if(element.character.name.toLowerCase().search(val.toLowerCase()) != -1)
+            {
+                $('tr.character.'+element.character.name.toLowerCase()).fadeIn('fast');
+            }
+            else
+            {
+                $('tr.character.'+element.character.name.toLowerCase()).fadeOut('fast');
+            }
+        });
+    });
+
+    $('select[name="race"]').change(function(event) {
+        var val = $(this).val();
+
+        if(val == 'all')
+        {
+            $('tr.character').fadeIn('fast');
+            return;
+        }
+
+        roster.members.filter(function(element){
+            if(element.character.race != val)
+            {
+                $('tr.character.'+element.character.name.toLowerCase()).fadeOut('fast');
+            }
+            else
+            {
+                $('tr.character.'+element.character.name.toLowerCase()).fadeIn('fast');
+            }
+        });
     });
 });

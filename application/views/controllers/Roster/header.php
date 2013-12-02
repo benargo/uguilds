@@ -13,11 +13,11 @@
 			<span class="field">
 				<label for="race">Race</label>
 				<select name="race">
-					<option value="" selected disabled>Select One...</option><?php	
+					<option value="all" selected>All</option><?php	
 
 					foreach($races->getAll($guild->getData()['side']) as $race)
 					{
-						echo "\n\t\t<option value=\"". strtolower($race['name']) ."\" data-image=\"/media/images/races/race_". $race['id'] ."_0.jpg\">". $race['name'] ."</option>";
+						echo "\n\t\t<option value=\"". strtolower($race['id']) ."\" data-image=\"/media/images/races/race_". $race['id'] ."_0.jpg\">". $race['name'] ."</option>";
 					}
 				?>
 				</select>
@@ -27,7 +27,7 @@
 			<span class="field">
 				<label for="class">Class</label>
 				<select name="class">
-					<option value="" selected disabled>Select One...</option><?php 
+					<option value="all" selected>All</option><?php 
 
 					foreach($classes->getAll() as $class)
 					{
@@ -57,6 +57,11 @@
 					} 
 				?>
 				</select>
+			</span>
+
+			<span class="nojs">
+				<input type="submit" value="Filter" />
+				<input type="reset" value="Clear" />
 			</span>
 		</form>
 		<!-- Roster table -->

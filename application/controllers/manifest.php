@@ -2,7 +2,7 @@
 
 class Manifest extends UG_Controller {
 
-	private $files = array();
+	private $files = array(	);
 
 	/**
 	 * Construction function
