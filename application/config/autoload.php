@@ -64,7 +64,7 @@ $autoload['libraries'] = array('database','session','BattlenetArmory','uGuilds')
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array();
+$autoload['helper'] = array('dump');
 
 
 /*

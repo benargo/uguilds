@@ -145,8 +145,7 @@ $(function() {
     $('select[name="maxLevel"] option').removeAttr('selected');
     $('select[name="characterName"], select[name="minLevel"], select[name="maxLevel"]').combobox();
 
-    $('#roster-filter select, #roster-filter input').blur(function(e) {
+    $('input[name="characterName"]').keyup(function(event) {
         
-
     });
 });

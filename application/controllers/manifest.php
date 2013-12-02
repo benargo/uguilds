@@ -16,13 +16,16 @@ class Manifest extends UG_Controller {
 
 	public function index()
 	{
-		header('Content-type: text/cache-manifest');
+		if(ENVIRONMENT == 'production')
+		{
+			header('Content-type: text/cache-manifest');
 		
-		$this->_getEmblems();
-		$this->_getSystemMedia();
-		$this->_getThemeFiles();
+			$this->_getEmblems();
+			$this->_getSystemMedia();
+			$this->_getThemeFiles();
 
-		$this->load->view('controllers/Manifest/manifest', array('files' => $this->files));
+			$this->load->view('controllers/Manifest/manifest', array('files' => $this->files));
+		}
 	}
 
 	/**
