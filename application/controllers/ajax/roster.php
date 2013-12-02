@@ -27,8 +27,8 @@ class Roster extends UG_Controller {
 
 		$json = array('lastModified' => date('r', $this->uguilds->guild->getData()['lastModified']/1000),
 			'members' => $this->uguilds->guild->getMembers('rank'),
-			'races' => new uGuilds\Races(strtolower($this->uguilds->guild->region),
-			'classes' => new uGuilds\Classes(strtolower($this->uguilds->guild->region));
+			'races' => new uGuilds\Races(strtolower($this->uguilds->guild->region)),
+			'classes' => new uGuilds\Classes(strtolower($this->uguilds->guild->region)));
 
 		echo $this->ajax->asJSON($json);
 	}
