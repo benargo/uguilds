@@ -137,6 +137,78 @@ $.ajax({
     window.localStorage.setItem('roster', JSON.stringify(data));
 });
 
+function filter(options, event)
+{
+    var key = event.keyCode;
+    var roster = JSON.parse(window.localStorage['roster']);
+    var matches = Array(); // Characters to remove
+
+    roster.members.filter(function(element){
+        if(options['name'] !== undefined)
+        {
+            // If the character name matches the filter option
+            if(element.character.name.toLowerCase().search(options['name'].toLowerCase()) == -1)
+            {
+                // Add the character to the matches
+                console.log('Added '+ element.character.name +' because it\'s name matches');
+                matches.push(element.character.name);
+            }
+
+        }
+        
+        if(options['race'] !== undefined)
+        {
+            // If the character race matches the filter option
+            if(options['race'] != 'all' && element.character.race != options['race'])
+            {
+                // Add the character to the matches
+                console.log('Added '+ element.character.name +' because its race matches');
+                matches.push(element.character.name);
+            }
+        }
+
+        if(options['class'] !== undefined)
+        {
+            // If the character's class matches the filter option
+            if(options['class'] != 'all' && element.character.class != options['class'])
+            {
+                // Add the character to the matches
+                console.log('Added '+ element.character.name +' because its class matches');
+                matches.push(element.character.name);
+            }
+
+        }
+
+        if(options['minLevel'] !== undefined && options['maxLevel'] !== undefined)
+        {
+            // If the character's level is LESS than the minimum level
+            // OR the character's level is MORE than the maximum level
+            if(element.character.level < parseInt(options['minLevel'], 10) ||
+                element.character.level > parseInt(options['maxLevel'], 10))
+            {
+                // Add the character to the matches
+                console.log('Added '+ element.character.name +' because it\'s NOT in the level range');
+                matches.push(element.character.name);
+            }
+        }
+    });
+
+    $.each(roster.members, function(index,element){
+        // If the character does NOT match the filters
+        if($.inArray(element.character.name, matches) == -1)
+        {
+            // Show this character
+            $('tr.character.'+element.character.name.toLowerCase()).removeClass('hidden').fadeIn('medium');
+        }
+        // If the character DOES match the filters
+        if($.inArray(element.character.name, matches) != -1)
+        {
+            // Hide the character
+            $('tr.character.'+element.character.name.toLowerCase()).addClass('hidden').fadeOut('medium');
+        }
+    });
+}
+
 $(function() {
     // On Resize Events
     $(window).on('resize', function() {
@@ -152,42 +224,72 @@ $(function() {
     });
 
     $('.nojs input').remove();
-    var roster = JSON.parse(window.localStorage['roster']);
     $('select[name="characterName"], select[name="minLevel"], select[name="maxLevel"]').combobox();
 
-    $('input[name="characterName"]').keyup(function(event) {
-        var val = $(this).val();
+    var options = Array();
+    var path = '/roster';
 
-        roster.members.filter(function(element){
-            if(element.character.name.toLowerCase().search(val.toLowerCase()) != -1)
-            {
-                $('tr.character.'+element.character.name.toLowerCase()).fadeIn('fast');
-            }
-            else
-            {
-                $('tr.character.'+element.character.name.toLowerCase()).fadeOut('fast');
-            }
-        });
+    $('input[name="characterName"]').bind("keyup change", function(event) {
+        options['name'] = $(this).val();
+        filter(options, event);
     });
 
     $('select[name="race"]').change(function(event) {
-        var val = $(this).val();
+        options['race'] = $(this).val();
 
-        if(val == 'all')
+        path = path.replace(/\/race=[\w\-]+/,'');
+
+        if(options['race'] == 'all')
         {
-            $('tr.character').fadeIn('fast');
-            return;
+            history.pushState(null,null,path);
+        }
+        else
+        {
+            var roster = JSON.parse(window.localStorage['roster']);
+            path = path+'/race='+roster.races[options['race']].name.replace(' ','-').toLowerCase();
+            history.pushState(null,null,path);
         }
 
-        roster.members.filter(function(element){
-            if(element.character.race != val)
-            {
-                $('tr.character.'+element.character.name.toLowerCase()).fadeOut('fast');
-            }
-            else
-            {
-                $('tr.character.'+element.character.name.toLowerCase()).fadeIn('fast');
-            }
-        });
+        filter(options, event);
+    });
+
+    $('select[name="class"]').change(function(event){
+        options['class'] = $(this).val();
+
+        path = path.replace(/\/class=[\w\-]+/,'');
+
+        if(options['class'] == 'all')
+        {
+            history.pushState(null,null,path);
+        }
+        else
+        {
+            var roster = JSON.parse(window.localStorage['roster']);
+            path = path+'/class='+roster.classes[options['class']].name.replace(' ','-').toLowerCase();
+            history.pushState(null,null,path);
+        }
+
+        filter(options, event);
+    });
+
+    $('input[name$="Level"]').bind("keyup change", function(event){
+        input = $(this).attr('name');
+        options[input] = $(this).val();
+
+        path = path.replace(/\/level=[0-9]+[\-0-9]*/,'');
+
+        if(options['minLevel'] === undefined)
+        {
+            options['minLevel'] = $('input[name="minLevel"]').attr('min');
+        }
+        if(options['maxLevel'] === undefined)
+        {
+            options['maxLevel'] = $('input[name="maxLevel"]').attr('max');
+        }
+
+        path = path+'/level='+options['minLevel']+'-'+options['maxLevel'];
+        history.pushState(null,null,path);
+
+        filter(options, event);
     });
 });

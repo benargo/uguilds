@@ -17,7 +17,7 @@
 
 					foreach($races->getAll($guild->getData()['side']) as $race)
 					{
-						echo "\n\t\t<option value=\"". strtolower($race['id']) ."\" data-image=\"/media/images/races/race_". $race['id'] ."_0.jpg\">". $race['name'] ."</option>";
+						echo "\n\t\t<option value=\"". $race['id'] ."\" data-image=\"/media/images/races/race_". $race['id'] ."_0.jpg\">". $race['name'] ."</option>";
 					}
 				?>
 				</select>
@@ -31,7 +31,7 @@
 
 					foreach($classes->getAll() as $class)
 					{
-						echo "\n\t\t<option value=\"". strtolower($class['name']) ."\" data-image=\"/media/images/classes/class_". $class['id'] .".jpg\">". $class['name'] ."</option>";	
+						echo "\n\t\t<option value=\"". $class['id'] ."\" data-image=\"/media/images/classes/class_". $class['id'] .".jpg\">". $class['name'] ."</option>";	
 					}
 				?>
 				</select>
@@ -51,7 +51,7 @@
 				<select name="rank">
 					<option value="" selected disabled>Select One...</option><?php 
 
-					foreach($guild->ranks as $position => $title)
+					foreach($ranks as $position => $title)
 					{
 						echo "\n\t\t<option value=\"". $position ."\">". $title ."</option>";
 					} 

@@ -17,6 +17,7 @@ class Guild extends \BattlenetArmory\Guild {
 	private $domainName;
 	private $theme = 'default';
 	private $locale = 'en_GB';
+	private $faction;
 	private $ranks = array();
 	private $features = array();
 	private $levelRange = array('min' => self::MAXLEVEL,
@@ -70,6 +71,10 @@ class Guild extends \BattlenetArmory\Guild {
 				break;
 
 			case "ranks":
+				if(empty($this->ranks))
+				{
+					
+				}
 				return $this->ranks;
 				break;
 
@@ -169,6 +174,30 @@ class Guild extends \BattlenetArmory\Guild {
 		}
 		
 		return '/media/BattlenetArmory/emblem_'. strtoupper($this->region) .'_'. preg_replace('/\ /', '_', $this->realm) .'_'. preg_replace('/\ /', '_', $this->guildName) .'_'. $width .'.png';
+	}
+
+	/**
+	 * getFaction()
+	 *
+	 * @access public
+	 * @return text
+	 */
+	public function getFaction()
+	{
+		if(is_null($this->faction))
+		{
+			$this->faction = $this->getData()['side'];
+		}
+
+		switch($this->faction)
+		{
+			case 0:
+				return 'alliance';
+				break;
+			case 1:
+				return 'horde';
+				break;
+		}
 	}
 
 	/**

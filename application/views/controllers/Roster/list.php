@@ -9,14 +9,14 @@
 
 		<!-- Race -->
 		<td class="race">
-			<a href="/roster/class=<?php echo strtolower(preg_replace('/\ /', '-', $races->getRace($member['character']['race'], 'name'))); ?>">
+			<a href="/roster/race/<?php echo strtolower(preg_replace('/\ /', '-', $races->getRace($member['character']['race'], 'name'))); ?>">
 			<img src="<?php echo $races->getIcon($member['character']['race'], $member['character']['gender']); ?>"
 				alt="<?php echo $races->getRace($member['character']['race'],'name'); ?>" width="18" /></a>
 		</td>
 
 		<!-- Class -->
 		<td class="class">
-			<a href="/roster/race=<?php echo strtolower(preg_replace('/\ /', '-', $classes->getClass($member['character']['class'], 'name'))); ?>">
+			<a href="/roster/class/<?php echo strtolower(preg_replace('/\ /', '-', $classes->getClass($member['character']['class'], 'name'))); ?>">
 				<img src="<?php echo $classes->getIcon($member['character']['class'], 18); ?>"
 					alt="<?php echo $classes->getClass($member['character']['class'], 'name'); ?>" width="18" />
 				<?php if(array_key_exists('spec', $member['character']))
@@ -32,7 +32,7 @@
 
 		<!-- Guild Rank -->
 		<td class="guild-rank" data-id="<?php echo $member['rank']; ?>">
-			<a href="/roster/rank=<?php echo (array_key_exists('rankname', $member) ? strtolower(preg_replace('/\ /', '-', $member['rankname'])) : $member['rank']); ?>"><?php 
+			<a href="/roster/rank/<?php echo (array_key_exists('rankname', $member) ? strtolower(preg_replace('/\ /', '-', $member['rankname'])) : $member['rank']); ?>"><?php 
 			echo (array_key_exists('rankname', $member) ? $member['rankname'] : $member['rank']); ?></a>
 		</td>
 

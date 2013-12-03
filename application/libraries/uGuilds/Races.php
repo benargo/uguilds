@@ -31,24 +31,25 @@ class Races extends \BattlenetArmory\Races {
      * @param mixed (string/int) $side
      * @return array
      */
-    public function getAll($side = 'both')
+    public function getAll($input = 'both')
     {
-        switch($side)
+        switch($input)
         {
             case 0:
-               $side = 'alliance';
-               break;
+            case "alliance":
+                $side = 'alliance';
+                break;
 
             case 1:
+            case "horde":
                $side = 'horde';
                break;
 
-            case 'both':
+            case "both":
             default:
-               unset($side);
+
                break;
         }
-
          
         $races = '';
 
@@ -69,7 +70,7 @@ class Races extends \BattlenetArmory\Races {
         $return = array();
         foreach($races as $id => $name)
         {
-            $return[] = $this->datas[$id];
+            $return[$id] = $this->datas[$id];
         }
         return $return;
       }

@@ -10,7 +10,7 @@ if(!function_exists('dump'))
 	 * @static true
 	 * @return dumped contents
 	 */
-	function &dump($data,$exit=true) 
+	function dump($data,$exit=true) 
 	{
 		print "<pre>";
 		print_r($data);

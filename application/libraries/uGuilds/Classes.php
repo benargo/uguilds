@@ -44,7 +44,7 @@ class Classes extends \BattlenetArmory\Classes {
         $return = array();
         foreach($classes as $id => $name)
         {
-        	$return[] = $this->datas[$id];
+        	$return[$id] = $this->datas[$id];
         }
         return $return;
     }

@@ -41,7 +41,8 @@ class Roster extends UG_Controller {
 
 		$custom_data = array("races"   => $races,
 							 "classes" => $classes,
-							 "members" => $this->uguilds->guild->getMembers('rank'));
+							 "members" => $this->uguilds->guild->getMembers('rank'),
+							 "ranks"   => $this->uguilds->guild->ranks);
 
 		// Load the roster table header and filter system
 		$this->load->view('controllers/Roster/header.php', $this->data($custom_data));
