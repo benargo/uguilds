@@ -2,7 +2,8 @@
 
 class Manifest extends UG_Controller {
 
-	private $files = array(	);
+	private $files =  array('http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js',
+							'//code.jquery.com/ui/1.10.3/jquery-ui.js');
 
 	/**
 	 * Construction function
