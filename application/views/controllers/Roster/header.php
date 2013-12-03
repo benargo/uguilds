@@ -49,7 +49,7 @@
 			<span class="field">
 				<label for="rank">Guild Rank</label>
 				<select name="rank">
-					<option value="" selected disabled>Select One...</option><?php 
+					<option value="all" selected>Select One...</option><?php 
 
 					foreach($ranks as $position => $title)
 					{
@@ -59,8 +59,8 @@
 				</select>
 			</span>
 
-			<span class="nojs">
-				<input type="submit" value="Filter" />
+			<span>
+				<input type="submit" value="Filter" class="nojs" />
 				<input type="reset" value="Clear" />
 			</span>
 		</form>

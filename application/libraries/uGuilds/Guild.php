@@ -73,7 +73,7 @@ class Guild extends \BattlenetArmory\Guild {
 			case "ranks":
 				if(empty($this->ranks))
 				{
-					
+					$this->_setRanks();
 				}
 				return $this->ranks;
 				break;
@@ -145,7 +145,7 @@ class Guild extends \BattlenetArmory\Guild {
 	    		// Load the levels and ranks
 	    		$this->_setLowestLevelMember();
 	    		$this->_setHighestLevelMember();
-	    		$this->setGuildRankTitles();
+	    		$this->_setRanks();
    			}
 
    			// Encode this object and store it in the cache
@@ -291,6 +291,22 @@ class Guild extends \BattlenetArmory\Guild {
 				$this->levelRange['max'] = $member['character']['level'];
 			}
 		}
+	}
+
+	/**
+	 * _setRanks()
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function _setRanks()
+	{
+		$highestRank = $this->getMembers('rank','desc')[0]['rank'];
+		for($i = 0; $i <= $highestRank; $i++)
+		{
+			$this->ranks[$i] = $i;
+		}
+		$this->setGuildRankTitles();
 	}
 
 	/**

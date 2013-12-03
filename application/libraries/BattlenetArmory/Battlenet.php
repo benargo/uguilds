@@ -39,7 +39,7 @@ abstract class Battlenet {
 	 */
 	public function getIcon($string, $size = 56)
 	{
-		if(!file_exists(FCPATH .'media/images/icons/'. (int) $size .'/'. strtolower($string)))
+		if(!file_exists(FCPATH .'media/images/icons/'. (int) $size .'/'. strtolower($string).'.jpg'))
 		{
 			if($image = imagecreatefromjpeg('http://media.blizzard.com/wow/icons/'. (int) $size .'/'. strtolower($string) .'.jpg'))
 			{	
