@@ -32,8 +32,13 @@ class Theme extends CI_Model {
 	function __construct()
 	{
 		parent::__construct();
+		$ci = get_instance();
 
 		$this->_findById(\uGuilds\Guild::instance()->theme);
+
+		$this->data['theme_path'] = $this->getPath();
+		$this->data['locale'] = uGuilds\Guild::instance()->locale;
+		$this->data['guild'] = uGuilds\Guild::instance();
 	}
 
 	/**
@@ -180,6 +185,32 @@ class Theme extends CI_Model {
 	}
 
 	/**
+	 * getIncludes()
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function getIncludes()
+	{
+		$this->data['head'] = $this->view('includes/head', $this->data);
+		$this->data['nav'] = $this->view('includes/nav', $this->data);
+		$this->data['footer'] = $this->view('includes/footer', $this->data);
+	}
+
+	/**
+	 * data()
+	 *
+	 * @access public
+	 * @param array $data
+	 * @return views
+	 */
+	public function data(array $data = NULL)
+	{
+		$this->data = array_merge($this->data, $data);
+		return $this->data;
+	}
+
+	/**
 	 * view()
 	 *
 	 * Gets the requested view and returns it as data
@@ -189,7 +220,7 @@ class Theme extends CI_Model {
 	 * @param array $data
 	 * @return \CodeIgniter\View
 	 */
-	public function view($name, $data = array())
+	public function view($name, array $data = array())
 	{
 		$data = array_merge($this->data, $data);
 
