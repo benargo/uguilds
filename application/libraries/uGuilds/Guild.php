@@ -15,7 +15,7 @@ class Guild extends \BattlenetArmory\Guild {
 
 	private $_id;
 	private $domainName;
-	private $theme = 'default';
+	private $theme;
 	private $locale = 'en_GB';
 	private $faction;
 	private $ranks = array();
@@ -73,7 +73,7 @@ class Guild extends \BattlenetArmory\Guild {
 			case "ranks":
 				if(empty($this->ranks))
 				{
-					
+					$this->_setRanks();
 				}
 				return $this->ranks;
 				break;
@@ -102,7 +102,20 @@ class Guild extends \BattlenetArmory\Guild {
 	}
 
 	/**
-	 * load()
+	 * instance()
+	 * 
+	 * @access public
+	 * @static true
+	 * @return \uGuilds\Guild object
+	 */
+	public static function instance()
+	{
+		$ci =& get_instance();
+		return $ci->uguilds->guild;
+	}
+
+	/**
+	 * _load()
 	 *
 	 * @access private
 	 * @param string $domain
@@ -145,7 +158,7 @@ class Guild extends \BattlenetArmory\Guild {
 	    		// Load the levels and ranks
 	    		$this->_setLowestLevelMember();
 	    		$this->_setHighestLevelMember();
-	    		$this->setGuildRankTitles();
+	    		$this->_setRanks();
    			}
 
    			// Encode this object and store it in the cache
@@ -291,6 +304,22 @@ class Guild extends \BattlenetArmory\Guild {
 				$this->levelRange['max'] = $member['character']['level'];
 			}
 		}
+	}
+
+	/**
+	 * _setRanks()
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function _setRanks()
+	{
+		$highestRank = $this->getMembers('rank','desc')[0]['rank'];
+		for($i = 0; $i <= $highestRank; $i++)
+		{
+			$this->ranks[$i] = $i;
+		}
+		$this->setGuildRankTitles();
 	}
 
 	/**

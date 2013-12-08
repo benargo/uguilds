@@ -156,10 +156,10 @@ function filter(options, event)
 
         }
         
-        if(options['race'] !== undefined)
+        if(options['race'] != 'all' && options['race'] !== undefined)
         {
             // If the character race matches the filter option
-            if(options['race'] != 'all' && element.character.race != options['race'])
+            if(element.character.race != options['race'])
             {
                 // Add the character to the matches
                 console.log('Added '+ element.character.name +' because its race matches');
@@ -167,10 +167,10 @@ function filter(options, event)
             }
         }
 
-        if(options['class'] !== undefined)
+        if(options['class'] != 'all' && options['class'] !== undefined)
         {
             // If the character's class matches the filter option
-            if(options['class'] != 'all' && element.character.class != options['class'])
+            if(element.character.class != options['class'])
             {
                 // Add the character to the matches
                 console.log('Added '+ element.character.name +' because its class matches');
@@ -191,6 +191,18 @@ function filter(options, event)
                 matches.push(element.character.name);
             }
         }
+
+        if(options['rank'] !== undefined && options['rank'] != 'all')
+        {
+            // If the character's rank DOES NOT matches
+            if(element.rank != options['rank'])
+            {
+                // Add the character to the matches.
+                console.log('Added '+ element.character.name +' because it\'s NOT the correct rank');
+                matches.push(element.character.name);
+            }
+        }
+
     });
 
     $.each(roster.members, function(index,element){
@@ -210,6 +222,7 @@ function filter(options, event)
 }
 
 $(function() {
+
     // On Resize Events
     $(window).on('resize', function() {
         if($(window).width() <= '640')
@@ -223,7 +236,7 @@ $(function() {
         }
     });
 
-    $('.nojs input').remove();
+    $('input.nojs').remove();
     $('select[name="characterName"], select[name="minLevel"], select[name="maxLevel"]').combobox();
 
     var options = Array();
@@ -239,16 +252,12 @@ $(function() {
 
         path = path.replace(/\/race=[\w\-]+/,'');
 
-        if(options['race'] == 'all')
-        {
-            history.pushState(null,null,path);
-        }
-        else
+        if(options['race'] != 'all')
         {
             var roster = JSON.parse(window.localStorage['roster']);
             path = path+'/race='+roster.races[options['race']].name.replace(' ','-').toLowerCase();
-            history.pushState(null,null,path);
         }
+        history.pushState(null,null,path);
 
         filter(options, event);
     });
@@ -258,16 +267,13 @@ $(function() {
 
         path = path.replace(/\/class=[\w\-]+/,'');
 
-        if(options['class'] == 'all')
-        {
-            history.pushState(null,null,path);
-        }
-        else
+        if(options['class'] != 'all')
         {
             var roster = JSON.parse(window.localStorage['roster']);
             path = path+'/class='+roster.classes[options['class']].name.replace(' ','-').toLowerCase();
-            history.pushState(null,null,path);
         }
+
+        history.pushState(null,null,path);
 
         filter(options, event);
     });
@@ -278,11 +284,11 @@ $(function() {
 
         path = path.replace(/\/level=[0-9]+[\-0-9]*/,'');
 
-        if(options['minLevel'] === undefined)
+        if(options['minLevel'] === undefined || options['minLevel'] === '')
         {
             options['minLevel'] = $('input[name="minLevel"]').attr('min');
         }
-        if(options['maxLevel'] === undefined)
+        if(options['maxLevel'] === undefined || options['maxLevel'] === '')
         {
             options['maxLevel'] = $('input[name="maxLevel"]').attr('max');
         }
@@ -290,6 +296,29 @@ $(function() {
         path = path+'/level='+options['minLevel']+'-'+options['maxLevel'];
         history.pushState(null,null,path);
 
+        filter(options, event);
+    });
+
+    $('select[name="rank"]').change(function(event){
+        options['rank'] = $(this).val();
+
+        path = path.replace(/\/rank=[\w\-]+/,'');
+
+        if(options['rank'] != 'all')
+        {
+            var roster = JSON.parse(window.localStorage['roster']);
+            path = path+'/rank='+roster.ranks[options['rank']].toString().replace(' ','-').toLowerCase();
+        }
+
+        history.pushState(null,null,path);
+
+        filter(options, event);
+    });
+
+    $('input[type="reset"]').click(function(event){
+        options = [];
+        path = '/roster';
+        history.pushState(null,null,path);
         filter(options, event);
     });
 });
