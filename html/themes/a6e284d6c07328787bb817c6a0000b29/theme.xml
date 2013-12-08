@@ -8,4 +8,13 @@
 	<authorEmail>support@uguilds.com</authorEmail>
 	<authorURL>http://www.uguilds.com</authorURL>
 	<description>Default template using Mists of Pandaria styling for uGuilds</description>
+	<files>
+		<file>theme.xml</file>
+		<file>css/screen.css</file>
+		<file>js/jquery.sticky.js</file>
+		<file>js/theme.js</file>
+		<file>images/headerBG.jpg</file>
+		<file>images/home.svg</file>
+		<file>images/pageBG.jpg</file>
+	</files>
 </theme>

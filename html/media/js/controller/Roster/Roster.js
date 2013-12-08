@@ -222,7 +222,6 @@ function filter(options, event)
 }
 
 $(function() {
-
     // On Resize Events
     $(window).on('resize', function() {
         if($(window).width() <= '640')
@@ -284,11 +283,11 @@ $(function() {
 
         path = path.replace(/\/level=[0-9]+[\-0-9]*/,'');
 
-        if(options['minLevel'] === undefined || options['minLevel'] === '')
+        if(options['minLevel'] === undefined)
         {
             options['minLevel'] = $('input[name="minLevel"]').attr('min');
         }
-        if(options['maxLevel'] === undefined || options['maxLevel'] === '')
+        if(options['maxLevel'] === undefined)
         {
             options['maxLevel'] = $('input[name="maxLevel"]').attr('max');
         }
@@ -312,13 +311,6 @@ $(function() {
 
         history.pushState(null,null,path);
 
-        filter(options, event);
-    });
-
-    $('input[type="reset"]').click(function(event){
-        options = [];
-        path = '/roster';
-        history.pushState(null,null,path);
         filter(options, event);
     });
 });

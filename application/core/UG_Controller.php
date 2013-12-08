@@ -2,10 +2,6 @@
 
 class UG_Controller extends CI_Controller {
 
-	// Variables
-	protected $page_title;
-	protected $page_author;
-
 	/**
 	 * data()
 	 * 
@@ -17,6 +13,7 @@ class UG_Controller extends CI_Controller {
 	{
 		$data = array(/*"account"	=> $this->uguilds->account,*/
 					 "guild"	=> $this->uguilds->guild,
+					 "theme"	=> $this->uguilds->theme,
 					 "locale"	=> $this->uguilds->locale);
 
 		if($extra_data)
@@ -41,9 +38,9 @@ class UG_Controller extends CI_Controller {
 	 * @param $title
 	 * @return void
 	 */
-	protected function _setPageTitle($title = "{{ missing: page_title }}")
+	protected function _setPageTitle($title)
 	{
-		$this->page_title = $title;
+		$this->uguilds->theme->data->page_title = $title;
 	}
 
 	/**
@@ -53,14 +50,9 @@ class UG_Controller extends CI_Controller {
 	 * @param $author
 	 * @return void
 	 */
-	protected function _setPageAuthor($author = NULL)
+	protected function _setPageAuthor($author)
 	{
-		if(is_null($author))
-		{
-			$author = uGuilds\Guild::instance()->name;
-		}
-		
-		$this->page_author = $author;
+		$this->uguilds->theme->data->page_author = $author;
 	}
 
 	/**
