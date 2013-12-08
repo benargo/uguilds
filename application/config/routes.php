@@ -40,9 +40,16 @@
 
 $route['default_controller'] = "welcome";
 $route['404_override'] = '';
+
+// ajax
+
+// themes
+$route['theme/css/([cb]'] = "theme/css";
+$route['theme/css/controller/([\w\/\-]+)'] = "theme/css/controller/$1";
+
+// roster
 $route['roster'] = "roster";
-$route['roster/race/([\w]+)'] = "roster/filter";
-$route['roster/class/([\w]+)'] = "roster/filter";
+$route['roster(.*)/(race|class|level|rank)=([\w\-]+)(.*)'] = "roster/filter";
 
 
 /* End of file routes.php */

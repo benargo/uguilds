@@ -33,7 +33,9 @@ class Welcome extends UG_Controller {
 	 */
 	public function index()
 	{
+		dump($this);
 		$this->load->view('controllers/Welcome/leadingArticle');
+
 		$this->_loadFooter();
 	}
 }
