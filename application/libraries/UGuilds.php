@@ -51,14 +51,6 @@ class UGuilds {
 				}
 				return $this->domain;
 				break;
-
-			case "guild":
-				if(!$this->guild instanceof uGuilds\Guild)
-				{
-					$this->guild = $this->_findGuild();
-				}
-				return $this->guild;
-				break;
 		}
 	}
 

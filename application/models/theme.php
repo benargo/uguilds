@@ -34,11 +34,11 @@ class Theme extends CI_Model {
 		parent::__construct();
 		$ci = get_instance();
 
-		$this->_findById(\uGuilds\Guild::instance()->theme);
+		$this->_findById($ci->guild->theme);
 
 		$this->data['theme_path'] = $this->getPath();
-		$this->data['locale'] = uGuilds\Guild::instance()->locale;
-		$this->data['guild'] = uGuilds\Guild::instance();
+		$this->data['locale'] = $ci->guild->locale;
+		$this->data['guild'] = $ci->guild;
 	}
 
 	/**
