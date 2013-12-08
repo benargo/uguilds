@@ -8,18 +8,11 @@
 $bg-color: rgba(7, 22, 27, 0.7);
 $link-active: #fed000;
 
-html {
+body {
 	background: url('../images/headerBG.jpg') center top no-repeat fixed, url('../images/pageBG.jpg') center top repeat;
    	color: #ffffff;
 	font-family: Helvetica, Arial, sans-serif;
    	font-size: 12pt;
-
-   	@media (min-width:1024px) {
-	    body {
-	    	padding: 0 30px;
-
-	    }
-	}
 
 	@media (max-width: 640px) {
 		font-size: 10pt;
@@ -32,6 +25,10 @@ html {
 		& ul {
 			margin: 0 30px 20px;
 		}
+	}
+
+	.container > * {
+		padding: 15px;
 	}
 
 	.menu-bar {
@@ -130,8 +127,7 @@ html {
 
 	& article {
 		clear: both;
-		margin: 20px 0;
-		padding: 15px;
+		margin: 20px;
 		background: $bg-color;
 		-webkit-border-radius: 5px;
 	    border-radius: 5px;
@@ -171,7 +167,6 @@ html {
 	& footer {
 		clear: both;
 		margin: 20px 0;
-		padding: 15px;
 		background: $bg-color;
 		-webkit-border-radius: 5px;
 	    border-radius: 5px;

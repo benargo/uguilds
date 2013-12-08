@@ -32,7 +32,8 @@ class Welcome extends UG_Controller {
 	 */
 	public function index()
 	{
-		$leadingArticle = $this->load->view('controllers/Welcome/leadingArticle',null,true);
+		$this->theme->data(array('content' => $this->load->view('controllers/Welcome/leadingArticle',null,true)));
+		$this->theme->view('page');
 	}
 }
 

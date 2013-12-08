@@ -192,9 +192,10 @@ class Theme extends CI_Model {
 	 */
 	public function getIncludes()
 	{
-		$this->data['head'] = $this->view('includes/head', $this->data);
-		$this->data['nav'] = $this->view('includes/nav', $this->data);
-		$this->data['footer'] = $this->view('includes/footer', $this->data);
+		$ci =& get_instance();
+		$this->data['head'] = $ci->load->view('includes/head', $this->data, true);
+		$this->data['nav'] = $ci->load->view('includes/nav', $this->data, true);
+		$this->data['footer'] = $ci->load->view('includes/footer', $this->data, true);
 	}
 
 	/**
@@ -220,7 +221,7 @@ class Theme extends CI_Model {
 	 * @param array $data
 	 * @return \CodeIgniter\View
 	 */
-	public function view($name, array $data = array())
+	public function view($name, array $data = array(), $asData = false)
 	{
 		$data = array_merge($this->data, $data);
 
@@ -231,7 +232,7 @@ class Theme extends CI_Model {
 				$this->views[$name] = 'themes/'. $this->_id .'/'. $name;
 			}
 			$ci =& get_instance();
-			return $ci->load->view($this->views[$name], $data, true);
+			return $ci->load->view($this->views[$name], $data, $asData);
 		}
 	}
 
