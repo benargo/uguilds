@@ -313,4 +313,14 @@ $(function() {
 
         filter(options, event);
     });
+
+    $('input[type="reset"]').click(function(event)
+    {
+        options = [];
+
+        path = '/roster';
+        history.pushState(null,null,path);
+
+        filter(options, event);
+    });
 });
