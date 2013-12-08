@@ -160,7 +160,7 @@ html {
 	    		}
 	    	}
 
-	    	@media (max-width: 640px), (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+	    	@media screen and (max-device-width: 640px) and (-webkit-min-device-pixel-ratio: 2) {
 	    		& .spec, & .achievements > img {
 	    			display: none;
 	    		}
