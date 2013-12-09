@@ -205,7 +205,7 @@ class Theme extends CI_Model {
 	 * @param array $data
 	 * @return views
 	 */
-	public function data(array $data = NULL)
+	public function data(array $data = array())
 	{
 		$this->data = array_merge($this->data, $data);
 		return $this->data;

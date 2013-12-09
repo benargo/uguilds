@@ -68,12 +68,12 @@
 <table class="guild-roster tablesorter">
 	<thead>
 		<tr>
-			<th class="sortable character-name">Name</th>
-			<th class="sortable race">Race</th>
-			<th class="sortable class">Class</th>
-			<th class="sortable level">Level</th>
-			<th class="sortable guild-rank">Guild Rank</th>
-			<th class="sortable achievements">Achievement Points</th>
+			<th class="sortable character-name four columns">Name</th>
+			<th class="sortable race two columns">Race</th>
+			<th class="sortable class two columns">Class</th>
+			<th class="sortable level two columns">Level</th>
+			<th class="sortable guild-rank three columns">Guild Rank</th>
+			<th class="sortable achievements three columns">Achievement Points</th>
 		</tr>
 	</thead>
 </table>
