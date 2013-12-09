@@ -1,5 +1,5 @@
 <?php foreach($members as $member): ?>
-	<tr class="character <?php echo strtolower($member['character']['name']); ?>">
+	<tr class="character <?php echo $member['character']['name']; ?>">
 		<!-- Character Name -->
 		<td class="character-name">
 			<a href="/roster/character/<?php echo strtolower($member['character']['name']); ?>" 

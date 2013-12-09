@@ -69,8 +69,8 @@
 			<thead>
 				<tr>
 					<th class="sortable character-name">Name</th>
-					<th class="sortable race">Race</th>
-					<th class="sortable class">Class</th>
+					<th class="race">Race</th>
+					<th class="class">Class</th>
 					<th class="sortable level">Level</th>
 					<th class="sortable guild-rank">Guild Rank</th>
 					<th class="sortable achievements">Achievement Points</th>
