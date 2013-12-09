@@ -5,11 +5,6 @@ if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 class Races extends \BattlenetArmory\Races {
 
-    private $icons = array(
-        '1_0' => 'achievement_character_human_male',    // Human male
-        '1_1' => 'achievement_character_human_female',  // Human female
-        );
-
 	/**
 	 * getIcon()
 	 * 
@@ -18,20 +13,15 @@ class Races extends \BattlenetArmory\Races {
 	 * @param bool $gender
 	 * @return string
 	 */
-	public function getIcon($id, $gender = 0, $size = 18) 
+	public function getIcon($id, $gender = 0) 
     {
-        if($size !== 18 || $size !== 56)
+        if(!file_exists(FCPATH ."media/images/races/race_". $id . '_'. $gender .'.jpg'))
         {
-            $size = 18;
+            $image = imagecreatefromjpeg('http://media.blizzard.com/wow/icons/18/race_'. $id .'_'. $gender .'.jpg');
+            imagejpeg($image, FCPATH .'media/images/races/race_'. $id .'_'. $gender .'.jpg', 100);
         }
 
-        if(!file_exists(FCPATH ."media/images/icons/$size/race_". $id . '_'. $gender .'_'. $size .'.jpg'))
-        {
-            $image = imagecreatefromjpeg('http://media.blizzard.com/wow/icons/'. $size .'/race_'. $id .'_'. $gender .'.jpg');
-            imagejpeg($image, FCPATH .'media/images/races/race_'. $id .'_'. $gender .'_'. $size .'.jpg', 100);
-        }
-
-        return '/media/images/races/race_'. $id .'_'. $gender .'_'. $size .'.jpg';
+        return '/media/images/races/race_'. $id .'_'. $gender .'jpg';
     }
 
     /**
