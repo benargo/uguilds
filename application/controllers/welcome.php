@@ -14,6 +14,8 @@ class Welcome extends UG_Controller {
 		$this->_setPageAuthor($this->uguilds->guild->guildName);
 
 		$this->_loadHeader();
+
+		dump(get_browser());
 	}
 
 	/**

@@ -5,6 +5,19 @@ if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 class Classes extends \BattlenetArmory\Classes {
 
+    private $names = array(
+        1  => 'Warrior',
+        2  => 'Paladin',
+        3  => 'Hunter',
+        4  => 'Rogue',
+        5  => 'Priest',
+        6  => 'Death Knight',
+        7  => 'Shaman',
+        8  => 'Mage',
+        9  => 'Warlock',
+        10 => 'Monk',
+        11 => 'Druid');
+
 	/**
 	 * getIcon()
 	 *
@@ -12,15 +25,22 @@ class Classes extends \BattlenetArmory\Classes {
 	 * @param int $id
 	 * @return string
 	 */
-	public function getIcon($id) 
+	public function getIcon($id, $size = 18)
     {
-        if(!file_exists(FCPATH .'media/images/classes/class_'. $id . '.jpg'))
+        $name = strtolower(preg_replace('/\ /', '', $this->names[$id]));
+
+        if($size != 18 && $size != 56)
         {
-        	$image = imagecreatefromjpeg('http://media.blizzard.com/wow/icons/18/class_'. $id .'.jpg');
-        	imagejpeg($image, FCPATH .'media/images/classes/class_'. $id .'.jpg', 100);
+            $size = 18;
         }
 
-    	return '/media/images/classes/class_'. $id .'.jpg';
+        if(!file_exists(FCPATH ."media/images/icons/$size/classicon_$name.jpg"))
+        {
+        	$image = imagecreatefromjpeg("http://media.blizzard.com/wow/icons/$size/classicon_$name.jpg");
+        	imagejpeg($image, FCPATH ."media/images/icons/$size/classicon_$name.jpg", 100);
+        }
+
+    	return "/media/images/icons/$size/classicon_$name.jpg";
     }
 
     /**
