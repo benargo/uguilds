@@ -18,7 +18,7 @@
 	<?php echo $theme->css; ?>
 
 	<!-- JAVASCRIPT -->
-	<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+	<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
 	<?php echo $theme->javascript; ?>
 
 	<!-- SHORTCUT ICONS -->

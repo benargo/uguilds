@@ -2,7 +2,7 @@
 
 class Manifest extends UG_Controller {
 
-	private $files = array(	);
+	private $files = array();
 
 	/**
 	 * Construction function
@@ -56,6 +56,7 @@ class Manifest extends UG_Controller {
 	 */
 	private function _getSystemMedia()
 	{
+		$this->files[] = '//code.jquery.com/jquery-1.10.2.min.js';
 		$iterator = new RecursiveDirectoryIterator(FCPATH.'media');
 		foreach (new RecursiveIteratorIterator($iterator) as $filename => $file) 
 		{
