@@ -5,8 +5,8 @@ $.ajax({
     type: 'GET',
     dataType: 'json',
     ifModified: true
-}).done(function(data) {
-    alert('Fresh request made');
+}).done(function(data, textStatus) {
+    alert(textStatus);
     window.localStorage.setItem('roster', JSON.stringify(data));
     $('.guild-roster tbody tr').remove();
     data.members.forEach(function(element, index, array){
