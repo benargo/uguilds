@@ -13,11 +13,11 @@ function filter(options, event)
         if(options['name'] !== undefined)
         {
             // If the character name matches the filter option
-            if(element.character.name.toLowerCase().search(options['name'].toLowerCase()) == -1)
+            if(element.name.toLowerCase().search(options['name'].toLowerCase()) == -1)
             {
                 // Add the character to the matches
-                console.log('Added '+ element.character.name +' because it\'s name matches');
-                matches.push(element.character.name);
+                console.log('Added '+ element.name +' because it\'s name matches');
+                matches.push(element.name);
             }
 
         }
@@ -25,22 +25,22 @@ function filter(options, event)
         if(options['race'] != 'all' && options['race'] !== undefined)
         {
             // If the character race matches the filter option
-            if(element.character.race != options['race'])
+            if(element.race != options['race'])
             {
                 // Add the character to the matches
-                console.log('Added '+ element.character.name +' because its race matches');
-                matches.push(element.character.name);
+                console.log('Added '+ element.name +' because its race matches');
+                matches.push(element.name);
             }
         }
 
         if(options['class'] != 'all' && options['class'] !== undefined)
         {
             // If the character's class matches the filter option
-            if(element.character.class != options['class'])
+            if(element.class != options['class'])
             {
                 // Add the character to the matches
-                console.log('Added '+ element.character.name +' because its class matches');
-                matches.push(element.character.name);
+                console.log('Added '+ element.name +' because its class matches');
+                matches.push(element.name);
             }
 
         }
@@ -49,12 +49,12 @@ function filter(options, event)
         {
             // If the character's level is LESS than the minimum level
             // OR the character's level is MORE than the maximum level
-            if(element.character.level < parseInt(options['minLevel'], 10) ||
-                element.character.level > parseInt(options['maxLevel'], 10))
+            if(element.level < parseInt(options['minLevel'], 10) ||
+                element.level > parseInt(options['maxLevel'], 10))
             {
                 // Add the character to the matches
-                console.log('Added '+ element.character.name +' because it\'s NOT in the level range');
-                matches.push(element.character.name);
+                console.log('Added '+ element.name +' because it\'s NOT in the level range');
+                matches.push(element.name);
             }
         }
 
@@ -64,8 +64,8 @@ function filter(options, event)
             if(element.rank != options['rank'])
             {
                 // Add the character to the matches.
-                console.log('Added '+ element.character.name +' because it\'s NOT the correct rank');
-                matches.push(element.character.name);
+                console.log('Added '+ element.name +' because it\'s NOT the correct rank');
+                matches.push(element.name);
             }
         }
 
@@ -73,18 +73,20 @@ function filter(options, event)
 
     $.each(roster.members, function(index,element){
         // If the character does NOT match the filters
-        if($.inArray(element.character.name, matches) == -1)
+        if($.inArray(element.name, matches) == -1)
         {
             // Show this character
-            $('tr.character.'+element.character.name.toLowerCase()).removeClass('hidden').fadeIn('medium');
+            $('tr.character.'+element.name).removeClass('hidden').fadeIn('medium');
         }
         // If the character DOES match the filters
-        if($.inArray(element.character.name, matches) != -1)
+        if($.inArray(element.name, matches) != -1)
         {
             // Hide the character
-            $('tr.character.'+element.character.name.toLowerCase()).addClass('hidden').fadeOut('medium');
+            $('tr.character.'+element.name).addClass('hidden').fadeOut('medium');
         }
     });
+
+    $(".guild-roster").trigger("update");
 }
 
 var options, path, roster;
@@ -121,13 +123,13 @@ $(function() {
             window.localStorage.setItem('roster', JSON.stringify(data));
             $('.guild-roster tbody').empty();
             data.members.forEach(function(element, index, array){
-                $('.guild-roster tbody').append('<tr class="character '+ element.character.name +'">'
-                  +'<td class="character-name"><a class="'+ data.classes[element.character.class].name.replace(' ','-').toLowerCase() +'" href="/roster/character/'+ element.character.name.toLowerCase() +'">'+ element.character.name +'</a></td>'
-                  +'<td class="race"><a href="/roster/race='+ data.races[element.character.race].name.replace(' ','-').toLowerCase() +'"><img src="/media/images/races/race_'+ element.character.race +'_'+ element.character.gender +'.jpg" alt="'+ data.races[element.character.race].name.replace(' ','-') +'" width="18" /></a></td>'
-                  +'<td class="class"><a href="/roster/class='+ data.classes[element.character.class].name.replace(' ','-').toLowerCase() +'"><img src="/media/images/icons/56/classicon_'+ data.classes[element.character.class].name.replace(' ','').toLowerCase() +'.jpg" alt="'+ data.classes[element.character.class].name.replace(' ','-') +'" width="18" />'+ ('spec' in element.character ? ' <img src="/media/images/icons/56/'+ element.character.spec.icon +'.jpg" alt="'+ element.character.spec.name +'" class="spec" width="18" />' : '') +'</a></td>'
-                  +'<td class="level">'+ element.character.level +'</td>'
+                $('.guild-roster tbody').append('<tr class="character '+ element.name +'">'
+                  +'<td class="character-name"><a class="'+ data.classes[element.class].name.replace(' ','-').toLowerCase() +'" href="/roster/character/'+ element.name.toLowerCase() +'">'+ element.name +'</a></td>'
+                  +'<td class="race"><a href="/roster/race='+ data.races[element.race].name.replace(' ','-').toLowerCase() +'"><img src="/media/images/races/race_'+ element.race +'_'+ element.gender +'.jpg" alt="'+ data.races[element.race].name.replace(' ','-') +'" width="18" /></a></td>'
+                  +'<td class="class"><a href="/roster/class='+ data.classes[element.class].name.replace(' ','-').toLowerCase() +'"><img src="/media/images/icons/56/classicon_'+ data.classes[element.class].name.replace(' ','').toLowerCase() +'.jpg" alt="'+ data.classes[element.class].name.replace(' ','-') +'" width="18" />'+ ('spec' in element ? ' <img src="/media/images/icons/56/'+ element.spec.icon +'.jpg" alt="'+ element.spec.name +'" class="spec" width="18" />' : '') +'</a></td>'
+                  +'<td class="level">'+ element.level +'</td>'
                   +'<td class="guild-rank" data-id="'+ element.rank +'"><a href="/roster/rank='+ ('rankname' in element ? element.rankname.replace(' ','-').toLowerCase() : element.rank) +'">'+ ('rankname' in element ? element.rankname : element.rank) +'</a></td>'
-                  +'<td class="achievements">'+ element.character.achievementPoints +'<img src="/media/images/achievements.gif" alt="Achievement Points" width="8" /></td>'
+                  +'<td class="achievements">'+ element.achievementPoints +' <img src="/media/images/achievements.gif" alt="Achievement Points" width="8" /></td>'
                   +'</tr>');
             });
             $(".guild-roster").trigger("update");

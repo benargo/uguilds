@@ -6,7 +6,7 @@
 			<!-- Character Name -->
 			<span class="field">
 				<label for="characterName">Character Name</label>
-				<input type="text" name="characterName" placeholder="e.g. <?php echo $members[0]['character']['name']; ?>"/>
+				<input type="text" name="characterName" placeholder="e.g. <?php echo $members[0]->name; ?>"/>
 			</span>
 
 			<!-- Race -->

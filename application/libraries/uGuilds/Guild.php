@@ -234,6 +234,69 @@ class Guild extends \BattlenetArmory\Guild {
 	}
 
 	/**
+	 * getMembers
+	 * 
+	 * @access public
+	 * @param string $sort
+	 * @param string $sortFlag
+	 * @return array
+	 */
+	public function getMembers($sort = FALSE, $sortFlag = 'asc')
+	{
+		$members = parent::getMembers($sort, $sortFlag);
+
+		foreach($members as $key => $member)
+		{
+			$members[$key] = (object) $member;
+			foreach($member['character'] as $trait => $value)
+			{
+				if($trait == 'spec')
+				{
+					$value = (object) $value;
+				}
+				$members[$key]->$trait = $value;
+			}
+			unset($members[$key]->character);
+		}
+
+		return $members;
+	}
+
+	/**
+	 * filterMembers()
+	 *
+	 * @access public
+	 * @param array $params
+	 * @return array $members
+	 */
+	public function filterMembers(array $params = array())
+	{
+		$this->params = $params;
+		$members = array_filter($this->getMembers(), array($this, '_filter'));
+		unset($this->params);
+		return $members;
+	}
+
+	/**
+	 * _filter()
+	 * 
+	 * @access private
+	 * @param array $members
+	 * @return array
+	 */
+	private function _filter($members)
+	{
+		foreach($this->params as $key => $value)
+		{
+			switch($key) 
+			{
+				case "race":
+					return ($members);
+			}
+		}
+	}
+
+	/**
 	 * getLowestLevelMember()
 	 *
 	 * @access public
