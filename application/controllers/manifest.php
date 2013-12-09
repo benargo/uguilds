@@ -16,7 +16,7 @@ class Manifest extends UG_Controller {
 
 	public function index()
 	{
-		if(ENVIRONMENT != 'development')
+		if(ENVIRONMENT == 'productions')
 		{
 			header('Content-type: text/cache-manifest');
 		
