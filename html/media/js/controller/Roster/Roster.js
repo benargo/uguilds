@@ -1,11 +1,27 @@
+var roster = JSON.parse(window.localStorage.getItem('roster'));
+
 $.ajax({
     url: '/ajax/roster/all',
     type: 'GET',
     dataType: 'json',
     ifModified: true
 }).done(function(data) {
+    alert('Fresh request made');
     window.localStorage.setItem('roster', JSON.stringify(data));
+    $('.guild-roster tbody tr').remove();
+    data.members.forEach(function(element, index, array){
+        $('.guild-roster tbody').append('<tr class="character '+ element.character.name.replace(' ','-').toLowerCase() +'">'
+          +'<td class="character-name"><a class="'+ data.classes[element.character.class].name.replace(' ','-').toLowerCase() +'" href="/roster/character/'+ element.character.name.toLowerCase() +'">'+ element.character.name +'</a></td>'
+          +'<td class="race"><a href="/roster/race='+ data.races[element.character.race].name.replace(' ','-').toLowerCase() +'"><img src="/media/images/races/race_'+ element.character.race +'_'+ element.character.gender +'.jpg" alt="'+ data.races[element.character.race].name.replace(' ','-') +'" width="18" /></a></td>'
+          +'<td class="class"><a href="/roster/class='+ data.classes[element.character.class].name.replace(' ','-').toLowerCase() +'"><img src="/media/images/icons/56/classicon_'+ data.classes[element.character.class].name.replace(' ','').toLowerCase() +'.jpg" alt="'+ data.classes[element.character.class].name.replace(' ','-') +'" width="18" />'+ ('spec' in element.character ? ' <img src="/media/images/icons/56/'+ element.character.spec.icon +'.jpg" alt="'+ element.character.spec.name +'" class="spec" width="18" />' : '') +'</a></td>'
+          +'<td class="level">'+ element.character.level +'</td>'
+          +'<td class="guild-rank" data-id="'+ element.rank +'"><a href="/roster/rank='+ ('rankname' in element ? element.rankname : element.rank) +'">'+ ('rankname' in element ? element.rankname : element.rank) +'</a></td>'
+          +'<td class="achievements">'+ element.character.achievementPoints +'<img src="/media/images/achievements.gif" alt="Achievement Points" width="8" /></td>'
+          +'</tr>');
+    });
 });
+
+delete window.roster;
 
 function filter(options, event)
 {
