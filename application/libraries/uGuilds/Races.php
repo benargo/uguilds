@@ -63,11 +63,12 @@ class Races extends \BattlenetArmory\Races {
      */
     public function getByName($name)
     {
+        $ci =& get_instance();
         $name = ucwords(str_replace('-', ' ', $name));
 
         foreach($this->data as $race)
         {
-            if($race->name == $name)
+            if($race->name == $name && $race->side == $ci->uguilds->guild->getFaction())
             {
                 return $race;
             }

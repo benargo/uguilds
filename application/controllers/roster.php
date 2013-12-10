@@ -41,7 +41,8 @@ class Roster extends UG_Controller {
 		$custom_data = array("races"   => $races,
 							 "classes" => $classes,
 							 "members" => $this->uguilds->guild->getMembers('rank'),
-							 "ranks"   => $this->uguilds->guild->ranks);
+							 "ranks"   => $this->uguilds->guild->ranks,
+							 "uri"	   => '/roster');
 
 		// Load the roster table header and filter system
 		$this->load->view('controllers/Roster/header.php', $this->data($custom_data));
@@ -61,19 +62,13 @@ class Roster extends UG_Controller {
 	 */
 	public function filter()
 	{
-		if($this->uri->segments !== array_unique($this->uri->segments))
-		{
-			$this->load->helper('url');
-			redirect('/'.implode('/', array_unique($this->uri->segments)));
-		}
 
 		$races = new uGuilds\Races;
 		$classes = new uGuilds\Classes;
 
 		$data = array("races"   => $races,
 					  "classes" => $classes,
-					  "ranks"   => $this->uguilds->guild->ranks,
-					  "uri"		=> '/'.implode('/', $this->uri->segments));
+					  "ranks"   => $this->uguilds->guild->ranks);
 
 		$params = array();
 		$segments = array_slice($this->uri->segments, 1);
@@ -81,13 +76,19 @@ class Roster extends UG_Controller {
 		{
 			list($key, $value) = explode("=", $segment);
 			$params[$key] = $value;
-			if($key == 'race' || $key == 'class')
+			if($key == 'race')
 			{
-				$params[$key] = $data[$key.'s']->getByName($value)->id;
+				$params[$key] = $data['races']->getByName($value)->id;
 			}
-		}
+			if($key == 'class')
+			{
+				$params[$key] = $data['classes']->getByName($value)->id;
+			}
 
-		$data['members'] = $this->uguilds->guild->filter($params);
+		}
+		$data['uri'] = '/'.implode('/', $this->uri->segments);
+		$data['members'] = $this->uguilds->guild->getMembers('rank');
+		$data['filtered'] = $this->uguilds->guild->filter($params);
 
 		// Load the roster table header and filter system
 		$this->load->view('controllers/Roster/header.php', $this->data($data));

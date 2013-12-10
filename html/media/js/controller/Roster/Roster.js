@@ -86,6 +86,11 @@ function filter(options, event)
         }
     });
 
+    $('a[href^="/roster"]').each(function(index, element){
+    	var ending = $(this).attr('href').match(/\/[\w\-]+\=[\w\-]+$/);
+    	$(this).attr('href', path + ending);
+    });
+
     $(".guild-roster").trigger("update");
 }
 
@@ -93,6 +98,7 @@ var options, path, roster;
 
 $.ajax({
     url: '/ajax/roster/all',
+    async: false,
     type: 'GET',
     dataType: 'json',
     ifModified: true
@@ -146,14 +152,14 @@ $(function() {
     		if(param[0] == 'race' || param[0] == 'class' || param[0] == 'rank') { 
     			$('select[name="'+ param[0] +'"] option').each(function(){
     				if($(this).text().replace(' ','-').toLowerCase() == param[1]){
-    					param[1] = $(this).val();
+    					param[1] = parseInt($(this).val());
     				}
     			});
     		}
-    		$('input[name$="'+ param[0] +'"], select[name$="'+ param[0] +'"]').val(param[1]).trigger("change");
     		options[param[0]] = param[1];
+    		$('input[name$="'+ param[0] +'"], select[name$="'+ param[0] +'"]').val(param[1]).trigger('change');
     	});
-    	filter(options, $(".guild-roster").trigger("update"));
+    	filter(options, $(window).trigger('change'));
     }
 
     // Table Sorter
