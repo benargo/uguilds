@@ -365,7 +365,7 @@ class Guild extends \BattlenetArmory\Guild {
 	 */
 	private function _setRanks()
 	{
-		$highestRank = $this->getMembers('rank','desc')[0]['rank'];
+		$highestRank = $this->getMembers('rank','desc')[0]->rank;
 		for($i = 0; $i <= $highestRank; $i++)
 		{
 			$this->ranks[$i] = $i;
