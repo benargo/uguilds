@@ -17,7 +17,7 @@
 
 					foreach($races->getAll($guild->getData()['side']) as $race)
 					{
-						echo "\n\t\t<option value=\"". $race['id'] ."\" data-image=\"/media/images/races/race_". $race['id'] ."_0.jpg\">". $race['name'] ."</option>";
+						echo "\n\t\t<option value=\"". $race->id ."\" data-image=\"/media/images/races/race_". $race->id ."_0.jpg\">". $race->name ."</option>";
 					}
 				?>
 				</select>
@@ -31,7 +31,7 @@
 
 					foreach($classes->getAll() as $class)
 					{
-						echo "\n\t\t<option value=\"". $class['id'] ."\" data-image=\"/media/images/classes/class_". $class['id'] .".jpg\">". $class['name'] ."</option>";	
+						echo "\n\t\t<option value=\"". $class->id ."\" data-image=\"/media/images/classes/class_". $class->id .".jpg\">". $class->name ."</option>";	
 					}
 				?>
 				</select>
@@ -39,10 +39,10 @@
 
 			<!-- Level Range -->
 			<span class="field">
-				<label for="minLevel">Level</label>
-				<input type="number" name="minLevel" min="<?php echo $guild->getLowestLevelMember(); ?>" max="<?php echo $guild->getHighestLevelMember(); ?>" placeholder="<?php echo $guild->getLowestLevelMember(); ?>" />
+				<label for="minlevel">Level</label>
+				<input type="number" name="minlevel" min="<?php echo $guild->getLowestLevelMember(); ?>" max="<?php echo $guild->getHighestLevelMember(); ?>" placeholder="<?php echo $guild->getLowestLevelMember(); ?>" />
 				&ndash;
-				<input type="number" name="maxLevel" min="<?php echo $guild->getLowestLevelMember(); ?>" max="<?php echo $guild->getHighestLevelMember(); ?>" placeholder="<?php echo $guild->getHighestLevelMember(); ?>" />
+				<input type="number" name="maxlevel" min="<?php echo $guild->getLowestLevelMember(); ?>" max="<?php echo $guild->getHighestLevelMember(); ?>" placeholder="<?php echo $guild->getHighestLevelMember(); ?>" />
 			</span>
 
 			<!-- Guild Rank -->

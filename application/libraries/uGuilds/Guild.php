@@ -269,10 +269,10 @@ class Guild extends \BattlenetArmory\Guild {
 	 * @param array $params
 	 * @return array $members
 	 */
-	public function filterMembers(array $params = array())
+	public function filter(array $params = array())
 	{
 		$this->params = $params;
-		$members = array_filter($this->getMembers(), array($this, '_filter'));
+		$members = array_values(array_filter($this->getMembers(), array($this, '_filter')));
 		unset($this->params);
 		return $members;
 	}
@@ -281,19 +281,20 @@ class Guild extends \BattlenetArmory\Guild {
 	 * _filter()
 	 * 
 	 * @access private
-	 * @param array $members
+	 * @param array $member
 	 * @return array
 	 */
-	private function _filter($members)
+	private function _filter($member)
 	{
 		foreach($this->params as $key => $value)
 		{
-			switch($key) 
+			if($member->$key == $value)
 			{
-				case "race":
-					return ($members);
+				return true;
 			}
 		}
+
+		return false;
 	}
 
 	/**

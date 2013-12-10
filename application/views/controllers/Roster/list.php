@@ -9,14 +9,14 @@
 
 		<!-- Race -->
 		<td class="race">
-			<a href="/roster/race/<?php echo strtolower(preg_replace('/\ /', '-', $races->getRace($member->race, 'name'))); ?>">
+			<a href="<?php echo $uri; ?>/race/<?php echo strtolower(preg_replace('/\ /', '-', $races->getRace($member->race, 'name'))); ?>">
 			<img src="<?php echo $races->getIcon($member->race, $member->gender); ?>"
 				alt="<?php echo $races->getRace($member->race,'name'); ?>" width="18" /></a>
 		</td>
 
 		<!-- Class -->
 		<td class="class">
-			<a href="/roster/class/<?php echo strtolower(preg_replace('/\ /', '-', $classes->getClass($member->class, 'name'))); ?>">
+			<a href="<?php echo $uri; ?>/class/<?php echo strtolower(preg_replace('/\ /', '-', $classes->getClass($member->class, 'name'))); ?>">
 				<img src="<?php echo $classes->getIcon($member->class, 18); ?>"
 					alt="<?php echo $classes->getClass($member->class, 'name'); ?>" width="18" />
 				<?php if(property_exists($member, 'spec'))

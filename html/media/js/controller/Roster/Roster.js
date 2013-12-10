@@ -91,6 +91,31 @@ function filter(options, event)
 
 var options, path, roster;
 
+$.ajax({
+    url: '/ajax/roster/all',
+    type: 'GET',
+    dataType: 'json',
+    ifModified: true
+}).done(function(data, textStatus, jqXHR) {
+    if(jqXHR.status == 200)
+    {
+        console.log('Updated the local copy of the roster');
+        window.localStorage.setItem('roster', JSON.stringify(data));
+        $('.guild-roster tbody').empty();
+        data.members.forEach(function(element, index, array){
+            $('.guild-roster tbody').append('<tr class="character '+ element.name +'">'
+              +'<td class="character-name"><a class="'+ data.classes[element.class].name.replace(' ','-').toLowerCase() +'" href="/roster/character/'+ element.name.toLowerCase() +'">'+ element.name +'</a></td>'
+              +'<td class="race"><a href="'+ path +'/race='+ data.races[element.race].name.replace(' ','-').toLowerCase() +'"><img src="/media/images/races/race_'+ element.race +'_'+ element.gender +'.jpg" alt="'+ data.races[element.race].name.replace(' ','-') +'" width="18" /></a></td>'
+              +'<td class="class"><a href="'+ path +'/class='+ data.classes[element.class].name.replace(' ','-').toLowerCase() +'"><img src="/media/images/icons/56/classicon_'+ data.classes[element.class].name.replace(' ','').toLowerCase() +'.jpg" alt="'+ data.classes[element.class].name.replace(' ','-') +'" width="18" />'+ ('spec' in element ? ' <img src="/media/images/icons/56/'+ element.spec.icon +'.jpg" alt="'+ element.spec.name +'" class="spec" width="18" />' : '') +'</a></td>'
+              +'<td class="level">'+ element.level +'</td>'
+              +'<td class="guild-rank" data-id="'+ element.rank +'"><a href="/roster/rank='+ ('rankname' in element ? element.rankname.replace(' ','-').toLowerCase() : element.rank) +'">'+ ('rankname' in element ? element.rankname : element.rank) +'</a></td>'
+              +'<td class="achievements">'+ element.achievementPoints +' <img src="/media/images/achievements.gif" alt="Achievement Points" width="8" /></td>'
+              +'</tr>');
+        });
+        $(".guild-roster").trigger("update");
+    }
+});
+
 $(function() { 
     $('input.nojs').remove();
 
@@ -111,30 +136,25 @@ $(function() {
         }
     });
 
-    $.ajax({
-        url: '/ajax/roster/all',
-        type: 'GET',
-        dataType: 'json',
-        ifModified: true
-    }).done(function(data, textStatus, jqXHR) {
-        if(jqXHR.status == 200)
-        {
-            console.log('Updated the local copy of the roster');
-            window.localStorage.setItem('roster', JSON.stringify(data));
-            $('.guild-roster tbody').empty();
-            data.members.forEach(function(element, index, array){
-                $('.guild-roster tbody').append('<tr class="character '+ element.name +'">'
-                  +'<td class="character-name"><a class="'+ data.classes[element.class].name.replace(' ','-').toLowerCase() +'" href="/roster/character/'+ element.name.toLowerCase() +'">'+ element.name +'</a></td>'
-                  +'<td class="race"><a href="/roster/race='+ data.races[element.race].name.replace(' ','-').toLowerCase() +'"><img src="/media/images/races/race_'+ element.race +'_'+ element.gender +'.jpg" alt="'+ data.races[element.race].name.replace(' ','-') +'" width="18" /></a></td>'
-                  +'<td class="class"><a href="/roster/class='+ data.classes[element.class].name.replace(' ','-').toLowerCase() +'"><img src="/media/images/icons/56/classicon_'+ data.classes[element.class].name.replace(' ','').toLowerCase() +'.jpg" alt="'+ data.classes[element.class].name.replace(' ','-') +'" width="18" />'+ ('spec' in element ? ' <img src="/media/images/icons/56/'+ element.spec.icon +'.jpg" alt="'+ element.spec.name +'" class="spec" width="18" />' : '') +'</a></td>'
-                  +'<td class="level">'+ element.level +'</td>'
-                  +'<td class="guild-rank" data-id="'+ element.rank +'"><a href="/roster/rank='+ ('rankname' in element ? element.rankname.replace(' ','-').toLowerCase() : element.rank) +'">'+ ('rankname' in element ? element.rankname : element.rank) +'</a></td>'
-                  +'<td class="achievements">'+ element.achievementPoints +' <img src="/media/images/achievements.gif" alt="Achievement Points" width="8" /></td>'
-                  +'</tr>');
-            });
-            $(".guild-roster").trigger("update");
-        }
-    });
+    var uri = window.location.pathname;
+    if(uri.length >= 8)
+    {
+    	path = uri;
+    	var segments = uri.substr(8).split('/');
+    	segments.forEach(function(element, index, array) {
+    		var param = element.split('=')
+    		if(param[0] == 'race' || param[0] == 'class' || param[0] == 'rank') { 
+    			$('select[name="'+ param[0] +'"] option').each(function(){
+    				if($(this).text().replace(' ','-').toLowerCase() == param[1]){
+    					param[1] = $(this).val();
+    				}
+    			});
+    		}
+    		$('input[name$="'+ param[0] +'"], select[name$="'+ param[0] +'"]').val(param[1]).trigger("change");
+    		options[param[0]] = param[1];
+    	});
+    	filter(options, $(".guild-roster").trigger("update"));
+    }
 
     // Table Sorter
     $.tablesorter.addParser({ 
@@ -173,7 +193,7 @@ $(function() {
 
     $('input[name="characterName"]').bind("keyup change", function(event) {
         options['name'] = $(this).val();
-        filter(options, event);
+        filter(optios, event);
     });
 
     $('select[name="race"]').change(function(event) {
@@ -205,22 +225,22 @@ $(function() {
         filter(options, event);
     });
 
-    $('input[name$="Level"]').bind("keyup change", function(event){
+    $('input[name$="level"]').bind("keyup change", function(event){
         input = $(this).attr('name');
         options[input] = $(this).val();
 
         path = path.replace(/\/level=[0-9]+[\-0-9]*/,'');
 
-        if(options['minLevel'] === undefined)
+        if(options['minlevel'] === undefined)
         {
-            options['minLevel'] = $('input[name="minLevel"]').attr('min');
+            options['minlevel'] = $('input[name="minLevel"]').attr('min');
         }
-        if(options['maxLevel'] === undefined)
+        if(options['maxlevel'] === undefined)
         {
-            options['maxLevel'] = $('input[name="maxLevel"]').attr('max');
+            options['maxlevel'] = $('input[name="maxLevel"]').attr('max');
         }
 
-        path = path+'/level='+options['minLevel']+'-'+options['maxLevel'];
+        path = path+'/level='+options['minlevel']+'-'+options['maxlevel'];
         history.pushState(null,null,path);
 
         filter(options, event);

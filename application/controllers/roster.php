@@ -10,6 +10,11 @@ class Roster extends UG_Controller {
 	public function __construct() 
 	{
 		parent::__construct();
+		$this->_setPageTitle('Guild Roster');
+		$this->_setPageAuthor($this->uguilds->guild->guildName);
+
+		// Load the header
+		$this->_loadHeader();
 	}
 
 	/**
@@ -30,14 +35,8 @@ class Roster extends UG_Controller {
 	 */
 	public function all()
 	{
-		$this->_setPageTitle('Guild Roster');
-		$this->_setPageAuthor($this->uguilds->guild->guildName);
-
-		// Load the header
-		$this->_loadHeader();
-
-		$races = new uGuilds\Races(strtolower($this->uguilds->guild->region));
-		$classes = new uGuilds\Classes(strtolower($this->uguilds->guild->region));	
+		$races = new uGuilds\Races;
+		$classes = new uGuilds\Classes;	
 
 		$custom_data = array("races"   => $races,
 							 "classes" => $classes,
@@ -53,6 +52,53 @@ class Roster extends UG_Controller {
 
 		// Load the footer
 		$this->_loadFooter();
+	}
+
+	/**
+	 * filter()
+	 *
+	 * @access public
+	 */
+	public function filter()
+	{
+		if($this->uri->segments !== array_unique($this->uri->segments))
+		{
+			$this->load->helper('url');
+			redirect('/'.implode('/', array_unique($this->uri->segments)));
+		}
+
+		$races = new uGuilds\Races;
+		$classes = new uGuilds\Classes;
+
+		$data = array("races"   => $races,
+					  "classes" => $classes,
+					  "ranks"   => $this->uguilds->guild->ranks,
+					  "uri"		=> '/'.implode('/', $this->uri->segments));
+
+		$params = array();
+		$segments = array_slice($this->uri->segments, 1);
+		foreach($segments as $segment)
+		{
+			list($key, $value) = explode("=", $segment);
+			$params[$key] = $value;
+			if($key == 'race' || $key == 'class')
+			{
+				$params[$key] = $data[$key.'s']->getByName($value)->id;
+			}
+		}
+
+		$data['members'] = $this->uguilds->guild->filter($params);
+
+		// Load the roster table header and filter system
+		$this->load->view('controllers/Roster/header.php', $this->data($data));
+
+		// Load the roster list
+		$this->load->view('controllers/Roster/list.php', $this->data($data));
+		unset($races, $classes, $data);
+
+		// Load the footer
+		$this->_loadFooter();
+		
 	}
 
 }

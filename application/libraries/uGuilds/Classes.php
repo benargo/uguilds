@@ -5,6 +5,8 @@ if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 class Classes extends \BattlenetArmory\Classes {
 
+    private $data;
+
     private $names = array(
         1  => 'Warrior',
         2  => 'Paladin',
@@ -17,6 +19,73 @@ class Classes extends \BattlenetArmory\Classes {
         9  => 'Warlock',
         10 => 'Monk',
         11 => 'Druid');
+
+    /**
+     * __construct()
+     * 
+     * @access public
+     * @return void
+     */
+    function __construct()
+    {
+        $ci =& get_instance();
+        parent::__construct(strtolower($ci->uguilds->guild->region));
+        foreach($this->datas as $key => $datum)
+        {
+            $this->data[$key] = (object) $datum;
+        }
+        unset($this->datas);
+    }
+
+    /**
+     * __get()
+     *
+     * @access public
+     * @param string $param
+     * @return mixed
+     */
+    function __get($param)
+    {
+        switch($param)
+        {
+            case "data": // Prefered
+            case "datas":
+                return $this->data;
+                break;
+        }
+    }
+
+    /**
+     * getClass()
+     *
+     * @access public
+     * @param $id
+     * @param $field
+     * @return stdClass $datum
+     */
+    public function getClass($id, $field){
+        return $this->data[$id]->$field;
+    }    
+
+    /**
+     * getByName()
+     *
+     * @access public
+     * @param string $name
+     * @return array
+     */
+    public function getByName($name)
+    {
+        $name = ucwords(str_replace('-', ' ', $name));
+
+        foreach($this->data as $class)
+        {
+            if($class->name == $name)
+            {
+                return $class;
+            }
+        }
+    }
 
 	/**
 	 * getIcon()
@@ -52,9 +121,9 @@ class Classes extends \BattlenetArmory\Classes {
     public function getAll()
     {
         $classes = array();
-        foreach($this->datas as $class)
+        foreach($this->data as $class)
         {
-        	$classes[$class['id']] = $class['name'];
+        	$classes[$class->id] = $class->name;
         }
 
         // Sort the races by name
@@ -64,7 +133,7 @@ class Classes extends \BattlenetArmory\Classes {
         $return = array();
         foreach($classes as $id => $name)
         {
-        	$return[$id] = $this->datas[$id];
+        	$return[$id] = $this->data[$id];
         }
         return $return;
     }
