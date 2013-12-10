@@ -199,7 +199,7 @@ $(function() {
 
     $('input[name="characterName"]').bind("keyup change", function(event) {
         options['name'] = $(this).val();
-        filter(optios, event);
+        filter(options, event);
     });
 
     $('select[name="race"]').change(function(event) {
