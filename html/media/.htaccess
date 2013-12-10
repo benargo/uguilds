@@ -1,0 +1,6 @@
+RewriteEngine On
+RewriteBase /media
+
+RewriteCond %{HTTP_HOST} \.com$ [NC]
+RewriteCond %{HTTP_HOST} !^static.uguilds.net$ [NC]
+RewriteRule ^(.*)$ http://static.uguilds.net/$1 [R=301]
