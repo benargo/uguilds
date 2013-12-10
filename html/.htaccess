@@ -12,3 +12,8 @@ AddOutputFilterByType DEFLATE application/xhtml+xml
 AddOutputFilterByType DEFLATE application/rss+xml
 AddOutputFilterByType DEFLATE application/javascript
 AddOutputFilterByType DEFLATE application/x-javascript
+
+<IfModule mod_expires.c>
+	ExpiresActive On
+	ExpiresByType text/cache-manifest "access plus 0 seconds"
+</IfModule>

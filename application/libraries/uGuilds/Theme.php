@@ -210,7 +210,7 @@ class Theme {
 		// jQuery Migrate
 		if(version_compare($this->jquery_version, '1.9.0', '>='))
 		{
-			$files .= '<script src="/media/js/migrate.min.js"></script>'."\n";
+			$files .= '<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>'."\n";
 		}
 		
 		// Google Analytics
