@@ -20,19 +20,15 @@ class Manifest extends UG_Controller {
 		if(ENVIRONMENT == 'production')
 		{
 			header('Content-type: text/cache-manifest');
-		}
-		else
-		{
-			header('Content-type: text/plain');
-		}
 		
-		$this->_getEmblems();
-		$this->_getSystemMedia();
-		$this->_getThemeFiles();
+			$this->_getEmblems();
+			$this->_getSystemMedia();
+			$this->_getThemeFiles();
 
-		$this->load->view('controllers/Manifest/manifest', 
-			array('network' => $this->network,
-				  'cache' => $this->cache));
+			$this->load->view('controllers/Manifest/manifest', 
+				array('network' => $this->network,
+					  'cache' => $this->cache));
+		}
 	}
 
 	/**

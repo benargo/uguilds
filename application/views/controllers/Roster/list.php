@@ -1,8 +1,8 @@
 <?php foreach($members as $member): ?>
-	<tr class="character <?php echo $member->name; ?>" <?php echo (isset($filtered) && !in_array($member, $filtered) ? 'style="display:none;"' : ''); ?>
+	<tr class="character <?php echo $member->name; ?>" <?php echo (isset($filtered) && !in_array($member, $filtered) ? 'style="display:none;"' : ''); ?>>
 		<!-- Character Name -->
 		<td class="character-name">
-			<a href="/roster/character/<?php echo strtolower($member->name); ?>" 
+			<a href="/roster/<?php echo strtolower($member->name); ?>" 
 				class="<?php echo strtolower(preg_replace('/\ /', '-', $classes->getClass($member->class, 'name'))); ?>"
 				><?php echo $member->name; ?></a>
 		</td>

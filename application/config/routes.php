@@ -42,6 +42,7 @@ $route['default_controller'] = "welcome";
 $route['404_override'] = '';
 $route['roster'] = "roster";
 $route['roster/(race|class|level|rank)=([\w\-]+)([\/\w\-\=]*)'] = "roster/filter";
+$route['roster/(.+)'] = "roster/character";
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

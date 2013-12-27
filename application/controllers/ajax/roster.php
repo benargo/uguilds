@@ -25,14 +25,26 @@ class Roster extends UG_Controller {
 		header('Content-Type: application/json');
 		header('Last-Modified: '.date('r', $this->uguilds->guild->getData()['lastModified']/1000));
 
-		$races = new uGuilds\Races(strtolower($this->uguilds->guild->region));
-		$classes = new uGuilds\Classes(strtolower($this->uguilds->guild->region));
+		$filename = APPPATH .'cache/uGuilds/ajax_rosters/'. strformat($this->uguilds->guild->region) .'_'. strformat($this->uguilds->guild->realm) .'_'. strformat($this->uguilds->guild->name) .'.txt';
 
-		$json = array('lastModified' => date('r', $this->uguilds->guild->getData()['lastModified']/1000),
-			'members' => $this->uguilds->guild->getMembers('rank'),
-			'races' => $races->getAll($this->uguilds->guild->getData()['side']),
-			'classes' => $classes->getAll(),
-			'ranks' => $this->uguilds->guild->ranks);
+		if(file_exists($filename) && filemtime($filename) >= $this->uguilds->guild->getData()['lastModified']/1000)
+		{
+			$json = unserialize(file_get_contents($filename));
+			http_response_code(304);		
+		}
+		else
+		{
+			$races = new uGuilds\Races(strtolower($this->uguilds->guild->region));
+			$classes = new uGuilds\Classes(strtolower($this->uguilds->guild->region));
+
+			$json = array('lastModified' => date('r', $this->uguilds->guild->getData()['lastModified']/1000),
+				'members' => $this->uguilds->guild->getMembers('rank'),
+				'races' => $races->getAll($this->uguilds->guild->getData()['side']),
+				'classes' => $classes->getAll(),
+				'ranks' => $this->uguilds->guild->ranks);
+
+			file_put_contents($filename, serialize($json));
+		}
 
 		echo $this->ajax->asJSON($json);
 	}
