@@ -15,7 +15,7 @@ class Guild extends \BattlenetArmory\Guild {
 
 	private $_id;
 	private $domainName;
-	private $theme = 'default';
+	private $theme;
 	private $locale = 'en_GB';
 	private $faction;
 	private $ranks = array();
@@ -102,7 +102,20 @@ class Guild extends \BattlenetArmory\Guild {
 	}
 
 	/**
-	 * load()
+	 * instance()
+	 * 
+	 * @access public
+	 * @static true
+	 * @return \uGuilds\Guild object
+	 */
+	public static function instance()
+	{
+		$ci =& get_instance();
+		return $ci->uguilds->guild;
+	}
+
+	/**
+	 * _load()
 	 *
 	 * @access private
 	 * @param string $domain

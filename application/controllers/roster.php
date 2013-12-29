@@ -10,11 +10,9 @@ class Roster extends UG_Controller {
 	public function __construct() 
 	{
 		parent::__construct();
-		$this->_setPageTitle('Guild Roster');
-		$this->_setPageAuthor($this->uguilds->guild->guildName);
-
-		// Load the header
-		$this->_loadHeader();
+		$this->theme->data(array('page_title' => 'Guild Roster',
+					  			 'author' => $this->guild->name));
+		$this->theme->getIncludes();
 	}
 
 	/**
@@ -38,21 +36,15 @@ class Roster extends UG_Controller {
 		$races = new uGuilds\Races;
 		$classes = new uGuilds\Classes;	
 
-		$custom_data = array("races"   => $races,
+		$this->theme->data(array("races"   => $races,
 							 "classes" => $classes,
-							 "members" => $this->uguilds->guild->getMembers('rank'),
-							 "ranks"   => $this->uguilds->guild->ranks,
-							 "uri"	   => '/roster');
+							 "members" => $this->guild->getMembers('rank'),
+							 "ranks"   => $this->guild->ranks));
 
-		// Load the roster table header and filter system
-		$this->load->view('controllers/Roster/header.php', $this->data($custom_data));
+		$this->theme->data(array("content" => $this->load->view('controllers/Roster/header', $this->theme->data(), true)
+							 			. $this->load->view('controllers/Roster/list', $this->theme->data(), true)));
 
-		// Load the roster list
-		$this->load->view('controllers/Roster/list.php', $this->data($custom_data));
-		unset($races, $classes, $custom_data);
-
-		// Load the footer
-		$this->_loadFooter();
+		$this->theme->view('page');
 	}
 
 	/**
