@@ -132,5 +132,6 @@
  * Theme.js 
  */
 $(function(){
+  $("body").removeClass('nojs');
 	$("nav.menu-bar").sticky({topSpacing:0});
 });

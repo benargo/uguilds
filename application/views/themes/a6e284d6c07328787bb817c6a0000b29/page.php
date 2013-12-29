@@ -5,17 +5,16 @@
 	<?php echo $head; ?>
 
 	<!-- Theme Files -->
-	<link rel="stylesheet" href="<?php echo $theme_path; ?>/css/skeleton.css">
 	<link rel="stylesheet" href="<?php echo $theme_path; ?>/css/screen.css">
 	<script src="<?php echo $theme_path; ?>/js/theme.min.js"></script>
 </head>
-<body>
+<body class="nojs">
 	<div class="container">
 		<!-- Header -->
-		<nav class="menu-bar sixteen columns row">
+		<nav class="menu-bar">
 			<?php echo $nav; ?>
 		</nav>
-		<header class="sixteen columns row">
+		<header>
 			<a href="/" rel="home">
 				<span><img src="<?php echo $guild->getEmblem(TRUE,150); ?>" alt="<?php echo $guild->name; ?> guild emblem" width="150" /></span>
 				<span class="guild-name">
@@ -24,11 +23,11 @@
 				</span>
 			</a>
 		</header>
-		<article class="sixteen columns row">
+		<article>
 			<?php echo $content; ?>
 		</article>
 		<!-- Footer -->
-		<footer class="sixteen columns row">
+		<footer>
 			<?php echo $footer; ?>
 		</footer>
 		<!-- End Footer -->

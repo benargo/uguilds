@@ -14,8 +14,9 @@
 <link rel="stylesheet" media="all" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
 
 <!-- JAVASCRIPT -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script src="/media/js/uGuilds.min.js"></script>
 
 <!-- SHORTCUT ICONS -->
 <link type="image/png" rel="icon" href="<?php echo $guild->getEmblem(FALSE, 64); ?>" />
