@@ -10,10 +10,9 @@ class Welcome extends UG_Controller {
 	public function __construct() 
 	{
 		parent::__construct();
-		$this->_setPageTitle($this->uguilds->guild->guildName .' ('. $this->uguilds->guild->realm .')');
-		$this->_setPageAuthor($this->uguilds->guild->guildName);
-
-		$this->_loadHeader();
+		$this->theme->data(array('page_title' => $this->guild->name .' ('. $this->guild->realm .')',
+					  			 'author' => $this->guild->name));
+		$this->theme->getIncludes();
 	}
 
 	/**
@@ -33,8 +32,8 @@ class Welcome extends UG_Controller {
 	 */
 	public function index()
 	{
-		$this->load->view('controllers/Welcome/leadingArticle');
-		$this->_loadFooter();
+		$this->theme->data(array('content' => $this->load->view('controllers/Welcome/leadingArticle',null,true)));
+		$this->theme->view('page');
 	}
 }
 

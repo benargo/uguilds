@@ -21,9 +21,6 @@ class UGuilds {
 	 * vars
 	 */
 	private $domain;
-	private $guild;
-	private $theme;
-	private $locale;
 
 	/**
 	 * __construct()
@@ -34,10 +31,6 @@ class UGuilds {
 	{
 		// Find the guild
 		$this->_findGuild();
-
-		// Set the theme & locale
-		$this->_setLocale(true);
-		$this->_setTheme(true);
 	}
 
 	/**
@@ -57,30 +50,6 @@ class UGuilds {
 					$this->_setDomain();
 				}
 				return $this->domain;
-				break;
-
-			case "guild":
-				if(!$this->guild instanceof uGuilds\Guild)
-				{
-					$this->guild = $this->_findGuild();
-				}
-				return $this->guild;
-				break;
-
-			case "theme":
-				if(!$this->theme instanceof uGuilds\Theme)
-				{
-					$this->theme = $this->_setTheme();
-				}
-				return $this->theme;
-				break;
-
-			case "locale":
-				if(is_null($this->locale))
-				{
-					$this->_setLocale();
-				}
-				return $this->locale;
 				break;
 		}
 	}
@@ -104,11 +73,11 @@ class UGuilds {
 		if(file_exists(APPPATH . 'cache/uGuilds/guild_objects/'. $this->domain .'.txt') 
 			&& filemtime(APPPATH . 'cache/uGuilds/guild_objects/'. $this->domain .'.txt') >= time() - $ci->config->item('battle.net')['GuildsTTL'])
 		{
-			$this->guild = unserialize(file_get_contents(APPPATH . 'cache/uGuilds/guild_objects/'. $this->domain .'.txt'));
+			$ci->guild = unserialize(file_get_contents(APPPATH . 'cache/uGuilds/guild_objects/'. $this->domain .'.txt'));
 		}
 		else // No cache file, generate one from the database
 		{
-			$this->guild = new uGuilds\Guild($this->domain);
+			$ci->guild = new uGuilds\Guild($this->domain);
 		}
 	}
 
@@ -127,37 +96,6 @@ class UGuilds {
 		if($this->domain === "app.uguilds.net") 
 		{
 			header('HTTP/1.0 403 Forbidden');
-		}
-	}
-
-	/**
-	 * _setLocale()
-	 *
-	 * @access private
-	 * @var bool $override
-	 * @return void
-	 */
-	private function _setLocale($override = false) 
-	{
-		if(is_null($this->locale) || $override == true)
-		{
-			$this->locale = $this->guild->locale;
-		}
-	}
-
-	/**
-	 * _setTheme()
-	 *
-	 * @access private
-	 * @var bool $override
-	 * @return void
-	 */
-	private function _setTheme($override = false) 
-	{
-		if(empty($this->theme) || !$this->theme instanceof uGuilds\Theme || $override == true) 
-		{
-			$this->theme = new uGuilds\Theme;
-			$this->theme->findByID($this->guild->theme);
 		}
 	}
 }

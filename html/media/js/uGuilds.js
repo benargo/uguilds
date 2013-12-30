@@ -1,3 +1,12 @@
+/**
+ * uGuilds.js
+ * This is the primary JavaScript file for uGuilds. 
+ * It performs the basic functions for each instance of the application.
+ *
+ ** Table of Contents
+ * jQuery Migration Script (for jQuery > 1.9)
+ * Navigation JavaScript
+ */
 
 var warnedAbout = {};
 
@@ -69,3 +78,25 @@ if ( document.compatMode === "BackCompat" ) {
 	// jQuery has never supported or tested Quirks Mode
 	migrateWarn( "jQuery is not compatible with Quirks Mode" );
 }
+
+
+/** 
+ * Navigational jQuery
+ */
+$(function() {
+	$("#navigation select option").each(function( index ) {
+		if($(this).val() == window.location.href) {
+			$(this).attr('selected', 'true');
+		}
+	});
+
+	$("#navigation select").change(function(event) {
+		event.preventDefault();
+		window.location.href = $(this).val();
+	});
+});
+
+
+
+
+

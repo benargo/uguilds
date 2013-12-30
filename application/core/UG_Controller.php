@@ -11,10 +11,9 @@ class UG_Controller extends CI_Controller {
 	 */
 	protected function data($extra_data = NULL)
 	{
-		$data = array(/*"account"	=> $this->uguilds->account,*/
-					 "guild"	=> $this->uguilds->guild,
-					 "theme"	=> $this->uguilds->theme,
-					 "locale"	=> $this->uguilds->locale);
+		$data = array(/*"account"	=> $this->account,*/
+					 "guild"	=> $this->guild,
+					 "locale"	=> $this->guild->locale);
 
 		if($extra_data)
 		{	
@@ -29,42 +28,6 @@ class UG_Controller extends CI_Controller {
 		}
 
 		return $data;
-	}
-
-	/**
-	 * _setPageTitle()
-	 *
-	 * @access protected
-	 * @param $title
-	 * @return void
-	 */
-	protected function _setPageTitle($title)
-	{
-		$this->uguilds->theme->data->page_title = $title;
-	}
-
-	/**
-	 * _setPageAuthor()
-	 *
-	 * @access protected
-	 * @param $author
-	 * @return void
-	 */
-	protected function _setPageAuthor($author)
-	{
-		$this->uguilds->theme->data->page_author = $author;
-	}
-
-	/**
-	 * _loadHeader()
-	 *
-	 * @access protected
-	 * @return output
-	 */
-	protected function _loadHeader()
-	{
-		$this->load->view('includes/head', $this->data());
-		$this->uguilds->theme->loadHeader();
 	}
 
 	/**
