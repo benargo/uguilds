@@ -29,7 +29,7 @@ class Classes extends \BattlenetArmory\Classes {
     function __construct()
     {
         $ci =& get_instance();
-        parent::__construct(strtolower($ci->uguilds->guild->region));
+        parent::__construct(strtolower($ci->guild->region));
         foreach($this->datas as $key => $datum)
         {
             $this->data[$key] = (object) $datum;

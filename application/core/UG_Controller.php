@@ -31,13 +31,61 @@ class UG_Controller extends CI_Controller {
 	}
 
 	/**
-	 * _loadFooter()
+	 * getControllerCss()
 	 *
-	 * @access protected
-	 * @return output
+	 * Prints out any additional CSS files neccessary for the controller. 
+	 * This is defined by uGuilds and applies to all themes.
+	 * i.e. All themes have these basic standards for the controllers and they may be overwritten per theme.
+	 *
+	 * @access public
+	 * @return string
 	 */
-	protected function _loadFooter()
+	public function getControllerCSS() 
 	{
-		$this->load->view('includes/footer', $this->data());
+		$ci =& get_instance();
+		$controller_name = get_class($ci);
+		$files = array();
+
+		if(is_dir(FCPATH .'media/css/controller/'. $controller_name))
+		{
+			$files = scandir(FCPATH .'media/css/controller/'. $controller_name .'/');
+			$files = preg_grep('/\.css$/', $files);
+
+			foreach($files as $key => $value)
+			{
+				$files[$key] = '/media/css/controller/'. $controller_name .'/'. $value;
+			}
+		}
+
+		return $files;
+	}
+
+	/**
+	 * getControllerJS()
+	 *
+	 * Prints out any additional JS files neccessary for the controller. 
+	 * This is defined by uGuilds, applies to all themes and cannot be overwritten.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function getControllerJS()
+	{
+		$ci =& get_instance();
+		$controller_name = get_class($ci);
+		$files = array();
+
+		if(is_dir(FCPATH .'media/js/controller/'. $controller_name .'/'))
+		{
+			$files = scandir(FCPATH .'media/js/controller/'. $controller_name .'/');
+			$files = preg_grep('/\.min\.js/', $files);
+
+			foreach($files as $key => $value)
+			{
+				$files[$key] = '/media/js/controller/'. $controller_name .'/'. $value;
+			}
+		}
+
+		return $files;
 	}
 }

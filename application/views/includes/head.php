@@ -12,11 +12,17 @@
 <!-- CSS -->
 <link rel="stylesheet" media="all" href="/media/css/uGuilds.css">
 <link rel="stylesheet" media="all" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+<?php foreach($controller_css as $file): ?>
+<link rel="stylesheet" media="all" href="<?php echo $file; ?>">
+<?php endforeach; ?>
 
 <!-- JAVASCRIPT -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script src="/media/js/uGuilds.min.js"></script>
+<?php foreach($controller_js as $file): ?>
+<script src="<?php echo $file; ?>"></script>
+<?php endforeach; ?>
 
 <!-- SHORTCUT ICONS -->
 <link type="image/png" rel="icon" href="<?php echo $guild->getEmblem(FALSE, 64); ?>" />

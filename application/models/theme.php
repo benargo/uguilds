@@ -39,6 +39,8 @@ class Theme extends CI_Model {
 		$this->data['theme_path'] = $this->getPath();
 		$this->data['locale'] = $ci->guild->locale;
 		$this->data['guild'] = $ci->guild;
+		$this->data['controller_css'] = $ci->getControllerCSS();
+		$this->data['controller_js'] = $ci->getControllerJS();
 	}
 
 	/**

@@ -16,7 +16,7 @@ class Races extends \BattlenetArmory\Races {
     function __construct()
     {
         $ci =& get_instance();
-        parent::__construct(strtolower($ci->uguilds->guild->region));
+        parent::__construct(strtolower($ci->guild->region));
         foreach($this->datas as $key => $datum)
         {
             $this->data[$key] = (object) $datum;
@@ -68,7 +68,7 @@ class Races extends \BattlenetArmory\Races {
 
         foreach($this->data as $race)
         {
-            if($race->name == $name && $race->side == $ci->uguilds->guild->getFaction())
+            if($race->name == $name && $race->side == $ci->guild->getFaction())
             {
                 return $race;
             }

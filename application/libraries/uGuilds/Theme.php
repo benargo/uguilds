@@ -247,38 +247,6 @@ class Theme {
 	}
 
 	/**
-	 * getControllerJS()
-	 *
-	 * Prints out any additional JS files neccessary for the controller. 
-	 * This is defined by uGuilds, applies to all themes and cannot be overwritten.
-	 *
-	 * @access private
-	 * @return string
-	 */
-	private function getControllerJS()
-	{
-		$ci =& get_instance();
-		$controller_name = get_class($ci);
-		$return = '';
-
-		if(is_dir(FCPATH .'media/js/controller/'. $controller_name .'/'))
-		{
-			$files = scandir(FCPATH .'media/js/controller/'. $controller_name .'/');
-			$files = preg_grep('/\.min\.js/', $files);
-			foreach($files as $file)
-			{
-				$return .= "\t".'<script src="/media/js/controller/'. $controller_name .'/'. $file .'"></script>'."\n";
-			}
-		}
-		else 
-		{
-
-		}
-
-		return $return;
-	}
-
-	/**
 	 * loadHeader()
 	 *
 	 * This loads the theme-specific header

@@ -537,24 +537,6 @@ body {
 	    		background-color: rgba(7, 22, 27, 0.3);
 	    	}
 	    }
-
-	    .guild-roster {
-	    	.race a, .class a {
-	    		background-color: $background-color;
-	    		-webkit-border-radius: 3px;
-	    		border-radius: 3px;
-
-	    		&:hover {
-	    			background-color: $link-active-color;
-	    		}
-	    	}
-
-	    	@media (max-width: 640px), (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-	    		.spec, .achievements > img {
-	    			display: none;
-	    		}
-	    	}
-	    }
 	}
 
 	footer {
@@ -661,6 +643,10 @@ body {
 			border-bottom-style: solid;
 		}
 	}
+
+	table thead th, table tbody td {
+		text-align: center;
+	}
 }
 
 /* Theme: No JS
@@ -683,5 +669,73 @@ body {
 		}
 	}
 }
+
+/* Theme: Guild Roster
+================================================== */
+
+span.field {
+
+	& > * {
+		display: block;
+		width: inherit;
+	}
+
+	input[name$="Level"] {
+		
+	}
+}
+
+
+.guild-roster {
+	width: 100%;
+
+	th {
+		padding: 5px 0;
+		width: 8.5%;
+		vertical-align: middle;
+		text-align: center;
+		font-weight: bold;
+
+		&.sortable {
+			cursor: pointer;
+		}
+	}
+	 
+	td {
+		vertical-align: middle;
+		padding: 2px 0;
+		width: 8.5%;
+		height: 28px;
+		text-align: center;
+
+		&.character-name a {
+			border-left-color: transparent;
+			border-top-color: transparent;
+			border-right-color: transparent;
+		}
+
+		&.race a, &.class a {
+			display: inline-block;
+			background-color: $background-color;
+			vertical-align: middle;
+			height: 18px;
+			padding: 5px;
+			border: none;
+			-webkit-border-radius: 3px;
+	    	border-radius: 3px;
+	    	
+	    	&:hover {
+	    		background-color: $link-active-color;
+	    	}
+
+	    	@media only screen and (max-width: 767px) {
+	    		.spec, .achievements > img {
+	    			display: none;
+	    		}
+	    	}
+		}
+	}
+}
+
 
 
