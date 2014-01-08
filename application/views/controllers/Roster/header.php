@@ -1,16 +1,16 @@
-<section class="sixteen columns">
+<section>
 	<h1>Guild Roster</h1>
 	<!-- Filter -->
 	<form action="/roster/filter" method="get" id="roster-filter">
 		
 		<!-- Character Name -->
-		<span class="field four columns alpha">
+		<span class="field">
 			<label for="characterName">Character Name</label>
 			<input type="text" name="characterName" placeholder="e.g. <?php echo $members[0]->name; ?>"/>
 		</span>
 
 		<!-- Race -->
-		<span class="field two columns">
+		<span class="field">
 			<label for="race">Race</label>
 			<select name="race">
 				<option value="all" selected>All</option>	
@@ -21,7 +21,7 @@
 		</span>
 
 		<!-- Class -->
-		<span class="field two columns">
+		<span class="field">
 			<label for="class">Class</label>
 			<select name="class">
 				<option value="all" selected>All</option>
@@ -32,7 +32,7 @@
 		</span>
 
 		<!-- Level Range -->
-		<span class="field two columns">
+		<span class="field">
 			<label for="minLevel">Level</label>
 			<input type="number" name="minLevel" min="<?php echo $guild->getLowestLevelMember(); ?>" max="<?php echo $guild->getHighestLevelMember(); ?>" placeholder="<?php echo $guild->getLowestLevelMember(); ?>" />
 			&ndash;
@@ -40,7 +40,7 @@
 		</span>
 
 		<!-- Guild Rank -->
-		<span class="field three columns">
+		<span class="field">
 			<label for="rank">Guild Rank</label>
 			<select name="rank">
 				<option value="all" selected>Select One...</option><?php 
@@ -53,7 +53,7 @@
 			</select>
 		</span>
 
-		<span class="three columns omega">
+		<span>
 			<input type="submit" value="Filter" class="nojs" />
 			<input type="reset" value="Clear" />
 		</span>

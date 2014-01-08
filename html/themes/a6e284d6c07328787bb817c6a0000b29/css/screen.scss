@@ -520,10 +520,17 @@ body {
 	article {
 		clear: both;
 		float: left;
+		width: inherit;
 		padding: 10px 0;
 		background: $background-color;
 		-webkit-border-radius: 5px;
 	    border-radius: 5px;
+
+	    & > * {
+
+	    	padding: 0 10px;
+
+	    }
 
 	    @media only screen and (max-width: 767px) {
     		h1 {

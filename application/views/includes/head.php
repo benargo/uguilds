@@ -11,7 +11,6 @@
 
 <!-- CSS -->
 <link rel="stylesheet" media="all" href="/media/css/uGuilds.css">
-<link rel="stylesheet" media="all" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
 <?php foreach($controller_css as $file): ?>
 <link rel="stylesheet" media="all" href="<?php echo $file; ?>">
 <?php endforeach; ?>
