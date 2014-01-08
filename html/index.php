@@ -18,7 +18,8 @@
  * NOTE: If you change these, also change the error_reporting() code below
  *
  */
-	define('ENVIRONMENT', 'development');
+	print_r($_SERVER);
+	exit;
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING
