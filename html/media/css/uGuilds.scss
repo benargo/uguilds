@@ -2,18 +2,18 @@
 
 /* Fonts */
 
-@Font-face { 
+@font-face { 
 	font-family: 'WebSymbolsLigaRegular';
 		src: url ('../fonts/WebSymbolsLiga-Regular/websymbolsligaregular.eot');
-		src: url ('../fonts/WebSymbolsLiga-Regular/websymbolsligaregular.eot? # iefix') format ('embedded-opentype'),
+		src: url ('../fonts/WebSymbolsLiga-Regular/websymbolsligaregular.eot?#iefix') format ('embedded-opentype'),
 			 url ('../fonts/WebSymbolsLiga-Regular/websymbolsligaregular.woff') format ('woff'),
 			 url ('../fonts/WebSymbolsLiga-Regular/websymbolsligaregular.ttf') format ('truetype'),
-			 url ('../fonts/WebSymbolsLiga-Regular/websymbolsligaregular.svg # WebSymbolsRegular') format ('svg');
+			 url ('../fonts/WebSymbolsLiga-Regular/websymbolsligaregular.svg#WebSymbolsRegular') format ('svg');
 }
 
 // http://www.dafont.com/arabolical.font
 @font-face {
-    font-family: 'arabolical';
+    font-family: 'arabolical1';
     src: url('../fonts/arabolical/arabolical-webfont.eot');
     src: url('../fonts/arabolical/arabolical-webfont.eot?#iefix') format('embedded-opentype'),
          url('../fonts/arabolical/arabolical-webfont.woff') format('woff'),
@@ -80,4 +80,6 @@
 	border-color: #00FFBA;
 }
 
-
+.logo {
+	font-family: 'arabolical', 'arabolical1', 'arabolical-webfont', sans-serif;
+}

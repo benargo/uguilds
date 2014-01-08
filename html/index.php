@@ -18,7 +18,7 @@
  * NOTE: If you change these, also change the error_reporting() code below
  *
  */
-	switch($_SERVER['UGUILDS_HOST'])
+	switch(getenv('UGUILDS_HOST'))
 	{
 		case 'local.uguilds.vhost':
 			define('ENVIRONMENT', 'development');
