@@ -42,11 +42,11 @@ $route['default_controller'] = "welcome";
 $route['404_override'] = '';
 
 // themes
-$route['theme/css/controller/([\w\/\-]+)'] = "theme/css/controller/$1";
+//$route['theme/css/controller/([\w\/\-]+)'] = "theme/css/controller/$1";
 
 // roster
 $route['roster'] = "roster";
-$route['roster/(.+)'] = "roster/character";
+$route['roster/(.+)$'] = "roster/character";
 $route['roster(.*)/(race|class|level|rank)=([\w\-]+)(.*)'] = "roster/filter";
 
 /* End of file routes.php */

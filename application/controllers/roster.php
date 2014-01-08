@@ -44,6 +44,8 @@ class Roster extends UG_Controller {
 
 		$this->theme->data(array("content" => $this->load->view('controllers/Roster/header', $this->theme->data(), true)
                                				. $this->load->view('controllers/Roster/list', $this->theme->data(), true)));
+
+		$this->theme->view('page');
 	}
 
 	/**
