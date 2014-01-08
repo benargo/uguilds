@@ -27,7 +27,7 @@ abstract class Battlenet {
 			$ci->config->load('battle.net');
 			$this->config = $ci->config->item('battle.net');
 		}
-		
+
 		return $this->config;
 	}
 

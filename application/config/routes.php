@@ -45,9 +45,9 @@ $route['404_override'] = '';
 //$route['theme/css/controller/([\w\/\-]+)'] = "theme/css/controller/$1";
 
 // roster
-$route['roster'] = "roster";
-$route['roster/(.+)$'] = "roster/character";
-$route['roster(.*)/(race|class|level|rank)=([\w\-]+)(.*)'] = "roster/filter";
+$route['roster'] = "roster/table";
+$route['roster/(\p{Latin}+)$'] = "roster/character";
+$route['roster(.*)/(race|class|level|rank)=([\w\-]+)(.*)'] = "roster/table/filter";
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

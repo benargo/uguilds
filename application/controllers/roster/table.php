@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Roster extends UG_Controller {
+class Table extends UG_Controller {
 
 	/**
 	 * Construction function
@@ -12,7 +12,6 @@ class Roster extends UG_Controller {
 		parent::__construct();
 		$this->theme->data(array('page_title' => 'Guild Roster',
                                  'author' => $this->guild->name));
-		$this->theme->getIncludes();
 	}
 
 	/**
@@ -29,9 +28,9 @@ class Roster extends UG_Controller {
 	/**
 	 * all()
 	 *
-	 * @access public
+	 * @access private
 	 */
-	public function all()
+	private function all()
 	{
 		$races = new uGuilds\Races;
 		$classes = new uGuilds\Classes;	

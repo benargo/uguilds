@@ -192,7 +192,7 @@ class Theme extends CI_Model {
 	 * @access public
 	 * @return void
 	 */
-	public function getIncludes()
+	private function getIncludes()
 	{
 		$ci =& get_instance();
 		$this->data['head'] = $ci->load->view('includes/head', $this->data, true);
@@ -233,6 +233,12 @@ class Theme extends CI_Model {
 			{
 				$this->views[$name] = 'themes/'. $this->_id .'/'. $name;
 			}
+
+			if($name == 'page')
+			{
+				$this->getIncludes();
+			}
+			
 			$ci =& get_instance();
 			return $ci->load->view($this->views[$name], $data, $asData);
 		}

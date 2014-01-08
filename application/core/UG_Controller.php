@@ -2,6 +2,11 @@
 
 class UG_Controller extends CI_Controller {
 
+	function __construct()
+	{
+		parent::__construct();
+	}
+
 	/**
 	 * data()
 	 * 
@@ -31,6 +36,23 @@ class UG_Controller extends CI_Controller {
 	}
 
 	/**
+	 * getNamespace()
+	 *
+	 * Gets the namespace of the current namespace
+	 * Can only be called by the child classes
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function getNamespace()
+	{
+		if(get_class($this) != 'UG_Controller')
+		{
+			return __NAMESPACE__;
+		}
+	}
+
+	/**
 	 * getControllerCss()
 	 *
 	 * Prints out any additional CSS files neccessary for the controller. 
@@ -46,14 +68,14 @@ class UG_Controller extends CI_Controller {
 		$controller_name = get_class($ci);
 		$files = array();
 
-		if(is_dir(FCPATH .'media/css/controller/'. $controller_name))
+		if(is_dir(FCPATH .'media/css/controller/'. ucwords($this->router->directory) . ucwords($controller_name)))
 		{
-			$files = scandir(FCPATH .'media/css/controller/'. $controller_name .'/');
+			$files = scandir(FCPATH .'media/css/controller/'. ucwords($this->router->directory) . ucwords($controller_name) .'/');
 			$files = preg_grep('/\.css$/', $files);
 
 			foreach($files as $key => $value)
 			{
-				$files[$key] = '/media/css/controller/'. $controller_name .'/'. $value;
+				$files[$key] = '/media/css/controller/'. ucwords($this->router->directory) . ucwords($controller_name) .'/'. $value;
 			}
 		}
 
@@ -72,20 +94,20 @@ class UG_Controller extends CI_Controller {
 	public function getControllerJS()
 	{
 		$ci =& get_instance();
-		$controller_name = get_class($ci);
+		$controller_name = str_replace('_', '/', get_class($ci));
 		$files = array();
 
-		if(is_dir(FCPATH .'media/js/controller/'. $controller_name .'/'))
+		if(is_dir(FCPATH .'media/js/controller/'. ucwords($this->router->directory) . ucwords($controller_name) .'/'))
 		{
-			$files = scandir(FCPATH .'media/js/controller/'. $controller_name .'/');
+			$files = scandir(FCPATH .'media/js/controller/'. ucwords($this->router->directory) . ucwords($controller_name) .'/');
 			$files = preg_grep('/\.min\.js/', $files);
 
 			foreach($files as $key => $value)
 			{
-				$files[$key] = '/media/js/controller/'. $controller_name .'/'. $value;
+				$files[$key] = '/media/js/controller/'. ucwords($this->router->directory) . ucwords($controller_name) .'/'. $value;
 			}
 		}
 
 		return $files;
-	}
+	} 
 }

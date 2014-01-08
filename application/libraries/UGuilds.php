@@ -8,11 +8,10 @@
  */
 
 require_once APPPATH . 'libraries/uGuilds/Account.php';
+require_once APPPATH . 'libraries/uGuilds/Character.php';
+require_once APPPATH . 'libraries/uGuilds/Classes.php';
 require_once APPPATH . 'libraries/uGuilds/Guild.php';
 require_once APPPATH . 'libraries/uGuilds/Races.php';
-require_once APPPATH . 'libraries/uGuilds/Classes.php';
-require_once APPPATH . 'libraries/uGuilds/Theme.php';
-require_once APPPATH . 'libraries/uGuilds/ThemeData.php';
 
 // Remember library class names need to be capitalised.
 class UGuilds {
@@ -71,7 +70,7 @@ class UGuilds {
 
 		// Check if there's a cache file for this guild and it's valid
 		if(file_exists(APPPATH . 'cache/uGuilds/guild_objects/'. $this->domain .'.txt') 
-			&& filemtime(APPPATH . 'cache/uGuilds/guild_objects/'. $this->domain .'.txt') >= time() - $ci->config->item('battle.net')['GuildsTTL'])
+			&& filemtime(APPPATH . 'cache/uGuilds/guild_objects/'. $this->domain .'.txt') <= time() - $ci->config->item('battle.net')['GuildsTTL'])
 		{
 			$ci->guild = unserialize(file_get_contents(APPPATH . 'cache/uGuilds/guild_objects/'. $this->domain .'.txt'));
 		}

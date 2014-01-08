@@ -3,15 +3,15 @@ namespace BattlenetArmory;
 
 class Character extends Battlenet  {
 	
-	private $name;
-	private $region;
-	private $realm;
-	private $characterData;
-	private $fields = array('stats','talents','items','reputation','titles','professions','appearance','companions','mounts','achievements','progression','pvp','quests','pets','guild');
-	private $cache;
-	private $currentTitle;
-	private $race;
-	private $class;
+	protected $name;
+	protected $region;
+	protected $realm;
+	protected $characterData;
+	protected $fields = array('stats','talents','items','reputation','titles','professions','appearance','companions','mounts','achievements','progression','pvp','quests','pets','guild');
+	protected $cache;
+	protected $currentTitle;
+	protected $race;
+	protected $class;
 	
 	
 	/**
@@ -107,7 +107,7 @@ class Character extends Battlenet  {
    	 * Enter description here ...
    	 * @param Array $fields
    	 */
-   	private function excludeFields($fields){
+   	protected function excludeFields($fields){
    		foreach ($fields as $field){
    			unset($this->fields[array_search($field,$this->fields)]);
    		}
@@ -137,7 +137,7 @@ class Character extends Battlenet  {
    	}
    	
    	
-   	private function setTalentTreeSelected(){
+   	protected function setTalentTreeSelected(){
    		if (!isset($this->characterData['talents'][0]['selected'])){
    			$this->characterData['talents'][0]['selected'] = 0;
    			$this->characterData['talents']['selectedSpec'] = 1;
@@ -497,7 +497,7 @@ class Character extends Battlenet  {
    		return $this->characterData['titles'];
    	}
    	
-   	private function setTitles(){
+   	protected function setTitles(){
    		$titles = $this->characterData['titles'];
    		foreach ($titles as $key => $title){
    			$this->characterData['titles'][$key]['name_with_name'] = preg_replace('/\%s/',$this->name,$title['name']);
@@ -508,7 +508,7 @@ class Character extends Battlenet  {
    		}
    	}
    	
-   	private function sortAchievements($array,$sortkey,$sortFlag){
+   	protected function sortAchievements($array,$sortkey,$sortFlag){
    		$arraysize = count($array);
    		foreach(array_keys($array) as $key){
   			$temp_array[$key] = $array[$key][$sortkey];
@@ -523,7 +523,7 @@ class Character extends Battlenet  {
    		return $return_array;
    	}
 
-   	private function sortReputation($array,$sortkey,$sortFlag){
+   	protected function sortReputation($array,$sortkey,$sortFlag){
    		$arraysize = count($array);
    		foreach(array_keys($array) as $key){
   			$temp_array[$key] = $array[$key][$sortkey];

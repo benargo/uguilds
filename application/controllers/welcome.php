@@ -12,7 +12,6 @@ class Welcome extends UG_Controller {
 		parent::__construct();
 		$this->theme->data(array('page_title' => $this->guild->name .' ('. $this->guild->realm .')',
 					  			 'author' => $this->guild->name));
-		$this->theme->getIncludes();
 	}
 
 	/**
