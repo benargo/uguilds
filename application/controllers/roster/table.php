@@ -41,8 +41,7 @@ class Table extends UG_Controller {
 							 	 "ranks"   => $this->guild->ranks,
 							 	 "uri"	   => '/roster'));
 
-		$this->theme->data(array("content" => $this->load->view('controllers/Roster/header', $this->theme->data(), true)
-                               				. $this->load->view('controllers/Roster/list', $this->theme->data(), true)));
+		$this->theme->data(array("content" => $this->load->view('controllers/Roster/table', $this->theme->data(), true)));
 
 		$this->theme->view('page');
 	}

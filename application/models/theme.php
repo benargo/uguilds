@@ -14,6 +14,8 @@ class Theme extends CI_Model {
 
 	// Properties
 	private $_id;
+	private $load;
+	private $guild;
 
 	// Files
 	private $xml;
@@ -32,13 +34,15 @@ class Theme extends CI_Model {
 	function __construct()
 	{
 		parent::__construct();
-		$ci = get_instance();
+		$ci =& get_instance();
+		$this->load =& $ci->load;
+		$this->guild =& $ci->guild;
 
-		$this->_findById($ci->guild->theme);
+		$this->_findById($this->guild->theme);
 
 		$this->data['theme_path'] = $this->getPath();
-		$this->data['locale'] = $ci->guild->locale;
-		$this->data['guild'] = $ci->guild;
+		$this->data['locale'] = $this->guild->locale;
+		$this->data['guild'] =& $this->guild;
 		$this->data['controller_css'] = $ci->getControllerCSS();
 		$this->data['controller_js'] = $ci->getControllerJS();
 	}
@@ -72,19 +76,6 @@ class Theme extends CI_Model {
 				return $this->data;
 				break;
 		}
-	}
-
-	/** 
-	 * instance()
-	 *
-	 * @access public
-	 * @static true
-	 * @return instanceof \uGuilds\models\Theme
-	 */
-	public static function &instance()
-	{
-		$ci = &get_instance();
-		return $ci->theme;
 	}
 
 	/**
@@ -194,10 +185,9 @@ class Theme extends CI_Model {
 	 */
 	private function getIncludes()
 	{
-		$ci =& get_instance();
-		$this->data['head'] = $ci->load->view('includes/head', $this->data, true);
-		$this->data['nav'] = $ci->load->view('includes/nav', $this->data, true);
-		$this->data['footer'] = $ci->load->view('includes/footer', $this->data, true);
+		$this->data['head'] = $this->load->view('includes/head', $this->data, true);
+		$this->data['nav'] = $this->load->view('includes/nav', $this->data, true);
+		$this->data['footer'] = $this->load->view('includes/footer', $this->data, true);
 	}
 
 	/**
@@ -225,7 +215,7 @@ class Theme extends CI_Model {
 	 */
 	public function view($name, array $data = array(), $asData = false)
 	{
-		$data = array_merge($this->data, $data);
+		$this->data = array_merge($this->data, $data);
 
 		if(file_exists(APPPATH .'views/themes/'. $this->_id .'/'. $name .'.php'))
 		{
@@ -238,9 +228,8 @@ class Theme extends CI_Model {
 			{
 				$this->getIncludes();
 			}
-			
-			$ci =& get_instance();
-			return $ci->load->view($this->views[$name], $data, $asData);
+		
+			return $this->load->view($this->views[$name], $this->data, $asData);
 		}
 	}
 
