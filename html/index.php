@@ -18,8 +18,20 @@
  * NOTE: If you change these, also change the error_reporting() code below
  *
  */
-	print_r($_SERVER);
-	exit;
+	switch($_SERVER['UGUILDS_HOST'])
+	{
+		case 'local.uguilds.vhost':
+			define('ENVIRONMENT', 'development');
+			break;
+
+		case 'beta.uguilds.net':
+			define('ENVIRONMENT', 'testing');
+			break;
+
+		case 'app.uguilds.net':
+			define('ENVIRONMENT', 'production');
+			break;
+	}
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING
