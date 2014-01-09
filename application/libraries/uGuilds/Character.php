@@ -2,10 +2,13 @@
 
 if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Character extends \BattlenetArmory\Character {
-
+class Character extends \BattlenetArmory\Character 
+{
 	protected $currentTitle;
 	protected $guild;
+	protected $guildRank;
+	protected $race;
+	protected $class;
 
 	/**
 	 * __construct()
@@ -17,6 +20,8 @@ class Character extends \BattlenetArmory\Character {
 		$ci =& get_instance();
 		$this->guild =& $ci->guild;
 		parent::__construct(strtolower($ci->guild->region), $ci->guild->realm, $name, false);
+		$this->race = new Races;
+		$this->class = new Classes;
 	}
 
 	/**
@@ -30,12 +35,16 @@ class Character extends \BattlenetArmory\Character {
 	{
 		switch($param)
 		{
-			case 'currentTitle':
-				return $this->getCurrentTitle();
-				break;
-
 			case 'name':
 				return ucwords($this->name);
+				break;
+
+			case 'class':
+				return $this->getClass();
+				break;
+
+			case 'guildRank':
+				return $this->getGuildRank();
 				break;
 
 			case 'realm':
@@ -61,23 +70,61 @@ class Character extends \BattlenetArmory\Character {
 	}
 
 	/**
-	 * get_current_title()
+	 * getClass()
+	 *
+	 * Returns the characters class
+	 *
+	 * @access public
+	 */
+	public function getClass()
+	{
+		return $this->class->getClass($this->characterData['class']);
+	}
+
+	/**
+	 * getCurrentTitle()
 	 *
 	 * Returns the users current title, and if we don't know it yet, finds it.
 	 *
 	 * @access private
-	 * @return string
+	 * @param Boolean $withName Set to FALSE if you want to use the %s instead of name
+   	 * @return A string with the title and name
 	 */
-	public function getCurrentTitle()
+	public function getCurrentTitle($withName = true)
 	{
 		if(empty($this->currentTitle))
 		{
 			$this->setTitles();
 		}
 
-		$this->currentTitle = (object) $this->currentTitle;
+		return parent::getCurrentTitle($withName);
+	}
 
-		return $this->currentTitle;
+	/**
+	 * getGuildRank()
+	 *
+	 * Sets the guild rank if we don't know it
+	 * and then returns it
+	 */
+	public function getGuildRank()
+	{
+		if(is_null($this->guildRank))
+		{
+			foreach($this->guild->getMembers() as $member)
+			{
+				if($member->name === $this->name)
+				{
+					$this->guildRank = new Character\Rank;
+					$this->guildRank->rank = $member->rank;
+					if(isset($member->rankname))
+					{
+						$this->guildRank->rankName = $member->rankname;
+					}
+				}
+			}
+		}
+
+		return $this->guildRank;
 	}
 
 	/**

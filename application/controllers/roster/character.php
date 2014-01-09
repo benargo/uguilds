@@ -16,8 +16,9 @@ class Character extends UG_Controller {
 		$this->theme->data(array(
 			'page_title' => $this->character->name .' - '. $this->character->realm,
 			'author' => $this->guild->name,
-			'character_name' => $this->character->currentTitle->name_with_name,
-			'inset_image' => $this->character->getImageURL('inset')
+			'character_name' => $this->character->name,
+			'character_title' => $this->character->getCurrentTitle(true),
+			'character_class' => $this->character->getClass()
 		));
 	}
 
@@ -29,17 +30,25 @@ class Character extends UG_Controller {
 	public function index()
 	{
 		$this->theme->data(array(
+			'breadcrumbs' => array(
+				'/' => 'Home',
+				'/roster' => 'Guild Roster',
+				'/roster/rank='. strformat($this->character->guildRank->rankName) => $this->character->guildRank->rankName,
+				'/roster/'. strtolower($this->character->name) => $this->character->name),
+			'inset_image' => $this->character->getImageURL('inset')
+		));
+		$this->theme->data(array(
 			'content' => $this->load->view('controllers/Roster/character', $this->theme->data(), true)
 		));
 		$this->theme->view('page');
 	}
 
 	/**
-	 * professions()
+	 * profile_picture()
 	 *
-	 * Display a character's professions
+	 * Display a character's full profile picture
 	 */
-	public function professions()
+	public function profile_picture()
 	{
 
 	}

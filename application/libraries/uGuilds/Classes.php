@@ -63,8 +63,13 @@ class Classes extends \BattlenetArmory\Classes {
      * @param $field
      * @return stdClass $datum
      */
-    public function getClass($id, $field){
-        return $this->data[$id]->$field;
+    public function getClass($id, $field = NULL)
+    {
+        if($field)
+        {
+            return $this->data[$id]->$field;
+        }
+        return $this->data[$id];
     }    
 
     /**

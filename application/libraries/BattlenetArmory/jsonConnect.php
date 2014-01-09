@@ -86,7 +86,7 @@ class jsonConnect extends Battlenet {
 		if ($this->utf8){
 			$character = utf8_encode($character);
 		}
-		$character = rawurlencode($character);
+		//$character = rawurlencode($character);
 		$url = 'http://'.$this->regions[$region].$this->characterbaseURL.$realm.'/'.$character;
 		return $this->getData($url,$fields,$region,'Characters');
 	}
