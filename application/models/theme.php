@@ -32,6 +32,7 @@ class Theme extends CI_Model {
 	 * @return void
 	 */
 	function __construct()
+
 	{
 		parent::__construct();
 		$ci =& get_instance();
@@ -185,9 +186,16 @@ class Theme extends CI_Model {
 	 */
 	private function getIncludes()
 	{
-		$this->data['head'] = $this->load->view('includes/head', $this->data, true);
-		$this->data['nav'] = $this->load->view('includes/nav', $this->data, true);
-		$this->data['footer'] = $this->load->view('includes/footer', $this->data, true);
+		$ci =& get_instance();
+		$dir = scandir(APPPATH .'views/includes');
+		foreach($dir as $file)
+		{
+			if(preg_match('/.*\.php$/', $file))
+			{
+				$file = str_replace('.php', '', $file);
+				$this->data[$file] = $ci->load->view('includes/'. $file, $this->data, true);
+			}
+		}
 	}
 
 	/**
@@ -217,7 +225,12 @@ class Theme extends CI_Model {
 	{
 		$this->data = array_merge($this->data, $data);
 
-		if(file_exists(APPPATH .'views/themes/'. $this->_id .'/'. $name .'.php'))
+		if(!is_link(APPPATH .'views/themes/'. $this->_id) && is_dir(FCPATH .'themes/'. $this->_id .'/views'))
+		{
+			symlink(FCPATH .'themes/'. $this->_id .'/views', APPPATH .'views/themes/'. $this->_id);
+		}
+
+		if(file_exists(readlink(APPPATH .'views/themes/'. $this->_id) .'/'. $name .'.php'))
 		{
 			if(!array_key_exists($name, $this->views))
 			{
@@ -228,8 +241,9 @@ class Theme extends CI_Model {
 			{
 				$this->getIncludes();
 			}
-		
-			return $this->load->view($this->views[$name], $this->data, $asData);
+			
+			$ci =& get_instance();
+			return $ci->load->view($this->views[$name], $this->data, $asData);
 		}
 	}
 
