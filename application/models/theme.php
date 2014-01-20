@@ -196,9 +196,15 @@ class Theme extends CI_Model {
 	private function getIncludes()
 	{
 		$ci =& get_instance();
-		$this->data['head'] = $ci->load->view('includes/head', $this->data, true);
-		$this->data['nav'] = $ci->load->view('includes/nav', $this->data, true);
-		$this->data['footer'] = $ci->load->view('includes/footer', $this->data, true);
+		$dir = scandir(APPPATH .'views/includes');
+		foreach($dir as $file)
+		{
+			if(preg_match('/.*\.php$/', $file))
+			{
+				$file = str_replace('.php', '', $file);
+				$this->data[$file] = $ci->load->view('includes/'. $file, $this->data, true);
+			}
+		}
 	}
 
 	/**
@@ -226,7 +232,7 @@ class Theme extends CI_Model {
 	 */
 	public function view($name, array $data = array(), $asData = false)
 	{
-		$data = array_merge($this->data, $data);
+		$this->data = array_merge($this->data, $data);
 
 		if(!is_link(APPPATH .'views/themes/'. $this->_id) && is_dir(FCPATH .'themes/'. $this->_id .'/views'))
 		{
@@ -246,7 +252,7 @@ class Theme extends CI_Model {
 			}
 			
 			$ci =& get_instance();
-			return $ci->load->view($this->views[$name], $data, $asData);
+			return $ci->load->view($this->views[$name], $this->data, $asData);
 		}
 	}
 
