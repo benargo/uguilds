@@ -30,6 +30,7 @@ class Theme extends CI_Model {
 	 * @return void
 	 */
 	function __construct()
+
 	{
 		parent::__construct();
 		$ci = get_instance();
@@ -227,7 +228,12 @@ class Theme extends CI_Model {
 	{
 		$data = array_merge($this->data, $data);
 
-		if(file_exists(APPPATH .'views/themes/'. $this->_id .'/'. $name .'.php'))
+		if(!is_link(APPPATH .'views/themes/'. $this->_id) && is_dir(FCPATH .'themes/'. $this->_id .'/views'))
+		{
+			symlink(FCPATH .'themes/'. $this->_id .'/views', APPPATH .'views/themes/'. $this->_id);
+		}
+
+		if(file_exists(readlink(APPPATH .'views/themes/'. $this->_id) .'/'. $name .'.php'))
 		{
 			if(!array_key_exists($name, $this->views))
 			{

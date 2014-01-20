@@ -1,5 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); ?>
-<!-- META INFORMATION -->
+<!-- Meta Information -->
 <meta charset="UTF-8">
 <meta name="author" content="<?php echo $guild->name; ?>">
 <meta name="application-name" content="uGuilds" />
@@ -15,13 +15,14 @@
 <link rel="stylesheet" media="all" href="<?php echo $file; ?>">
 <?php endforeach; ?>
 
-<!-- JAVASCRIPT -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<!-- JavaScript -->
+<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 <script src="/media/js/uGuilds.min.js"></script>
 <?php foreach($controller_js as $file): ?>
 <script src="<?php echo $file; ?>"></script>
 <?php endforeach; ?>
 
-<!-- SHORTCUT ICONS -->
+<!-- Shortcut Icons -->
 <link type="image/png" rel="icon" href="<?php echo $guild->getEmblem(FALSE, 64); ?>" />
 <link rel="apple-touch-icon" href="<?php echo $guild->getEmblem(FALSE, 60); ?>" />
