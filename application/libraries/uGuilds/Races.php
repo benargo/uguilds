@@ -17,9 +17,9 @@ class Races extends \BattlenetArmory\Races {
     {
         $ci =& get_instance();
         parent::__construct(strtolower($ci->guild->region));
-        foreach($this->datas as $key => $datum)
+        foreach($this->datas as $key => $data)
         {
-            $this->data[$key] = (object) $datum;
+            $this->data[$key] = (object) $data;
         }
         unset($this->datas);
     }
@@ -50,9 +50,14 @@ class Races extends \BattlenetArmory\Races {
      * @param $field
      * @return stdClass $datum
      */
-    public function getRace($id, $field){
-        return $this->data[$id]->$field;
-    }    
+    public function getRace($id, $field = NULL)
+    {
+        if($field)
+        {
+            return $this->data[$id]->$field;
+        }
+        return $this->data[$id];
+    }
 
     /**
      * getByName()

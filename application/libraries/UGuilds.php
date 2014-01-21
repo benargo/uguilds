@@ -10,6 +10,7 @@
 require_once APPPATH . 'libraries/uGuilds/Account.php';
 require_once APPPATH . 'libraries/uGuilds/Character.php';
 require_once APPPATH . 'libraries/uGuilds/Character/Rank.php';
+require_once APPPATH . 'libraries/uGuilds/Character/Spec.php';
 require_once APPPATH . 'libraries/uGuilds/Classes.php';
 require_once APPPATH . 'libraries/uGuilds/Guild.php';
 require_once APPPATH . 'libraries/uGuilds/Races.php';

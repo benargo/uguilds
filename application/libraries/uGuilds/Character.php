@@ -4,11 +4,20 @@ if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 class Character extends \BattlenetArmory\Character 
 {
-	protected $currentTitle;
-	protected $guild;
-	protected $guildRank;
-	protected $race;
+	protected $name;
 	protected $class;
+	protected $currentTitle;
+	protected $guild_rank;
+	protected $realm;
+	protected $race;
+	protected $region;
+	protected $specialisations = array();
+
+	// Other data
+	protected $characterData;
+
+	// Referenced information
+	protected $guild;
 
 	/**
 	 * __construct()
@@ -18,10 +27,14 @@ class Character extends \BattlenetArmory\Character
 	function __construct($name)
 	{
 		$ci =& get_instance();
-		$this->guild =& $ci->guild;
 		parent::__construct(strtolower($ci->guild->region), $ci->guild->realm, $name, false);
-		$this->race = new Races;
-		$this->class = new Classes;
+		$this->guild =& $ci->guild;
+
+		$races = new Races;
+		$this->race = $races->getRace($this->characterData['race']);
+
+		$classes = new Classes;
+		$this->class = $classes->getClass($this->characterData['class']);
 	}
 
 	/**
@@ -35,16 +48,20 @@ class Character extends \BattlenetArmory\Character
 	{
 		switch($param)
 		{
+			case 'class':
+				return $this->class;
+				break;
+
+			case 'guild_rank':
+				return $this->getGuildRank();
+				break;
+
 			case 'name':
 				return ucwords($this->name);
 				break;
 
-			case 'class':
-				return $this->getClass();
-				break;
-
-			case 'guildRank':
-				return $this->getGuildRank();
+			case 'race':
+				return $this->race;
 				break;
 
 			case 'realm':
@@ -70,29 +87,17 @@ class Character extends \BattlenetArmory\Character
 	}
 
 	/**
-	 * getClass()
-	 *
-	 * Returns the characters class
-	 *
-	 * @access public
-	 */
-	public function getClass()
-	{
-		return $this->class->getClass($this->characterData['class']);
-	}
-
-	/**
 	 * getCurrentTitle()
 	 *
 	 * Returns the users current title, and if we don't know it yet, finds it.
 	 *
-	 * @access private
-	 * @param Boolean $withName Set to FALSE if you want to use the %s instead of name
+	 * @access public
+	 * @param Boolean $withName: Set to FALSE if you want to use the %s instead of name
    	 * @return A string with the title and name
 	 */
 	public function getCurrentTitle($withName = true)
 	{
-		if(empty($this->currentTitle))
+		if(empty($this->current_title))
 		{
 			$this->setTitles();
 		}
@@ -105,26 +110,29 @@ class Character extends \BattlenetArmory\Character
 	 *
 	 * Sets the guild rank if we don't know it
 	 * and then returns it
+	 *
+	 * @access protected
+	 * @return \uGuilds\Character\Rank object
 	 */
-	public function getGuildRank()
+	protected function getGuildRank()
 	{
-		if(is_null($this->guildRank))
+		if(is_null($this->guild_rank))
 		{
 			foreach($this->guild->getMembers() as $member)
 			{
 				if($member->name === $this->name)
 				{
-					$this->guildRank = new Character\Rank;
-					$this->guildRank->rank = $member->rank;
+					$this->guild_rank = new Character\Rank;
+					$this->guild_rank->rank = $member->rank;
 					if(isset($member->rankname))
 					{
-						$this->guildRank->rankName = $member->rankname;
+						$this->guild_rank->rank_name = $member->rankname;
 					}
 				}
 			}
 		}
 
-		return $this->guildRank;
+		return $this->guild_rank;
 	}
 
 	/**
@@ -133,10 +141,10 @@ class Character extends \BattlenetArmory\Character
 	 * Returns the picture of the character, before caching it and storing it ready for display
 	 *
 	 * @access public
-	 * @param string $type: one of 'avatar' (default), 'pic' or 'inset'
+	 * @param string $type: one of 'thumbnail' (default), 'pic' or 'inset'
 	 * @return string: url of the cached image
 	 */
-	public function getImageURL($type = 'avatar')
+	public function getImageURL($type = 'thumbnail')
 	{
 		$dest_file = FCPATH .'media/images/characters/'
 					. strformat($this->region) .'/'
@@ -148,8 +156,22 @@ class Character extends \BattlenetArmory\Character
 			|| @filemtime($dest_file) >= $this->config()['CharactersTTL'])
 		{
 			// Generate the image
-			$function_name = 'getProfile'. ucwords($type) .'URL';
-			$image = parent::{$function_name}();
+			switch($type)
+			{
+				case 'thumbnail':
+				default:
+					$image = parent::getThumbnailURL();
+					break;
+
+				case 'picture':
+					$image = parent::getProfilePicURL();
+					break;
+
+				case 'inset';
+					$image = parent::getProfileInsetURL();
+					break;
+			}
+
 			$image = imagecreatefromjpeg($image);
 
 			// Save the image
@@ -162,4 +184,43 @@ class Character extends \BattlenetArmory\Character
 		return $dest_file;
 	}
 
+	/**
+	 * getSpec()
+	 *
+	 * Gets the Character's specialisation. A choice of 'active' (default), 'primary,' or 'secondary.'
+	 *
+	 * @access public
+	 * @param string $type: 'active'/'primary'/'secondary'
+	 * @return Spec object
+	 */ 
+	public function getSpec($type = 'active')
+	{
+		if(empty($this->specialisations))
+		{
+			$this->specialisations['primary'] = new Character\Spec($this->characterData['talents'][0], true);
+			$this->specialisations['secondary'] = new Character\Spec($this->characterData['talents'][1], false);
+		}
+
+		switch($type)
+		{
+			case 'active':
+			default:
+				foreach($this->specialisations as $spec)
+				{
+					if($spec->selected)
+					{
+						return $spec;
+					}
+				}
+				break;
+
+			case 'primary':
+				return $this->specialisations['primary'];
+				break;
+
+			case 'secondary':
+				return $this->specialisations['secondary'];
+				break;
+		}
+	}
 }

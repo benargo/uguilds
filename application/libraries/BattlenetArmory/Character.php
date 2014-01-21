@@ -475,18 +475,18 @@ class Character extends Battlenet  {
 	}
 	
 	
-   	/**
-   	 * Get the full currently used title
-   	 * @param Boolean $withName Set to FALSE if you want to use the %s instead of name
-   	 * @return A string with the title and name
-   	 */
-   	public function getCurrentTitle($withName = TRUE){
-   		if ($withName){
-	   		return $this->currentTitle['name_with_name'];
-   		} else {
-   			return $this->currentTitle['name'];
-   		}
+   /**
+    * Get the full currently used title
+    * @param Boolean $withName Set to FALSE if you want to use the %s instead of name
+    * @return A string with the title and name
+    */
+   public function getCurrentTitle($withName = TRUE){
+   	if ($withName){
+	   	return $this->currentTitle['name_with_name'];
+   	} else {
+   		return $this->currentTitle['name'];
    	}
+   }
    	
    	
    	/**

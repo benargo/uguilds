@@ -17,8 +17,6 @@ class Character extends UG_Controller {
 			'page_title' => $this->character->name .' - '. $this->character->realm,
 			'author' => $this->guild->name,
 			'character_name' => $this->character->name,
-			'character_title' => $this->character->getCurrentTitle(true),
-			'character_class' => $this->character->getClass()
 		));
 	}
 
@@ -33,9 +31,11 @@ class Character extends UG_Controller {
 			'breadcrumbs' => array(
 				'/' => 'Home',
 				'/roster' => 'Guild Roster',
-				'/roster/rank='. strformat($this->character->guildRank->rankName) => $this->character->guildRank->rankName,
+				'/roster/rank='. (isset($this->character->guild_rank->rank_name) ? strformat($this->character->guild_rank->rank_name) : $this->character->guild_rank->rank) => (isset($this->character->guild_rank->rank_name) ? $this->character->guild_rank->rank_name : $this->character->guild_rank->rank),
 				'/roster/'. strtolower($this->character->name) => $this->character->name),
-			'inset_image' => $this->character->getImageURL('inset')
+			'character' => $this->character,
+			'inset_image' => $this->character->getImageURL('inset'),
+			'faction' => $this->guild->getFaction()
 		));
 		$this->theme->data(array(
 			'content' => $this->load->view('controllers/Roster/character', $this->theme->data(), true)

@@ -7,8 +7,8 @@
  * @version 1.1
  */
 
-class Theme extends CI_Model {
-
+class Theme extends CI_Model 
+{
 	// Variables & Constants
 	const DEFAULT_THEME = 'a6e284d6c07328787bb817c6a0000b29';
 

@@ -1,5 +1,4 @@
-<?php
-namespace uGuilds;
+<?php namespace uGuilds;
 
 if (!defined('BASEPATH')) exit('No direct script access allowed');
 
@@ -30,9 +29,9 @@ class Classes extends \BattlenetArmory\Classes {
     {
         $ci =& get_instance();
         parent::__construct(strtolower($ci->guild->region));
-        foreach($this->datas as $key => $datum)
+        foreach($this->datas as $key => $data)
         {
-            $this->data[$key] = (object) $datum;
+            $this->data[$key] = (object) $data;
         }
         unset($this->datas);
     }
