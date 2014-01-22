@@ -17,6 +17,7 @@
 
 <!-- JavaScript -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//static.wowhead.com/widgets/power.js"></script>
 <script src="/media/js/uGuilds.min.js"></script>
 <?php foreach($controller_js as $file): ?>
 <script src="<?php echo $file; ?>"></script>

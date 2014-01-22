@@ -642,6 +642,12 @@ body {
 		font-size: 1.4em;
 	}
 
+	h2, h3, h4, h5, h6 {
+		strong {
+			font-weight: bold;
+		}
+	}
+
 	a {
 		display: inline-block;
 		margin: -1px;
@@ -694,6 +700,14 @@ body {
 			font-size: 1.6em;
 		}
 	}
+}
+
+/* Theme: Wowhead
+================================================== */
+
+a.wh:not([href]) {
+	color: #ffffff;
+	border: none;
 }
 
 /* Theme: Guild Roster
@@ -780,6 +794,10 @@ body article div.roster.character {
 
 		background: url(../images/sidebar-bg-horde.png) no-repeat;
 		background-position: top 0px right 0px;
+	}
+
+	h2 {
+		font-size: 1.2em;
 	}
 
 	#character-inset {

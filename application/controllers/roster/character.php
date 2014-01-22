@@ -31,7 +31,7 @@ class Character extends UG_Controller {
 			'breadcrumbs' => array(
 				'/' => 'Home',
 				'/roster' => 'Guild Roster',
-				'/roster/rank='. (isset($this->character->guild_rank->rank_name) ? strformat($this->character->guild_rank->rank_name) : $this->character->guild_rank->rank) => (isset($this->character->guild_rank->rank_name) ? $this->character->guild_rank->rank_name : $this->character->guild_rank->rank),
+				'/roster/rank='. (isset($this->character->guild_rank->rank_name) ? strformat($this->character->guild_rank->rank_name) : $this->character->guild_rank->rank) => (isset($this->character->guild_rank->rank_name) ? $this->character->guild_rank->rank_name : 'Rank '. $this->character->guild_rank->rank),
 				'/roster/'. strtolower($this->character->name) => $this->character->name),
 			'character' => $this->character,
 			'inset_image' => $this->character->getImageURL('inset'),
@@ -55,7 +55,7 @@ class Character extends UG_Controller {
 
 	public function dump()
 	{
-		dump($this->character);
+		dump($this->character->get_spec('active'));
 	}
 
 }
