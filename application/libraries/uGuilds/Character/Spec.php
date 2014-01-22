@@ -2,7 +2,7 @@
 
 if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Spec 
+class Spec extends \BattlenetArmory\Battlenet
 {
 	// Spec data
 	private $name;
@@ -16,13 +16,13 @@ class Spec
 	private $selected;
 
 	// Talent Calculator data
-	private $calcTalent;
 	private $calcSpec;
+	private $calcTalent;
 	private $calcGlyph;
 
 	// Talents & Glyphs
-	private $talents;
-	private $glyphs;
+	private $talents = array();
+	private $glyphs = array();
 
 	/**
 	 * __construct()
@@ -44,6 +44,10 @@ class Spec
 		{
 			switch($key)
 			{
+				case 'glyphs':
+					$this->_sort_glyphs($datum);
+					break;
+
 				case 'spec': // Spec data
 					foreach($datum as $key => $value)
 					{
@@ -53,6 +57,11 @@ class Spec
 
 				case 'selected':
 					$this->selected = (bool) $datum;
+					break;
+
+				case 'talents':
+					$this->_sort_talents($datum);
+					break;
 
 				default:
 					$this->$key = $datum;
@@ -75,5 +84,101 @@ class Spec
 		{
 			return $this->$param;
 		}
+	}
+
+	/**
+	 * getIcon()
+	 *
+	 * Gets the Spec's icon and returns the URL
+	 *
+	 * @access public
+	 * @param int $size
+	 * @return string
+	 */
+	public function getIcon($size = 18)
+	{
+		return parent::getIcon($this->icon, $size);
+	}
+
+	/**
+	 * get_talent()
+	 *
+	 * Gets a specific talent based on the tier provided
+	 * and returns it as an array
+	 * 
+	 * @access public
+	 * @param int $tier
+	 * @return array
+	 */
+	public function get_talent($tier)
+	{
+		return $this->talents[$tier];
+	}
+
+	/**
+	 * get_talents()
+	 *
+	 * Gets all the talents, sorted by tier
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function get_talents()
+	{
+
+	}
+
+	/**
+	 * get_talent_calculator_url()
+	 *
+	 * Concatenates the Talent Calculator URL and returns it.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function get_talent_calculator_url()
+	{
+		return $this->calcSpec .'!'. $this->calcTalent .'!'. $this->calcGlyph;
+	}
+
+	/**
+	 * _sort_glyphs()
+	 * 
+	 * Sorts an array of glyphs and populates this class accordingly
+	 *
+	 * @access private
+	 * @param array $data
+	 * @return void
+	 */
+	private function _sort_glyphs(array $data)
+	{
+		foreach($data as $type => $glyphs)
+		{
+			$this->glyphs[$type] = array();
+
+			foreach($glyphs as $glyph)
+			{
+				$this->glyphs[$type][] = new Spec\Glyph($glyph);
+			}
+		}
+	}
+
+	/**
+	 * _sort_talents()
+	 *
+	 * Sorts an array of talents and populates this class accordingly
+	 *
+	 * @access private
+	 * @param array $data
+	 * @return void
+	 */
+	private function _sort_talents(array $data)
+	{
+		foreach($data as $datum)
+		{
+			$this->talents[$datum['tier']] = new Spec\Talent($datum);
+		}
+
+		ksort($this->talents);
 	}
 }

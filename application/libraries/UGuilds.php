@@ -7,14 +7,6 @@
  *	@version 1.0
  */
 
-require_once APPPATH . 'libraries/uGuilds/Account.php';
-require_once APPPATH . 'libraries/uGuilds/Character.php';
-require_once APPPATH . 'libraries/uGuilds/Character/Rank.php';
-require_once APPPATH . 'libraries/uGuilds/Character/Spec.php';
-require_once APPPATH . 'libraries/uGuilds/Classes.php';
-require_once APPPATH . 'libraries/uGuilds/Guild.php';
-require_once APPPATH . 'libraries/uGuilds/Races.php';
-
 // Remember library class names need to be capitalised.
 class UGuilds {
 
@@ -30,6 +22,16 @@ class UGuilds {
 	 */
 	function __construct() 
 	{
+		// Include all this library's files
+		$iterator = new RecursiveDirectoryIterator(APPPATH .'libraries/uGuilds');
+		foreach (new RecursiveIteratorIterator($iterator) as $filename => $file) 
+		{
+			if(substr($file->getFileName(), -4) == '.php')
+			{
+				require_once($file->getPathName());
+			}
+		}
+		
 		// Find the guild
 		$this->_findGuild();
 	}

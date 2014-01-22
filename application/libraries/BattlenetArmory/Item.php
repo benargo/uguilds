@@ -3,14 +3,14 @@ namespace BattlenetArmory;
 
 class Item extends Battlenet {
 	
-	private $itemData;
-	private $statID;
-	private $cache;
-	private $iconbaseURL = '.media.blizzard.com/wow/icons/';
-	private $region;
-	private $name;
-	private $icon_extension = '.jpg';
-	private $icon;
+	protected $itemData;
+	protected $statID;
+	protected $cache;
+	protected $iconbaseURL = '.media.blizzard.com/wow/icons/';
+	protected $region;
+	protected $name;
+	protected $icon_extension = '.jpg';
+	protected $icon;
 	
    	function __construct($region, $itemID) {
    		$this->region = $region;
@@ -36,14 +36,15 @@ class Item extends Battlenet {
    	}
    	
    	/**
+   	 * DO NOT USE THIS FUNCTION !!!
    	 * Get the icon URL for the current item.
    	 * @param Integer $size The size of the icon, valid values are 18 | 36 | 56
    	 * @return A string with the icon URL
    	 */
-   	public function getIcon($size=56){
-   		$url = strtolower('http://'.$this->region.$this->iconbaseURL.$size.'/'.$this->icon);
-   		return $url;
-   	}
+   	//public function getIcon($size=56){
+   	//	$url = strtolower('http://'.$this->region.$this->iconbaseURL.$size.'/'.$this->icon);
+   	//	return $url;
+   	//}
    	
    	/**
    	 * Get the icon <img> tag, with nice blizz like frames

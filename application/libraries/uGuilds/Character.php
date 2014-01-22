@@ -185,15 +185,15 @@ class Character extends \BattlenetArmory\Character
 	}
 
 	/**
-	 * getSpec()
+	 * get_spec()
 	 *
-	 * Gets the Character's specialisation. A choice of 'active' (default), 'primary,' or 'secondary.'
+	 * Gets the Character's specialisation. A choice of 'active' (default), 'passive,' 'primary,' or 'secondary.'
 	 *
 	 * @access public
 	 * @param string $type: 'active'/'primary'/'secondary'
 	 * @return Spec object
 	 */ 
-	public function getSpec($type = 'active')
+	public function get_spec($type = 'active')
 	{
 		if(empty($this->specialisations))
 		{
@@ -214,6 +214,16 @@ class Character extends \BattlenetArmory\Character
 				}
 				break;
 
+			case 'passive':
+				foreach($this->specialisations as $spec)
+				{
+					if(!$spec->selected)
+					{
+						return $spec;
+					}
+				}
+				break;
+
 			case 'primary':
 				return $this->specialisations['primary'];
 				break;
@@ -222,5 +232,20 @@ class Character extends \BattlenetArmory\Character
 				return $this->specialisations['secondary'];
 				break;
 		}
+	}
+
+	/**
+	 * get_talent_calculator_url()
+	 *
+	 * Gets the Character's talent calculator URL, 
+	 * for either their 'active' (default), 'primary,' or 'secondary' spec
+	 *
+	 * @access public
+	 * @param string $type: : 'active'/'primary'/'secondary'
+	 * @return string
+	 */
+	public function get_talent_calculator_url($type = 'active')
+	{
+		return $this->class->talent_calculator_id . $this->get_spec($type)->get_talent_calculator_url();
 	}
 }
