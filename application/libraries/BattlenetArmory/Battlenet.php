@@ -11,7 +11,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 abstract class Battlenet {
 
-	private $config;
+	private static $config;
 
 	/**
 	 * config()
@@ -21,14 +21,14 @@ abstract class Battlenet {
 	 */
 	public function config()
 	{
-		if(is_null($this->config))
+		if(is_null(self::$config))
 		{
 			$ci =& get_instance();
 			$ci->config->load('battle.net');
-			$this->config = $ci->config->item('battle.net');
+			self::$config =& $ci->config->item('battle.net');
 		}
 
-		return $this->config;
+		return self::$config;
 	}
 
 	/**
