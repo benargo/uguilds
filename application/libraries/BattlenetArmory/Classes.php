@@ -3,7 +3,7 @@ namespace BattlenetArmory;
 
 class Classes extends Battlenet {
 	
-	protected $datas;
+	public $datas;
 
    function __construct($region) {
    	$jsonConnect = new jsonConnect();

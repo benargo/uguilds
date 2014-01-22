@@ -1,8 +1,8 @@
-<?php namespace uGuilds;
+<?php
 
 if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Classes extends \BattlenetArmory\Classes {
+class Classes extends CI_Model {
 
     private $data;
 
@@ -19,6 +19,19 @@ class Classes extends \BattlenetArmory\Classes {
         10 => 'Monk',
         11 => 'Druid');
 
+    private $talent_calculator_ids = array(
+        1  => 'Z',
+        2  => 'b',
+        3  => 'Y',
+        4  => 'c',
+        5  => 'X',
+        6  => 'd',
+        7  => 'W',
+        8  => 'e',
+        9  => 'V',
+        10 => 'f',
+        11 => 'U');
+
     /**
      * __construct()
      * 
@@ -28,10 +41,11 @@ class Classes extends \BattlenetArmory\Classes {
     function __construct()
     {
         $ci =& get_instance();
-        parent::__construct(strtolower($ci->guild->region));
-        foreach($this->datas as $key => $data)
+        $classes = new \BattlenetArmory\Classes($ci->guild->region);
+        foreach($classes->datas as $key => $data)
         {
             $this->data[$key] = (object) $data;
+            $this->data[$key]->talent_calculator_id = $this->talent_calculator_ids[$key];
         }
         unset($this->datas);
     }
