@@ -25,20 +25,20 @@ class Character extends \BattlenetArmory\Character
 	 *
 	 * @param string $name
 	 */
-	function __construct($name)
+	function __construct( $name )
 	{
 		// Load some models
 		$ci =& get_instance();
-		$ci->load->model('Classes');
-		$ci->load->model('Races');
+		$ci->load->model( 'Classes' );
+		$ci->load->model( 'Races' );
 		
 		// Construct the character
-		parent::__construct(strtolower($ci->guild->region), $ci->guild->realm, $name, false);
+		parent::__construct( strtolower( $ci->guild->region ), $ci->guild->realm, $name, false );
 		
 		// Construct some additional data
 		$this->guild =& $ci->guild;
-		$this->race  =& $ci->Races->getRace($this->characterData['race']);
-		$this->class =& $ci->Classes->getClass($this->characterData['class']);
+		$this->race  =& $ci->Races->getRace( $this->characterData['race'] );
+		$this->class =& $ci->Classes->getClass( $this->characterData['class'] );
 	}
 
 	/**
@@ -48,9 +48,9 @@ class Character extends \BattlenetArmory\Character
 	 * @param string $param
 	 * @return mixed
 	 */
-	function __get($param)
+	function __get( $param )
 	{
-		switch($param)
+		switch( $param )
 		{
 			case 'class':
 				return $this->class;
@@ -61,7 +61,7 @@ class Character extends \BattlenetArmory\Character
 				break;
 
 			case 'name':
-				return ucwords($this->name);
+				return ucwords( $this->name );
 				break;
 
 			case 'professions':
@@ -71,25 +71,25 @@ class Character extends \BattlenetArmory\Character
 				break;
 
 			case 'realm':
-				return ucwords($this->realm);
+				return ucwords( $this->realm );
 				break;
 
 			case 'region':
-				return strtoupper($this->region);
+				return strtoupper( $this->region );
 				break;
 
 
 			default:
-				if(property_exists($this, $param))
+				if( property_exists( $this, $param ) )
 				{
 					return $this->$param;
 				}
-				elseif(array_key_exists($param, $this->characterData))
+				elseif( array_key_exists( $param, $this->characterData ) )
 				{
 					return $this->characterData[$param];
 				}
-				break;
 
+				break;
 		}
 	}
 
@@ -102,14 +102,14 @@ class Character extends \BattlenetArmory\Character
 	 * @param Boolean $withName: Set to FALSE if you want to use the %s instead of name
    	 * @return A string with the title and name
 	 */
-	public function getCurrentTitle($withName = true)
+	public function getCurrentTitle( $withName = true )
 	{
-		if(empty($this->current_title))
+		if( empty( $this->current_title ) )
 		{
 			$this->setTitles();
 		}
 
-		return parent::getCurrentTitle($withName);
+		return parent::getCurrentTitle( $withName );
 	}
 
 	/**
@@ -123,15 +123,16 @@ class Character extends \BattlenetArmory\Character
 	 */
 	protected function getGuildRank()
 	{
-		if(is_null($this->guild_rank))
+		if( is_null( $this->guild_rank ) )
 		{
-			foreach($this->guild->getMembers() as $member)
+			foreach( $this->guild->getMembers() as $member )
 			{
-				if($member->name === $this->name)
+				if( $member->name === $this->name )
 				{
 					$this->guild_rank = new Character\Rank;
 					$this->guild_rank->rank = $member->rank;
-					if(isset($member->rankname))
+
+					if( isset( $member->rankname ) )
 					{
 						$this->guild_rank->rank_name = $member->rankname;
 					}
@@ -151,7 +152,7 @@ class Character extends \BattlenetArmory\Character
 	 * @param string $type: one of 'thumbnail' (default), 'pic' or 'inset'
 	 * @return string: url of the cached image
 	 */
-	public function getImageURL($type = 'thumbnail')
+	public function getImageURL( $type = 'thumbnail' )
 	{
 		$dest_file = FCPATH .'media/images/characters/'
 					. strformat($this->region) .'/'
@@ -159,11 +160,11 @@ class Character extends \BattlenetArmory\Character
 					. strformat($this->guild->name, '_') .'/'
 					. strformat($this->name) .'_'. $type .'.jpg';
 
-		if(!file_exists($dest_file)
-			|| @filemtime($dest_file) >= $this->config()['CharactersTTL'])
+		if( !file_exists( $dest_file )
+			|| @filemtime( $dest_file ) >= $this->config()['CharactersTTL'])
 		{
 			// Generate the image
-			switch($type)
+			switch( $type )
 			{
 				case 'thumbnail':
 				default:
@@ -179,15 +180,16 @@ class Character extends \BattlenetArmory\Character
 					break;
 			}
 
-			$image = imagecreatefromjpeg($image);
+			$image = imagecreatefromjpeg( $image );
 
 			// Save the image
 			$ci =& get_instance();
-			$ci->load->helper('save_jpeg');
-			save_jpeg($image, $dest_file);
+			$ci->load->helper( 'save_jpeg' );
+			save_jpeg( $image, $dest_file );
 		}
 
-		$dest_file = str_replace(FCPATH, '/', $dest_file);
+		$dest_file = str_replace( FCPATH, '/', $dest_file );
+
 		return $dest_file;
 	}
 
@@ -201,13 +203,13 @@ class Character extends \BattlenetArmory\Character
 	 */
 	protected function get_professions()
 	{
-		if(empty($this->professions))
+		if( empty( $this->professions ) )
 		{
-			if(is_array($this->characterData['professions']['primary']))
+			if( is_array( $this->characterData['professions']['primary'] ) )
 			{
-				foreach($this->characterData['professions']['primary'] as $profession)
+				foreach( $this->characterData['professions']['primary'] as $profession )
 				{
-					$this->professions[strtolower($profession['name'])] = new Character\Profession($profession);
+					$this->professions[ strtolower( $profession['name'] ) ] = new Character\Profession( $profession );
 				}
 			}
 		}
@@ -222,21 +224,21 @@ class Character extends \BattlenetArmory\Character
 	 * @param string $type: 'active'/'primary'/'secondary'
 	 * @return Spec object
 	 */ 
-	public function get_spec($type = 'active')
+	public function get_spec( $type = 'active' )
 	{
-		if(empty($this->specialisations) && is_array($this->characterData['talents']))
+		if( empty( $this->specialisations ) && is_array( $this->characterData['talents'] ) )
 		{
-			$this->specialisations['primary'] = new Character\Spec($this->characterData['talents'][0], true);
-			$this->specialisations['secondary'] = new Character\Spec($this->characterData['talents'][1], false);
+			$this->specialisations['primary'] = new Character\Spec( $this->characterData['talents'][0], true );
+			$this->specialisations['secondary'] = new Character\Spec( $this->characterData['talents'][1], false );
 		}
 
 		switch($type)
 		{
 			case 'active':
 			default:
-				foreach($this->specialisations as $spec)
+				foreach( $this->specialisations as $spec )
 				{
-					if($spec->selected)
+					if( $spec->selected )
 					{
 						return $spec;
 					}
@@ -244,9 +246,9 @@ class Character extends \BattlenetArmory\Character
 				break;
 
 			case 'passive':
-				foreach($this->specialisations as $spec)
+				foreach( $this->specialisations as $spec )
 				{
-					if(!$spec->selected)
+					if( !$spec->selected )
 					{
 						return $spec;
 					}
@@ -273,8 +275,8 @@ class Character extends \BattlenetArmory\Character
 	 * @param string $type: : 'active'/'primary'/'secondary'
 	 * @return string
 	 */
-	public function get_talent_calculator_url($type = 'active')
+	public function get_talent_calculator_url( $type = 'active' )
 	{
-		return $this->class->talent_calculator_id . $this->get_spec($type)->get_talent_calculator_url();
+		return $this->class->talent_calculator_id . $this->get_spec( $type )->get_talent_calculator_url();
 	}
 }

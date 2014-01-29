@@ -21,8 +21,15 @@ class Recipe extends \uGuilds\Spell
 	 * @param int $id
 	 * @return void
 	 */
-	function __construct($id)
+	function __construct( $id )
 	{
-		
+		/**
+		 * The battle net library we're using doesn't provide a method
+		 * of loading and caching recipes, so we have to do it.
+		 */
+		if( !file_exists( APPPATH .'cache/WoW/Recipes/'. (int) $id ) )
+		{
+			
+		}
 	}	
 }

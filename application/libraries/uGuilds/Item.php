@@ -28,21 +28,22 @@ class Item extends \BattlenetArmory\Item
 	 * @param int $id
 	 * @return void
 	 */
-	function __construct($id)
+	function __construct( $id )
 	{
 		$ci =& get_instance();
-		parent::__construct(strtolower($ci->guild->region), $id);
 
-		foreach($this->itemData as $key => $datum)
+		parent::__construct( strtolower( $ci->guild->region ), $id );
+
+		foreach( $this->itemData as $key => $datum )
 		{
 			$this->$key = $datum;
 		}
 
-		unset($this->itemData);
+		unset( $this->itemData );
 
-		foreach($this->allowableClasses as $key => $class_id)
+		foreach( $this->allowableClasses as $key => $class_id )
 		{
-			$this->allowableClasses[$key];
+			$this->allowableClasses[ $key ];
 		}
 	}
 
@@ -55,27 +56,12 @@ class Item extends \BattlenetArmory\Item
 	 * @param string $param
 	 * @return mixed
 	 */
-	function __get($param)
+	function __get( $param )
 	{
-		if(property_exists($this, $param))
+		if( property_exists( $this, $param ) )
 		{
 			return $this->$param;
 		}
-	}
-
-	/**
-	 * find_spells_by_trigger()
-	 *
-	 * Finds spells by a trigger type. Trigger types can be:
-	 * 'ON_USE' / 'ON_LEARN' / Others?
-	 *
-	 * @access public
-	 * @param string $trigger
-	 * @return mixed (string or array)
-	 */
-	public function find_spells_by_trigger($trigger)
-	{
-
 	}
 
 	/**
@@ -87,8 +73,8 @@ class Item extends \BattlenetArmory\Item
 	 * @param int $size
 	 * @return string
 	 */
-	public function getIcon($size = 18)
+	public function getIcon( $size = 18 )
 	{
-		return parent::getIcon($this->icon, $size);
+		return parent::getIcon( $this->icon, $size );
 	}
 }

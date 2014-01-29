@@ -12,7 +12,9 @@ class Character extends UG_Controller {
 	public function __construct() 
 	{
 		parent::__construct();
+		
 		$this->character = new uGuilds\Character($this->uri->segments[2]);
+
 		$this->theme->data(array(
 			'page_title' => $this->character->name .' - '. $this->character->realm,
 			'author' => $this->guild->name,
@@ -37,9 +39,11 @@ class Character extends UG_Controller {
 			'inset_image' => $this->character->getImageURL('inset'),
 			'faction' => $this->guild->getFaction()
 		));
+
 		$this->theme->data(array(
 			'content' => $this->load->view('controllers/Roster/character', $this->theme->data(), true)
 		));
+
 		$this->theme->view('page');
 	}
 

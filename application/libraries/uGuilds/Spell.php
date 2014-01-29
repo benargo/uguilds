@@ -24,11 +24,11 @@ class Spell extends \BattlenetArmory\Battlenet
 	 * @param array $data
 	 * @return void
 	 */
-	function __construct(array $data)
+	function __construct( array $data )
 	{
-		foreach($data as $key => $datum)
+		foreach( $data as $key => $datum )
 		{
-			$key = strtolower(preg_replace('/([A-Z])/', '_$1', $key));
+			$key = strtolower( preg_replace( '/([A-Z])/', '_$1', $key ) );
 			$this->$key = $datum;
 		}
 	}
@@ -42,9 +42,9 @@ class Spell extends \BattlenetArmory\Battlenet
 	 * @param string $param
 	 * @return mixed
 	 */
-	function __get($param)
+	function __get( $param )
 	{
-		if(property_exists($this, $param))
+		if( property_exists( $this, $param ) )
 		{
 			return $this->$param;
 		}
@@ -59,8 +59,8 @@ class Spell extends \BattlenetArmory\Battlenet
 	 * @param int $size
 	 * @return string
 	 */
-	public function getIcon($size = 18)
+	public function getIcon( $size = 18 )
 	{
-		return parent::getIcon($this->icon, $size);
+		return parent::getIcon( $this->icon, $size );
 	}
 }

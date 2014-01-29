@@ -20,8 +20,8 @@ class Guild extends \BattlenetArmory\Guild {
 	private $faction;
 	private $ranks = array();
 	private $features = array();
-	private $levelRange = array('min' => self::MAXLEVEL,
-								'max' => self::MINLEVEL);
+	private $levelRange = array( 'min' => self::MAXLEVEL,
+								 'max' => self::MINLEVEL );
 
 	/**
 	 * __construct()
@@ -30,11 +30,11 @@ class Guild extends \BattlenetArmory\Guild {
 	 * @param string $domain
 	 * @return void
 	 */
-	function __construct($domain = NULL) 
+	function __construct( $domain = NULL ) 
 	{
 		if($domain)
 		{
-			$this->_load($domain);
+			$this->_load( $domain );
 		}
 	}
 
@@ -45,7 +45,7 @@ class Guild extends \BattlenetArmory\Guild {
 	 * @access public
 	 * @return mixed
 	 */
-	function __get($var)
+	function __get( $var )
 	{
 		switch($var)
 		{
@@ -54,27 +54,28 @@ class Guild extends \BattlenetArmory\Guild {
 				break;
 
 			case "region":
-				return strtoupper($this->region);
+				return strtoupper( $this->region );
 				break;
 
 			case "realm":
-				return ucwords($this->realm);
+				return ucwords( $this->realm );
 				break;
 
 			case "guildName": /* preferred */
 			case "name":
-				return ucwords($this->name);
+				return ucwords( $this->name );
 				break;
 
 			case "domainName":
-				return strtolower(preg_replace("![^a-z0-9\-\.]+!i", "-", $this->domainName));
+				return strtolower( preg_replace( "![^a-z0-9\-\.]+!i", "-", $this->domainName ) );
 				break;
 
 			case "ranks":
-				if(empty($this->ranks))
+				if( empty( $this->ranks ) )
 				{
 					$this->_setRanks();
 				}
+
 				return $this->ranks;
 				break;
 
@@ -83,7 +84,7 @@ class Guild extends \BattlenetArmory\Guild {
 				break;
 
 			case "locale":
-				if(!preg_match("/([a-z]+)_([A-Z]+)/", $this->locale))
+				if( !preg_match( "/([a-z]+)_([A-Z]+)/", $this->locale ) )
 				{
 					$this->locale = 'en_GB';
 				}
@@ -125,7 +126,7 @@ class Guild extends \BattlenetArmory\Guild {
 	{
 		$ci =& get_instance();
 
-		$query = $ci->db->query("SELECT 	
+		$query = $ci->db->query( "SELECT 	
 								`_id`,
 								`region`,
 								`realm`,
@@ -135,25 +136,25 @@ class Guild extends \BattlenetArmory\Guild {
 								`locale`
 						FROM `ug_Guilds`
 						WHERE `domainName` = '$domain'
-						LIMIT 0, 1");
+						LIMIT 0, 1" );
 
 		// Check we got a result
-		if($query->num_rows() > 0)
+		if( $query->num_rows() > 0 )
 		{
 			// Loop through the rows (there should only be one)
-  			foreach ($query->result() as $row)
+  			foreach ( $query->result() as $row )
    			{
 	   			// Loop through the columns
-	    		foreach($row as $key => $value)
+	    		foreach( $row as $key => $value )
 	    		{
 	    			$this->$key = $value;
 	    		}
 
 	    		// Set the session
-	    		$ci->session->set_userdata('guild_id', $this->_id);
+	    		$ci->session->set_userdata( 'guild_id', $this->_id );
 
 	    		// Load the full guild from battle.net
-	    		parent::_load(strtolower($this->region), $this->realm, $this->name);
+	    		parent::_load( strtolower( $this->region ), $this->realm, $this->name );
 
 	    		// Load the levels and ranks
 	    		$this->_setLowestLevelMember();
@@ -162,11 +163,11 @@ class Guild extends \BattlenetArmory\Guild {
    			}
 
    			// Encode this object and store it in the cache
-   			file_put_contents(APPPATH .'cache/uGuilds/guild_objects/'. $this->domainName .'.txt', serialize($this));
+   			file_put_contents( APPPATH .'cache/uGuilds/guild_objects/'. $this->domainName .'.txt', serialize( $this ) );
 		}
 		else // No result from the database, this guild must not exist
 		{
-			throw new \Exception('This guild does not exist');
+			throw new \Exception( 'This guild does not exist' );
 		}
 	}
 
@@ -178,15 +179,15 @@ class Guild extends \BattlenetArmory\Guild {
 	 * @var int $width
 	 * @return string $url
 	 */
-	public function getEmblem($showlevel=TRUE, $width=215)
+	public function getEmblem( $showlevel = TRUE, $width = 215 )
 	{
-		if(!file_exists(FCPATH .'media/BattlenetArmory/emblem_'. strtoupper($this->region) .'_'. preg_replace('/\ /', '_', $this->realm) .'_'. preg_replace('/\ /', '_', $this->guildName) .'_'. $width .'.png'))
+		if( !file_exists( FCPATH .'media/BattlenetArmory/emblem_'. strtoupper( $this->region ) .'_'. preg_replace( '/\ /', '_', $this->realm ) .'_'. preg_replace( '/\ /', '_', $this->guildName ) .'_'. $width .'.png' ) )
 		{
-			$this->showEmblem($showlevel, $width);
-			$this->saveEmblem(FCPATH . 'media/BattlenetArmory/emblem_'. strtoupper($this->region) .'_'. preg_replace('/\ /', '_', $this->realm) .'_'. preg_replace('/\ /', '_', $this->guildName) .'_'. $width .'.png');
+			$this->showEmblem( $showlevel, $width );
+			$this->saveEmblem( FCPATH . 'media/BattlenetArmory/emblem_'. strtoupper( $this->region ) .'_'. preg_replace( '/\ /', '_', $this->realm ) .'_'. preg_replace( '/\ /', '_', $this->guildName ) .'_'. $width .'.png' );
 		}
 		
-		return '/media/BattlenetArmory/emblem_'. strtoupper($this->region) .'_'. preg_replace('/\ /', '_', $this->realm) .'_'. preg_replace('/\ /', '_', $this->guildName) .'_'. $width .'.png';
+		return '/media/BattlenetArmory/emblem_'. strtoupper( $this->region ) .'_'. preg_replace( '/\ /', '_', $this->realm ) .'_'. preg_replace( '/\ /', '_', $this->guildName ) .'_'. $width .'.png';
 	}
 
 	/**
@@ -197,12 +198,12 @@ class Guild extends \BattlenetArmory\Guild {
 	 */
 	public function getFaction()
 	{
-		if(is_null($this->faction))
+		if( is_null( $this->faction ) )
 		{
-			$this->faction = $this->getData()['side'];
+			$this->faction = $this->getData()[ 'side' ];
 		}
 
-		switch($this->faction)
+		switch( $this->faction )
 		{
 			case 0:
 				return 'alliance';
@@ -223,11 +224,11 @@ class Guild extends \BattlenetArmory\Guild {
 	{
 		$return = array();
 
-		foreach($this->features as $key => $value)
+		foreach( $this->features as $key => $value )
 		{
-			if($value)
+			if( $value )
 			{
-				$return[$key] = (bool) $value;
+				$return[ $key ] = (bool) $value;
 			}
 		}
 
@@ -241,9 +242,9 @@ class Guild extends \BattlenetArmory\Guild {
 	 * @var string $feature
 	 * @return bool
 	 */
-	public function hasFeature($feature)
+	public function hasFeature( $feature )
 	{
-		return array_key_exists($feature, $this->_getFeatures());
+		return array_key_exists( $feature, $this->_getFeatures() );
 	}
 
 	/**
@@ -254,39 +255,40 @@ class Guild extends \BattlenetArmory\Guild {
 	 * @param string $sortFlag
 	 * @return array
 	 */
-	public function getMembers($sort = FALSE, $sortFlag = 'asc')
+	public function getMembers( $sort = FALSE, $sortFlag = 'asc' )
 	{
-		$members = parent::getMembers($sort, $sortFlag);
+		$members = parent::getMembers( $sort, $sortFlag );
 
-		foreach($members as $key => $member)
+		foreach( $members as $key => $member )
 		{
-			$members[$key] = (object) $member;
-			foreach($member['character'] as $trait => $value)
+			$members[ $key ] = (object) $member;
+			foreach( $member['character'] as $trait => $value)
 			{
-				if($trait == 'spec')
+				if( $trait == 'spec' )
 				{
 					$value = (object) $value;
 				}
-				$members[$key]->$trait = $value;
+
+				$members[ $key ]->$trait = $value;
 			}
-			unset($members[$key]->character);
+			unset( $members[ $key ]->character );
 		}
 
 		return $members;
 	}
 
 	/**
-	 * filterMembers()
+	 * filter()
 	 *
 	 * @access public
 	 * @param array $params
 	 * @return array $members
 	 */
-	public function filter(array $params = array())
+	public function filter( array $params = array() )
 	{
 		$this->params = $params;
-		$members = array_values(array_filter($this->getMembers(), array($this, '_filter')));
-		unset($this->params);
+		$members = array_values( array_filter( $this->getMembers(), array( $this, '_filter' ) ) );
+		unset( $this->params );
 		return $members;
 	}
 
@@ -297,11 +299,11 @@ class Guild extends \BattlenetArmory\Guild {
 	 * @param array $member
 	 * @return array
 	 */
-	private function _filter($member)
+	private function _filter( $member )
 	{
-		foreach($this->params as $key => $value)
+		foreach( $this->params as $key => $value )
 		{
-			if($member->$key == $value)
+			if( $member->$key == $value )
 			{
 				return true;
 			}
@@ -330,10 +332,10 @@ class Guild extends \BattlenetArmory\Guild {
 	private function _setLowestLevelMember()
 	{
 		// Loop through each of the members
-		foreach($this->getData()['members'] as $member)
+		foreach( $this->getData()['members'] as $member )
 		{
 			// If this member has a lower level than the max level
-			if($member['character']['level'] < $this->levelRange['min'])
+			if( $member['character']['level'] < $this->levelRange['min'] )
 			{
 				$this->levelRange['min'] = $member['character']['level'];
 			}
@@ -360,10 +362,10 @@ class Guild extends \BattlenetArmory\Guild {
 	private function _setHighestLevelMember()
 	{
 		// Loop through each of the members
-		foreach($this->getData()['members'] as $member)
+		foreach( $this->getData()['members'] as $member )
 		{
 			// If the member has a higher level than the minimum level
-			if($member['character']['level'] > $this->levelRange['max'])
+			if( $member['character']['level'] > $this->levelRange['max'] )
 			{
 				$this->levelRange['max'] = $member['character']['level'];
 			}
@@ -379,10 +381,12 @@ class Guild extends \BattlenetArmory\Guild {
 	private function _setRanks()
 	{
 		$highestRank = $this->getMembers('rank','desc')[0]->rank;
-		for($i = 0; $i <= $highestRank; $i++)
+
+		for( $i = 0; $i <= $highestRank; $i++ )
 		{
-			$this->ranks[$i] = $i;
+			$this->ranks[ $i ] = $i;
 		}
+
 		$this->setGuildRankTitles();
 	}
 
@@ -396,20 +400,21 @@ class Guild extends \BattlenetArmory\Guild {
 	{
 		$ci =& get_instance();
 
-		$query = $ci->db->query("SELECT
+		$query = $ci->db->query( "SELECT
 								`position`,
 								`title`
 								FROM `ug_GuildRanks`
 								WHERE `guild_id` = '". $this->_id ."'
-								ORDER BY `position`");
+								ORDER BY `position`" );
 
-		if($query->num_rows() > 0)
+		if( $query->num_rows() > 0 )
 		{
-			foreach($query->result() as $row)
+			foreach( $query->result() as $row )
 			{
-				$this->ranks[$row->position] = $row->title;
+				$this->ranks[ $row->position ] = $row->title;
 			}
-			parent::setGuildRankTitles($this->ranks);
+
+			parent::setGuildRankTitles( $this->ranks );
 		}
 	}
 }

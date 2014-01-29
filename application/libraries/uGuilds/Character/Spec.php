@@ -34,22 +34,22 @@ class Spec extends \BattlenetArmory\Battlenet
 	 * @param bool $primary
 	 * @return void
 	 */
-	function __construct(array $data, $primary = false)
+	function __construct( array $data, $primary = false )
 	{
 		// Is this spec the primary spec?
 		$this->primary = (bool) $primary;
 
 		// Construct the data
-		foreach($data as $key => $datum)
+		foreach( $data as $key => $datum )
 		{
-			switch($key)
+			switch( $key )
 			{
 				case 'glyphs':
-					$this->_sort_glyphs($datum);
+					$this->_sort_glyphs( $datum );
 					break;
 
 				case 'spec': // Spec data
-					foreach($datum as $key => $value)
+					foreach( $datum as $key => $value )
 					{
 						$this->$key = $value;
 					}
@@ -60,7 +60,7 @@ class Spec extends \BattlenetArmory\Battlenet
 					break;
 
 				case 'talents':
-					$this->_sort_talents($datum);
+					$this->_sort_talents( $datum );
 					break;
 
 				default:
@@ -78,9 +78,9 @@ class Spec extends \BattlenetArmory\Battlenet
 	 * @param string $param
 	 * @return mixed
 	 */
-	function __get($param)
+	function __get( $param )
 	{
-		if(property_exists($this, $param))
+		if( property_exists( $this, $param ) )
 		{
 			return $this->$param;
 		}
@@ -95,9 +95,9 @@ class Spec extends \BattlenetArmory\Battlenet
 	 * @param int $size
 	 * @return string
 	 */
-	public function getIcon($size = 18)
+	public function getIcon( $size = 18 )
 	{
-		return parent::getIcon($this->icon, $size);
+		return parent::getIcon( $this->icon, $size );
 	}
 
 	/**
@@ -110,9 +110,9 @@ class Spec extends \BattlenetArmory\Battlenet
 	 * @param int $tier
 	 * @return array
 	 */
-	public function get_talent($tier)
+	public function get_talent( $tier )
 	{
-		return $this->talents[$tier];
+		return $this->talents[ $tier ];
 	}
 
 	/**
@@ -150,15 +150,15 @@ class Spec extends \BattlenetArmory\Battlenet
 	 * @param array $data
 	 * @return void
 	 */
-	private function _sort_glyphs(array $data)
+	private function _sort_glyphs( array $data )
 	{
-		foreach($data as $type => $glyphs)
+		foreach( $data as $type => $glyphs )
 		{
-			$this->glyphs[$type] = array();
+			$this->glyphs[ $type ] = array();
 
-			foreach($glyphs as $glyph)
+			foreach( $glyphs as $glyph )
 			{
-				$this->glyphs[$type][] = new Spec\Glyph($glyph);
+				$this->glyphs[ $type ][] = new Spec\Glyph( $glyph );
 			}
 		}
 	}
@@ -172,13 +172,13 @@ class Spec extends \BattlenetArmory\Battlenet
 	 * @param array $data
 	 * @return void
 	 */
-	private function _sort_talents(array $data)
+	private function _sort_talents( array $data )
 	{
-		foreach($data as $datum)
+		foreach( $data as $datum )
 		{
-			$this->talents[$datum['tier']] = new Spec\Talent($datum);
+			$this->talents[ $datum['tier'] ] = new Spec\Talent( $datum );
 		}
 
-		ksort($this->talents);
+		ksort( $this->talents );
 	}
 }

@@ -30,18 +30,18 @@ class Talent extends \BattlenetArmory\Battlenet
 	 * @param array $data
 	 * @return void
 	 */
-	function __construct(array $data)
+	function __construct( array $data )
 	{
 		// Loop through the data
-		foreach($data as $key => $datum)
+		foreach( $data as $key => $datum )
 		{
 			$this->$key = $datum;
 		}
 
-		$this->level = $this->talent_levels[$this->tier];
+		$this->level = $this->talent_levels[ $this->tier ];
 
 		// Handle the spell
-		$this->spell = new \uGuilds\Spell($this->spell);
+		$this->spell = new \uGuilds\Spell( $this->spell );
 	}
 
 	/**
@@ -53,9 +53,9 @@ class Talent extends \BattlenetArmory\Battlenet
 	 * @param string $param
 	 * @return mixed
 	 */
-	function __get($param)
+	function __get( $param )
 	{
-		if(property_exists($this, $param))
+		if( property_exists( $this, $param ) )
 		{
 			return $this->$param;
 		}

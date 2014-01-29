@@ -24,9 +24,9 @@ class Profession extends \BattlenetArmory\Battlenet
 	 * @param array $data
 	 * @return void
 	 */
-	function __construct(array $data)
+	function __construct( array $data )
 	{
-		foreach($data as $key => $datum)
+		foreach( $data as $key => $datum )
 		{
 			$this->$key = $datum;
 		}
@@ -41,9 +41,9 @@ class Profession extends \BattlenetArmory\Battlenet
 	 * @param string $param
 	 * @return mixed
 	 */
-	function __get($param)
+	function __get( $param )
 	{
-		if(property_exists($this, $param))
+		if( property_exists( $this, $param ) )
 		{
 			return $this->$param;
 		}
@@ -58,9 +58,9 @@ class Profession extends \BattlenetArmory\Battlenet
 	 * @param int $size
 	 * @return string
 	 */
-	public function getIcon($size = 18)
+	public function getIcon( $size = 18 )
 	{
-		return parent::getIcon($this->icon, $size);
+		return parent::getIcon( $this->icon, $size );
 	}
 
 	/**
@@ -72,14 +72,14 @@ class Profession extends \BattlenetArmory\Battlenet
 	 * @param int $id
 	 * @return Profession\Recipe object
 	 */
-	public function get_recipe($id)
+	public function get_recipe( $id )
 	{
-		if(in_array((int) $id, $this->recipes))
+		if( in_array( (int) $id, $this->recipes ) )
 		{
 			// Get the key
-			$key = array_shift(array_keys($this->recipes, (int) $id));
+			$key = array_shift( array_keys( $this->recipes, (int) $id ) );
 
-			$this->recipes[$key] = new Profession\Recipe((int) $id);
+			$this->recipes[ $key ] = new Profession\Recipe( (int) $id );
 		}
 	}
 }

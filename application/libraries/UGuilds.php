@@ -8,8 +8,8 @@
  */
 
 // Remember library class names need to be capitalised.
-class UGuilds {
-
+class UGuilds 
+{
 	/**
 	 * vars
 	 */
@@ -24,11 +24,11 @@ class UGuilds {
 	{
 		// Include all this library's files
 		$iterator = new RecursiveDirectoryIterator(APPPATH .'libraries/uGuilds');
-		foreach (new RecursiveIteratorIterator($iterator) as $filename => $file) 
+		foreach ( new RecursiveIteratorIterator($iterator) as $filename => $file ) 
 		{
-			if(substr($file->getFileName(), -4) == '.php')
+			if( substr( $file->getFileName(), -4 ) == '.php' )
 			{
-				require_once($file->getPathName());
+				require_once( $file->getPathName() );
 			}
 		}
 		
@@ -43,15 +43,16 @@ class UGuilds {
 	 * @var string $var
 	 * @return mixed
 	 */
-	function __get($var)
+	function __get( $var )
 	{
-		switch($var)
+		switch( $var )
 		{
 			case "domain":
-				if(is_null($this->domain))
+				if( is_null( $this->domain ) )
 				{
 					$this->_setDomain();
 				}
+
 				return $this->domain;
 				break;
 		}
@@ -67,20 +68,20 @@ class UGuilds {
 		$ci =& get_instance();
 
 		// Look up the domain name
-		if(is_null($this->domain)) 
+		if( is_null( $this->domain ) ) 
 		{
 			$this->_setDomain();
 		}
 
 		// Check if there's a cache file for this guild and it's valid
-		if(file_exists(APPPATH . 'cache/uGuilds/guild_objects/'. $this->domain .'.txt') 
-			&& filemtime(APPPATH . 'cache/uGuilds/guild_objects/'. $this->domain .'.txt') <= time() - $ci->config->item('battle.net')['GuildsTTL'])
+		if( file_exists( APPPATH . 'cache/uGuilds/guild_objects/'. $this->domain .'.txt' ) 
+			&& filemtime( APPPATH . 'cache/uGuilds/guild_objects/'. $this->domain .'.txt' ) <= time() - $ci->config->item('battle.net')['GuildsTTL'] )
 		{
-			$ci->guild = unserialize(file_get_contents(APPPATH . 'cache/uGuilds/guild_objects/'. $this->domain .'.txt'));
+			$ci->guild = unserialize( file_get_contents( APPPATH . 'cache/uGuilds/guild_objects/'. $this->domain .'.txt' ) );
 		}
 		else // No cache file, generate one from the database
 		{
-			$ci->guild = new uGuilds\Guild($this->domain);
+			$ci->guild = new uGuilds\Guild( $this->domain );
 		}
 	}
 
@@ -96,9 +97,9 @@ class UGuilds {
 		$this->domain = $_SERVER['SERVER_NAME'];
 
 		// If they're running on the application domain name, then return a 403 Forbidden error
-		if($this->domain === "app.uguilds.net") 
+		if( $this->domain === "app.uguilds.net" ) 
 		{
-			header('HTTP/1.0 403 Forbidden');
+			header( 'HTTP/1.0 403 Forbidden' );
 		}
 	}
 }

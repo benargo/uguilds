@@ -18,12 +18,12 @@ class Glyph extends \BattlenetArmory\Battlenet
 	 * @param array $data
 	 * @return void
 	 */
-	function __construct(array $data)
+	function __construct( array $data )
 	{
 		// Loop through the data
-		foreach($data as $key => $datum)
+		foreach( $data as $key => $datum )
 		{
-			if($key == 'glyph')
+			if( $key == 'glyph' )
 			{
 				$key = 'id';
 			}
@@ -31,7 +31,7 @@ class Glyph extends \BattlenetArmory\Battlenet
 			$this->$key = $datum;
 		}
 
-		$this->item = new \uGuilds\Item((int) $this->item);
+		$this->item = new \uGuilds\Item( (int) $this->item );
 	}
 
 	/**
@@ -43,9 +43,9 @@ class Glyph extends \BattlenetArmory\Battlenet
 	 * @param string $param
 	 * @return mixed
 	 */
-	function __get($param)
+	function __get( $param )
 	{
-		if(property_exists($this, $param))
+		if( property_exists( $this, $param ) )
 		{
 			return $this->$param;
 		}
@@ -60,8 +60,8 @@ class Glyph extends \BattlenetArmory\Battlenet
 	 * @param int $size
 	 * @return string
 	 */
-	public function getIcon($size = 18)
+	public function getIcon( $size = 18 )
 	{
-		return parent::getIcon($this->icon, $size);
+		return parent::getIcon( $this->icon, $size );
 	}
 }
