@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Table extends UG_Controller {
-
+class Table extends UG_Controller 
+{
 	/**
 	 * Construction function
 	 *
@@ -32,11 +32,11 @@ class Table extends UG_Controller {
 	 */
 	private function all()
 	{
-		$races = new uGuilds\Races;
-		$classes = new uGuilds\Classes;	
+		$this->load->model('races');
+		$this->load->model('classes');
 
-		$this->theme->data(array("races"   => $races,
-							 	 "classes" => $classes,
+		$this->theme->data(array("races"   => $this->races,
+							 	 "classes" => $this->classes,
 							 	 "members" => $this->guild->getMembers('rank'),
 							 	 "ranks"   => $this->guild->ranks,
 							 	 "uri"	   => '/roster'));
@@ -53,12 +53,11 @@ class Table extends UG_Controller {
 	 */
 	public function filter()
 	{
+		$this->load->model('races');
+		$this->load->model('classes');
 
-		$races = new uGuilds\Races;
-		$classes = new uGuilds\Classes;
-
-		$data = array("races"   => $races,
-					"classes" => $classes,
+		$data = array("races"   => $this->races,
+					"classes" => $this->classes,
 					"ranks"   => $this->guild->ranks);
 
 		$params = array();

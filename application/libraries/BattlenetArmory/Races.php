@@ -3,7 +3,7 @@ namespace BattlenetArmory;
 
 class Races extends Battlenet {
 	
-	protected $datas;
+	public $datas;
 
    function __construct($region)
    {

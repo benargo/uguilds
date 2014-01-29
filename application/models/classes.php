@@ -40,8 +40,11 @@ class Classes extends CI_Model {
      */
     function __construct()
     {
+        parent::__construct();
+
         $ci =& get_instance();
-        $classes = new \BattlenetArmory\Classes($ci->guild->region);
+        $classes = new \BattlenetArmory\Classes(strtolower($ci->guild->region));
+        
         foreach($classes->datas as $key => $data)
         {
             $this->data[$key] = (object) $data;

@@ -1,9 +1,6 @@
-<?php
-namespace uGuilds;
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-if (!defined('BASEPATH')) exit('No direct script access allowed');
-
-class Races extends \BattlenetArmory\Races {
+class Races extends CI_Model {
 
     protected $data;
 
@@ -15,9 +12,12 @@ class Races extends \BattlenetArmory\Races {
      */
     function __construct()
     {
+        parent::__construct();
+        
         $ci =& get_instance();
-        parent::__construct(strtolower($ci->guild->region));
-        foreach($this->datas as $key => $data)
+        $races = new \BattlenetArmory\Races(strtolower($ci->guild->region));
+
+        foreach($races->datas as $key => $data)
         {
             $this->data[$key] = (object) $data;
         }

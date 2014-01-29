@@ -1,24 +1,24 @@
-<?php namespace uGuilds;
+<?php namespace uGuilds\Character;
 
 if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Spell extends \BattlenetArmory\Battlenet
+class Profession extends \BattlenetArmory\Battlenet
 {
+	// Constants
+	const SKILL_MAX = 600;
+
+	// Profession Data
 	protected $id;
 	protected $name;
 	protected $icon;
-
-	// Additional (optional) data
-	protected $description;
-	protected $power_cost;
-	protected $cast_time;
-	protected $cooldown;
-	protected $range;
+	protected $rank;
+	protected $max;
+	protected $recipes = array();
 
 	/**
 	 * __construct()
 	 * 
-	 * Creates a spell based on the data provided
+	 * Initialise the class
 	 *
 	 * @access public
 	 * @param array $data
@@ -28,7 +28,6 @@ class Spell extends \BattlenetArmory\Battlenet
 	{
 		foreach($data as $key => $datum)
 		{
-			$key = strtolower(preg_replace('/([A-Z])/', '_$1', $key));
 			$this->$key = $datum;
 		}
 	}
@@ -53,7 +52,7 @@ class Spell extends \BattlenetArmory\Battlenet
 	/**
 	 * getIcon()
 	 *
-	 * Gets the icon in the specified size and returns the URL
+	 * Gets the Profession's icon and returns the URL
 	 *
 	 * @access public
 	 * @param int $size
@@ -62,5 +61,25 @@ class Spell extends \BattlenetArmory\Battlenet
 	public function getIcon($size = 18)
 	{
 		return parent::getIcon($this->icon, $size);
+	}
+
+	/**
+	 * get_recipe()
+	 *
+	 * Gets a specified recipe, and returns a Profession\Recipe object
+	 *
+	 * @access public
+	 * @param int $id
+	 * @return Profession\Recipe object
+	 */
+	public function get_recipe($id)
+	{
+		if(in_array((int) $id, $this->recipes))
+		{
+			// Get the key
+			$key = array_shift(array_keys($this->recipes, (int) $id));
+
+			$this->recipes[$key] = new Profession\Recipe((int) $id);
+		}
 	}
 }

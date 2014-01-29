@@ -40,10 +40,45 @@
 			<ul>
 				<?php $glyph_level = 25; ?>
 				<?php foreach($character->get_spec('active')->glyphs['major'] as $glyph): ?>
-				<li><a class="wh" rel=""></a></li>
+				<li><a class="wh" rel="item=<?php echo $glyph->item->id; ?>"><img src="<?php echo $glyph->item->getIcon(18); ?>" alt="<?php echo $glyph->item->name; ?>"> <?php echo $glyph->name; ?></a></li>
 				<?php $glyph_level += 25; ?>
 				<?php endforeach; ?>
 			</ul>
+
+			<p>Minor Glyphs</p>
+			<ul>
+			<?php foreach($character->get_spec('active')->glyphs['minor'] as $glyph): ?>
+				<li><a class="wh" rel="item=<?php echo $glyph->item->id; ?>"><img src="<?php echo $glyph->item->getIcon(18); ?>" alt="<?php echo $glyph->item->name; ?>"> <?php echo $glyph->name; ?></a></li>
+			<?php endforeach; ?>
+			</ul>
+		</span>
+
+		<span class="glyphs passive">
+			<p>Major Glyphs</p>
+			<ul>
+				<?php $glyph_level = 25; ?>
+				<?php foreach($character->get_spec('passive')->glyphs['major'] as $glyph): ?>
+				<li><a class="wh" rel="item=<?php echo $glyph->item->id; ?>"><img src="<?php echo $glyph->item->getIcon(18); ?>" alt="<?php echo $glyph->item->name; ?>"> <?php echo $glyph->name; ?></a></li>
+				<?php $glyph_level += 25; ?>
+				<?php endforeach; ?>
+			</ul>
+
+			<p>Minor Glyphs</p>
+			<ul>
+			<?php foreach($character->get_spec('passive')->glyphs['minor'] as $glyph): ?>
+				<li><a class="wh" rel="item=<?php echo $glyph->item->id; ?>"><img src="<?php echo $glyph->item->getIcon(18); ?>" alt="<?php echo $glyph->item->name; ?>"> <?php echo $glyph->name; ?></a></li>
+			<?php endforeach; ?>
+			</ul>
 		</span>
 	</section>
+	<!-- Talents -->
+
+	<!-- Professions -->
+	<section id="professions">
+		<h3>Professions</h3>
+		
+	</section>
+	<!-- Professions -->
+
+
 </div>

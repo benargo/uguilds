@@ -8,6 +8,7 @@ class Character extends \BattlenetArmory\Character
 	protected $class;
 	protected $currentTitle;
 	protected $guild_rank;
+	protected $professions = array();
 	protected $realm;
 	protected $race;
 	protected $region;
@@ -26,15 +27,18 @@ class Character extends \BattlenetArmory\Character
 	 */
 	function __construct($name)
 	{
+		// Load some models
 		$ci =& get_instance();
+		$ci->load->model('Classes');
+		$ci->load->model('Races');
+		
+		// Construct the character
 		parent::__construct(strtolower($ci->guild->region), $ci->guild->realm, $name, false);
+		
+		// Construct some additional data
 		$this->guild =& $ci->guild;
-
-		$races = new Races;
-		$this->race = $races->getRace($this->characterData['race']);
-
-		$classes = new Classes;
-		$this->class = $classes->getClass($this->characterData['class']);
+		$this->race  =& $ci->Races->getRace($this->characterData['race']);
+		$this->class =& $ci->Classes->getClass($this->characterData['class']);
 	}
 
 	/**
@@ -60,6 +64,8 @@ class Character extends \BattlenetArmory\Character
 				return ucwords($this->name);
 				break;
 
+			case 'professions':
+
 			case 'race':
 				return $this->race;
 				break;
@@ -71,6 +77,7 @@ class Character extends \BattlenetArmory\Character
 			case 'region':
 				return strtoupper($this->region);
 				break;
+
 
 			default:
 				if(property_exists($this, $param))
@@ -185,6 +192,28 @@ class Character extends \BattlenetArmory\Character
 	}
 
 	/**
+	 * get_professions()
+	 *
+	 * Gets an array containing all the Character's professions.
+	 *
+	 * @access protected
+	 * @return array
+	 */
+	protected function get_professions()
+	{
+		if(empty($this->professions))
+		{
+			if(is_array($this->characterData['professions']['primary']))
+			{
+				foreach($this->characterData['professions']['primary'] as $profession)
+				{
+					$this->professions[strtolower($profession['name'])] = new Character\Profession($profession);
+				}
+			}
+		}
+	}
+
+	/**
 	 * get_spec()
 	 *
 	 * Gets the Character's specialisation. A choice of 'active' (default), 'passive,' 'primary,' or 'secondary.'
@@ -195,7 +224,7 @@ class Character extends \BattlenetArmory\Character
 	 */ 
 	public function get_spec($type = 'active')
 	{
-		if(empty($this->specialisations))
+		if(empty($this->specialisations) && is_array($this->characterData['talents']))
 		{
 			$this->specialisations['primary'] = new Character\Spec($this->characterData['talents'][0], true);
 			$this->specialisations['secondary'] = new Character\Spec($this->characterData['talents'][1], false);
