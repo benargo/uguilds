@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-if(!function_exists('dump'))
+if( !function_exists( 'dump' ) )
 {
 
 	/**
@@ -10,12 +10,13 @@ if(!function_exists('dump'))
 	 * @static true
 	 * @return dumped contents
 	 */
-	function dump($data,$exit=true) 
+	function dump( $data, $exit = true ) 
 	{
 		print "<pre>";
-		print_r($data);
+		print_r( $data );
 		print "</pre>";
-		if($exit) 
+		
+		if( $exit ) 
 		{
 			exit;
 		}
