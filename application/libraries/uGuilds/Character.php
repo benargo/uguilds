@@ -170,6 +170,13 @@ class Character extends \BattlenetArmory\Character
 					}
 				}
 			}
+
+			// Failsafe
+			if(is_null($this->guild_rank))
+			{
+				$this->guild_rank = new Character\Rank;
+				$this->guild_rank->rank = '?';
+			}
 		}
 
 		return $this->guild_rank;

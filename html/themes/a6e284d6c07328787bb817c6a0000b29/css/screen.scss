@@ -833,7 +833,6 @@ body article div.roster.character {
 	#talents,
 	#glyphs,
 	#professions {
-		float: left; 
 		display: block; 
 
 		.specs {
@@ -911,7 +910,7 @@ body article div.roster.character {
 	}
 
 	#talents {
-
+		float: left; 
 		min-width: 300px;
 		margin: 10px 10px 10px 0;
 
@@ -932,7 +931,8 @@ body article div.roster.character {
 	}
 
 	#glyphs {
-		min-width: 320px;
+		float: left; 
+		min-width: 300px;
 		margin: 10px 10px 10px 0;
 
 		p {
@@ -953,12 +953,12 @@ body article div.roster.character {
 	}
 
 	#professions {
-		max-width: 300px;
+		overflow: hidden; 
 		margin: 10px 0;
 
 		li:first-child
 		{
-			width: 300px;
+			width: 100%;
 		}
 
 		li:nth-child(3)
