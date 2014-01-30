@@ -1,0 +1,204 @@
+/*
+Copyright (c) 2010-2012 Ivan Vanderbyl
+Originally found at http://ivan.ly/ui
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+*/
+/* Webkit animation keyframes */
+@-webkit-keyframes animate-stripes {
+	to {
+		background-position: 0 0;
+  	}
+
+  	from {
+		background-position: 44px 0;
+  	}
+}
+
+@-moz-keyframes animate-stripes {
+  	to {
+		background-position: 0 0;
+  	}
+
+  	from {
+		background-position: 36px 0;
+  	}
+}
+
+/* Bar which is placed behind the progress */
+.ui-progress-bar {
+  	/* Usual setup stuff */
+  	position: relative;
+  	height: 25px;
+  	margin-bottom: 10px;
+  	
+  	/* Pad right so we don't cover the borders when fully progressed */
+	padding-right: 2px;
+	
+	/* For browser that don't support gradients, we'll set a blanket background colour */
+	background-color: rgb(7, 22, 27);
+	
+	/* Rounds the ends, we specify an excessive amount to make sure they are completely rounded */
+	/* Adjust to your liking, and don't forget to adjust to the same amount in .ui-progress */
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-o-border-radius: 5px;
+	-ms-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	border-radius: 5px;
+	
+	/* Background gradient */
+	background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(7, 22, 27, 0.3)), color-stop(100%, rgba(7, 22, 27, 0.7)));
+	background: -webkit-linear-gradient(rgba(7, 22, 27, 0.3) 0%, rgba(7, 22, 27, 0.7) 100%);
+	background: -moz-linear-gradient(rgba(7, 22, 27, 0.3) 0%, rgba(7, 22, 27, 0.7) 100%);
+	background: -o-linear-gradient(rgba(7, 22, 27, 0.3) 0%, rgba(7, 22, 27, 0.7) 100%);
+	background: -ms-linear-gradient(rgba(7, 22, 27, 0.3) 0%, rgba(7, 22, 27, 0.7) 100%);
+	background: linear-gradient(rgba(7, 22, 27, 0.3) 0%, rgba(7, 22, 27, 0.7) 100%);
+	
+	/* Give it the inset look by adding some shadows and highlights */
+	-moz-box-shadow: inset 0px 1px 2px 0px rgba(7, 22, 27, 0.7), 0px 1px 0px 0px rgba(7, 22, 27, 0.5);
+	-webkit-box-shadow: inset 0px 1px 2px 0px rgba(7, 22, 27, 0.7), 0px 1px 0px 0px rgba(7, 22, 27, 0.5);
+	-o-box-shadow: inset 0px 1px 2px 0px rgba(7, 22, 27, 0.7), 0px 1px 0px 0px rgba(7, 22, 27, 0.5);
+	box-shadow: inset 0px 1px 2px 0px rgba(7, 22, 27, 0.7), 0px 1px 0px 0px rgba(7, 22, 27, 0.5);
+	
+	/* Alt colours */
+}
+/* Progress part of the progress bar */
+.ui-progress-bar.blue .ui-progress {
+	background-color: #339BB9!important;
+	border: 1px solid #287a91;
+}
+.ui-progress-bar.error .ui-progress {
+	background-color: #C43C35 !important;
+	border: 1px solid #9c302a;
+}
+.ui-progress-bar.warning .ui-progress {
+	background-color: #D9B31A!important;
+	border: 1px solid #ab8d15;
+}
+.ui-progress-bar.success .ui-progress {
+	background-color: #57A957!important;
+	border: 1px solid #458845;
+}
+.ui-progress-bar.transition .ui-progress {
+	-moz-transition: background-color 0.5s ease-in, border-color 1.5s ease-out, box-shadow 1.5s ease-out;
+	-webkit-transition: background-color 0.5s ease-in, border-color 1.5s ease-out, box-shadow 1.5s ease-out;
+	-o-transition: background-color 0.5s ease-in, border-color 1.5s ease-out, box-shadow 1.5s ease-out;
+	transition: background-color 0.5s ease-in, border-color 1.5s ease-out, box-shadow 1.5s ease-out;
+}
+.ui-progress-bar .ui-progress {
+	/* Usual setup stuff */
+	position: relative;
+	display: block;
+	overflow: hidden;
+	
+	/* Height should be 2px less than .ui-progress-bar so as to not cover borders and give it a look of being inset */
+	height: 23px;
+	
+	/* Rounds the ends, we specify an excessive amount to make sure they are completely rounded */
+	/* Adjust to your liking, and don't forget to adjust to the same amount in .ui-progress-bar */
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+  	-o-border-radius: 5px;
+  	-ms-border-radius: 5px;
+  	-khtml-border-radius: 5px;
+  	border-radius: 5px;
+  	/* Set the background size so the stripes work correctly */
+  	-webkit-background-size: 44px 44px;
+  	-moz-background-size: 36px 36px;
+  	/* Webkit */
+  	/* For browser that don't support gradients, we'll set a base background colour */
+  	background-color: #438e01;
+  	
+  	background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #438e01), color-stop(100%, #5dc301));
+	background: -webkit-linear-gradient(#438e01 0%, #5dc301 100%);
+	background: -moz-linear-gradient(#438e01 0%, #5dc301 100%);
+	background: -o-linear-gradient(#438e01 0%, #5dc301 100%);
+	background: -ms-linear-gradient(#438e01 0%, #5dc301 100%);
+	background: linear-gradient(#438e01 0%, #5dc301 100%);
+  	/* Give it a higher contrast outline */
+  	border: 1px solid #438e01;
+  	/* Animate *
+  	-moz-animation: animate-stripes 2s linear infinite;
+  	-webkit-animation: animate-stripes 2s linear infinite;
+  	-o-animation: animate-stripes 2s linear infinite;
+  	-ms-animation: animate-stripes 2s linear infinite;
+  	-khtml-animation: animate-stripes 2s linear infinite;
+  	animation: animate-stripes 2s linear infinite;
+  	/* Style status label */
+}
+
+.ui-progress-bar span.ui-label {
+  	display: block;
+  	width: 100%;
+  	height: inherit;
+  	z-index: 5;
+  	-moz-font-smoothing: antialiased;
+  	-webkit-font-smoothing: antialiased;
+  	-o-font-smoothing: antialiased;
+  	-ms-font-smoothing: antialiased;
+  	-khtml-font-smoothing: antialiased;
+  	font-smoothing: antialiased;
+  	font-size: 13px;
+  	position: absolute;
+  	left: 0;
+  	line-height: 25px;
+  	padding-right: 12px;
+  	color: #ffffff;
+  	text-shadow: 1px 1px 1px #000000;
+  	white-space: nowrap;
+}
+.ui-progress-bar span.ui-label a {
+  	display: block;
+  	width: inherit;
+  	height: inherit;
+  	border: solid 1px transparent;
+  	color: #ffffff;
+  	text-shadow: 1px 1px 1px #000000;
+}
+.ui-progress-bar span.ui-label a:hover {
+	background-color: rgba(255, 255, 255, 0.15);
+
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-o-border-radius: 5px;
+	-ms-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	border-radius: 5px;
+}
+.ui-progress-bar span.ui-label span.icon {
+	display: block;
+	float: left;
+	margin: 4px 5px auto 10px;
+	vertical-align: middle;
+}
+
+.ui-progress-bar span.ui-label span.name {
+	display: block;
+	float: left;
+}
+.ui-progress-bar span.ui-label span.level {
+	display: block;
+	float: right;
+	height: inherit;
+	line-height: 25px;
+  	font-weight: bold;
+  	margin-right: 10px;
+}
