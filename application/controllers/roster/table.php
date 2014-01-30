@@ -22,7 +22,6 @@ class Table extends UG_Controller
 	 */
 	public function index()
 	{
-		dump($this);
 		$this->all();
 	}
 
@@ -44,6 +43,7 @@ class Table extends UG_Controller
 
 		$this->theme->data(array("content" => $this->load->view('controllers/Roster/table', $this->theme->data(), true)));
 
+		dump($this->theme->data());
 		$this->theme->view('page');
 	}
 
