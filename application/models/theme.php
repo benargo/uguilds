@@ -223,6 +223,8 @@ class Theme extends CI_Model
 	 */
 	public function view($name, array $data = array(), $asData = false)
 	{
+		echo 'Viewing'. $name;
+
 		$this->data = array_merge($this->data, $data);
 
 		if(!is_link(APPPATH .'views/themes/'. $this->_id) && is_dir(FCPATH .'themes/'. $this->_id .'/views'))
