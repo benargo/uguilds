@@ -230,7 +230,7 @@ class Theme extends CI_Model
 			symlink(FCPATH .'themes/'. $this->_id .'/views', APPPATH .'views/themes/'. $this->_id);
 		}
 
-		if(file_exists(FCPATH .'themes/'. $this->_id) .'/views/'. $name .'.php')
+		if(file_exists(FCPATH .'themes/'. $this->_id .'/views/'. $name .'.php')
 		{
 			if(!array_key_exists($name, $this->views))
 			{
