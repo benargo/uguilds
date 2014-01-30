@@ -22,6 +22,7 @@ class Table extends UG_Controller
 	 */
 	public function index()
 	{
+		dump($this);
 		$this->all();
 	}
 
