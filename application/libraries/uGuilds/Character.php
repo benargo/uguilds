@@ -34,6 +34,11 @@ class Character extends \BattlenetArmory\Character
 		
 		// Construct the character
 		parent::__construct( strtolower( $ci->guild->region ), $ci->guild->realm, $name, false );
+
+		if(empty($this->characterData['class']))
+		{
+			return;
+		}
 		
 		// Construct some additional data
 		$this->guild =& $ci->guild;
@@ -65,6 +70,7 @@ class Character extends \BattlenetArmory\Character
 				break;
 
 			case 'professions':
+				return $this->get_professions();
 
 			case 'race':
 				return $this->race;
@@ -84,12 +90,38 @@ class Character extends \BattlenetArmory\Character
 				{
 					return $this->$param;
 				}
+				elseif( in_array( $param, Character\Profession::keys() ) )
+				{
+					return $this->get_profession( $param );
+				}
 				elseif( array_key_exists( $param, $this->characterData ) )
 				{
 					return $this->characterData[$param];
 				}
 
 				break;
+		}
+	}
+
+	/**
+	 * get_achievements_position()
+	 *
+	 * Gets the character's position in the achievement rankings
+	 *
+	 * @access public
+	 * @return string ordinal (e.g. 1st, 2nd, 3rd)
+	 */
+	public function get_achievements_position()
+	{
+		foreach($this->guild->getMembers('achievementPoints', 'desc') as $position => $member)
+		{
+			if($member->name == $this->name)
+			{
+				$ci =& get_instance();
+				$ci->load->helper('ordinal');
+
+				return ordinal($position + 1);
+			}
 		}
 	}
 
@@ -205,12 +237,58 @@ class Character extends \BattlenetArmory\Character
 	{
 		if( empty( $this->professions ) )
 		{
+			$this->_set_professions();
+		}
+
+		return $this->professions;
+	}
+
+	/**
+	 * get_profession()
+	 *
+	 * Gets a single profession
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return \uGuilds\Character\Profession object
+	 */
+	public function get_profession( $key )
+	{
+		if( empty( $this->professions ) )
+		{
+			$this->_set_professions();
+		}
+
+		if( array_key_exists( strformat( $key ), $this->professions ) )
+		{
+			return $this->professions[ strformat( $key ) ];
+		}
+	}
+
+	/**
+	 * _set_professions()
+	 *
+	 * @access protected
+	 * @return void
+	 */
+	private function _set_professions()
+	{
+		if( empty( $this->professions ) )
+		{
 			if( is_array( $this->characterData['professions']['primary'] ) )
 			{
 				foreach( $this->characterData['professions']['primary'] as $profession )
 				{
-					$this->professions[ strtolower( $profession['name'] ) ] = new Character\Profession( $profession );
+					$this->professions[ strformat( $profession['name'] ) ] = new Character\Profession( $profession );
 				}
+			}
+
+			if( is_array( $this->characterData['professions']['secondary'] ) )
+			{
+				foreach( $this->characterData['professions']['secondary'] as $profession )
+				{
+					$this->professions[ strformat( $profession['name'] ) ] = new Character\Profession( $profession );
+				}	
 			}
 		}
 	}
@@ -226,10 +304,16 @@ class Character extends \BattlenetArmory\Character
 	 */ 
 	public function get_spec( $type = 'active' )
 	{
-		if( empty( $this->specialisations ) && is_array( $this->characterData['talents'] ) )
+		if( empty( $this->specialisations ) )
 		{
-			$this->specialisations['primary'] = new Character\Spec( $this->characterData['talents'][0], true );
-			$this->specialisations['secondary'] = new Character\Spec( $this->characterData['talents'][1], false );
+			if(!empty($this->characterData['talents'][0]['spec']))
+			{
+				$this->specialisations['primary'] = new Character\Spec( $this->characterData['talents'][0], true );
+			}
+			if(!empty($this->characterData['talents'][1]['spec']))
+			{
+				$this->specialisations['secondary'] = new Character\Spec( $this->characterData['talents'][1], false );
+			}		
 		}
 
 		switch($type)
@@ -256,11 +340,11 @@ class Character extends \BattlenetArmory\Character
 				break;
 
 			case 'primary':
-				return $this->specialisations['primary'];
+				return (isset($this->specialisations['primary']) ? $this->specialisations['primary'] : false);
 				break;
 
 			case 'secondary':
-				return $this->specialisations['secondary'];
+				return (isset($this->specialisations['secondary']) ? $this->specialisations['secondary'] : false);
 				break;
 		}
 	}

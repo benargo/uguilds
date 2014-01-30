@@ -15,6 +15,28 @@ class Profession extends \BattlenetArmory\Battlenet
 	protected $max;
 	protected $recipes = array();
 
+	private static $keys = array(
+
+		// Primary
+		'alchemy',
+		'blacksmithing',
+		'enchanting',
+		'engineering',
+		'herbalism',
+		'inscription',
+		'jewelcrafting',
+		'leatherworking',
+		'mining',
+		'skinning',
+		'tailoring',
+
+		// Secondary
+		'archaeology',
+		'cooking',
+		'first_aid',
+		'fishing'
+	);
+
 	/**
 	 * __construct()
 	 * 
@@ -50,6 +72,20 @@ class Profession extends \BattlenetArmory\Battlenet
 	}
 
 	/**
+	 * profession_keys()
+	 *
+	 * Returns the array of profession keys
+	 *
+	 * @access public
+	 * @static true
+	 * @return array
+	 */
+	public static function keys()
+	{
+		return self::$keys;
+	}
+
+	/**
 	 * getIcon()
 	 *
 	 * Gets the Profession's icon and returns the URL
@@ -61,6 +97,26 @@ class Profession extends \BattlenetArmory\Battlenet
 	public function getIcon( $size = 18 )
 	{
 		return parent::getIcon( $this->icon, $size );
+	}
+
+	/**
+	 * get_percentage()
+	 * 
+	 * Gets the Profession's skill as a percentage of the maximum
+	 *
+	 * @access public
+	 * @return integer
+	 */
+	public function get_percentage()
+	{
+		$percentage = $this->rank / self::SKILL_MAX * 100;
+
+		if($percentage > 100)
+		{
+			$percentage = 100;
+		}
+
+		return $percentage;
 	}
 
 	/**
@@ -79,7 +135,47 @@ class Profession extends \BattlenetArmory\Battlenet
 			// Get the key
 			$key = array_shift( array_keys( $this->recipes, (int) $id ) );
 
-			$this->recipes[ $key ] = new Profession\Recipe( (int) $id );
+			$this->recipes[ (int) $id ] = new Profession\Recipe( (int) $id );
+
+			unset( $this->recipes[ $key ] );
 		}
+
+		return $this->recipes[ (int) $id ];
+	}
+
+	/**
+	 * get_recipes()
+	 * 
+	 * Gets all the recipes, and returns a Profession\Recipe object for each
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function get_recipes()
+	{
+		foreach( $this->recipes as $key => $recipe )
+		{
+			if( is_int( $recipe ) )
+			{
+				$this->recipes[ $recipe ] = new Profession\Recipe( $recipe );
+
+				unset( $this->recipes[ $key ] );
+			}
+		}
+
+		return $this->recipes;
+	}
+
+	/**
+	 * has_recipes()
+	 *
+	 * Determines if the profession has recipes attached to it
+	 *
+	 * @access public
+	 * @return bool
+	 */
+	public function has_recipes()
+	{
+		return (bool) !empty($this->recipes);
 	}
 }

@@ -16,7 +16,7 @@ function filter(options, event)
             if(element.name.toLowerCase().search(options['name'].toLowerCase()) == -1)
             {
                 // Add the character to the matches
-                console.log('Added '+ element.name +' because it\'s name matches');
+                console.log('Added '+ element.name +' because it\'s name DOES NOT match '+options['name']);
                 matches.push(element.name);
             }
 
@@ -76,12 +76,14 @@ function filter(options, event)
         if($.inArray(element.name, matches) == -1)
         {
             // Show this character
+            console.log('Showing '+element.name);
             $('tr.character.'+element.name).removeClass('hidden').fadeIn('medium');
         }
         // If the character DOES match the filters
         if($.inArray(element.name, matches) != -1)
         {
             // Hide the character
+            console.log('Hiding '+element.name);
             $('tr.character.'+element.name).addClass('hidden').fadeOut('medium');
         }
     });

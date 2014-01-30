@@ -13,7 +13,7 @@ class Spec extends \BattlenetArmory\Battlenet
 	private $order; // 0, 1 or 2
 
 	private $primary;
-	private $selected;
+	private $selected = 02;
 
 	// Talent Calculator data
 	private $calcSpec;
@@ -116,19 +116,6 @@ class Spec extends \BattlenetArmory\Battlenet
 	}
 
 	/**
-	 * get_talents()
-	 *
-	 * Gets all the talents, sorted by tier
-	 *
-	 * @access public
-	 * @return array
-	 */
-	public function get_talents()
-	{
-
-	}
-
-	/**
 	 * get_talent_calculator_url()
 	 *
 	 * Concatenates the Talent Calculator URL and returns it.
@@ -139,6 +126,19 @@ class Spec extends \BattlenetArmory\Battlenet
 	public function get_talent_calculator_url()
 	{
 		return $this->calcSpec .'!'. $this->calcTalent .'!'. $this->calcGlyph;
+	}
+
+	/**
+	 * is_active()
+	 *
+	 * Returns whether this spec is the active one
+	 *
+	 * @access public
+	 * @return bool
+	 */
+	public function is_active()
+	{
+		return (bool) $this->selected;
 	}
 
 	/**
@@ -176,7 +176,10 @@ class Spec extends \BattlenetArmory\Battlenet
 	{
 		foreach( $data as $datum )
 		{
-			$this->talents[ $datum['tier'] ] = new Spec\Talent( $datum );
+			if($datum)
+			{
+				$this->talents[ $datum['tier'] ] = new Spec\Talent( $datum );
+			}
 		}
 
 		ksort( $this->talents );

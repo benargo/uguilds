@@ -31,7 +31,7 @@ class UGuilds
 				require_once( $file->getPathName() );
 			}
 		}
-		
+
 		// Find the guild
 		$this->_findGuild();
 	}

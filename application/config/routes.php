@@ -46,11 +46,11 @@ $route['404_override'] = '';
 
 // roster
 $route['roster'] = "roster/table";
-$route['roster(.*)/(race|class|level|rank)=([\w\-]+)(.*)'] = "roster/table/filter";
-$route['roster/.+/dump'] = "roster/character/dump";
-$route['roster/.+/profile-picture'] = "roster/character/profile_picture";
-$route['roster/.+(\/)?'] = "roster/character";
-
+$route['roster(.*)\/(race|class|level|rank)=([\w\-]+)(.*)'] = "roster/table/filter";
+$route['roster\/.+\/dump'] = "roster/character/dump";
+$route['roster\/.+\/profile-picture'] = "roster/character/profile_picture";
+$route['roster\/.+\/[a-zA-Z\-]+(\/)?'] = "roster/character/profession";
+$route['roster\/.+(\/)?'] = "roster/character";
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
