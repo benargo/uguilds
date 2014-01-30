@@ -43,7 +43,6 @@ class Table extends UG_Controller
 
 		$this->theme->data(array("content" => $this->load->view('controllers/Roster/table', $this->theme->data(), true)));
 
-		dump($this->theme->view('page'));
 		$this->theme->view('page');
 	}
 
