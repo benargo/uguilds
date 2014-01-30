@@ -240,12 +240,7 @@ class Theme extends CI_Model
 			if($name == 'page')
 			{
 				$this->getIncludes();
-
-				var_dump($this->data);
 			}
-
-			var_dump($name);
-			var_dump($this->data);
 			
 			$ci =& get_instance();
 			return $ci->load->view($this->views[$name], $this->data, $asData);
