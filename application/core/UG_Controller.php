@@ -58,7 +58,8 @@ class UG_Controller extends CI_Controller {
 	 */
 	protected function render()
 	{
-		echo 'Rendering';
+		echo 'Rendering:';
+		dump($this->data());
 		$this->theme->view('page', $this->data());
 	}
 
