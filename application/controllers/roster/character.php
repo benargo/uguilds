@@ -129,7 +129,7 @@ class Character extends UG_Controller {
 
 	public function dump()
 	{
-		dump( $this->character->get_profession( 'alchemy' )->get_recipes() );
+		dump( $this->character->get_profession( 'inscription' )->get_recipes() );
 	}
 
 }
