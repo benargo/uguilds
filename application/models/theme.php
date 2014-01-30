@@ -241,7 +241,7 @@ class Theme extends CI_Model
 			{
 				$this->getIncludes();
 
-				dump($this->data);
+				var_dump($this->data);
 			}
 			
 			$ci =& get_instance();
