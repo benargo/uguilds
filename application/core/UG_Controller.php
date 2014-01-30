@@ -58,7 +58,7 @@ class UG_Controller extends CI_Controller {
 	 */
 	protected function render()
 	{
-		$this->theme->view('page', $this->data());
+		$this->theme->view('page');
 	}
 
 
