@@ -20,6 +20,12 @@ require_once(APPPATH .'libraries/oocurl/OOCurl.php');
  * Curl
  *
  * Extends OOCurl and adapts it for use with Battle.net's armory
+ *
+ * @package uGuilds
+ * @author Ben Argo <ben@benargo.com>
+ * @version 1.0
+ * @copyright Copyright © 2013-2014, Ben Argo
+ * @license CC-BY-SA-NC
  */
 class Curl extends \Curl
 {
@@ -29,6 +35,7 @@ class Curl extends \Curl
 		'kr'=>'kr.battle.net',
 		'tw'=>'tw.battle.net',
 		'cn'=>'battlenet.com.cn');
+	
 	/**
 	 * __construct()
 	 *

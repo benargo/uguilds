@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Character extends UG_Controller {
-
+class Character extends UG_Controller 
+{
 	protected $character;
 
 	/**
@@ -9,7 +9,7 @@ class Character extends UG_Controller {
 	 *
 	 * @access public
 	 */
-	public function __construct() 
+	function __construct() 
 	{
 		parent::__construct();
 		
@@ -129,7 +129,7 @@ class Character extends UG_Controller {
 
 	public function dump()
 	{
-		dump( $this->character->get_profession( 'inscription' )->get_recipes() );
+		dump($this->character);
 	}
 
 }

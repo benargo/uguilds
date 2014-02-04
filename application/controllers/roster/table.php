@@ -10,27 +10,23 @@ class Table extends UG_Controller
 	public function __construct() 
 	{
 		parent::__construct();
+
+		$this->config->load('battle.net');
+
+		header('Last-Modified: '. date('r', $this->guild->getData()['lastModified']/1000));
+		header('Cache-Control: max-age='. $this->config->item('battle.net')['GuildsTTL']);
+
 		$this->theme->data(array('page_title' => 'Guild Roster',
                                  'author' => $this->guild->name));
 	}
+
 
 	/**
 	 * index()
 	 *
 	 * @access public
-	 * @see all()
 	 */
 	public function index()
-	{
-		$this->all();
-	}
-
-	/**
-	 * all()
-	 *
-	 * @access private
-	 */
-	private function all()
 	{
 		$this->load->model('races');
 		$this->load->model('classes');
@@ -82,9 +78,7 @@ class Table extends UG_Controller
 
 		$this->theme->data($data);
 		$this->theme->data(array("content" => $this->load->view('controllers/Roster/table', $this->theme->data(), true)));
-		$this->theme->view('page');
-
-		
+		$this->theme->view('page');	
 	}
-
 }
+
