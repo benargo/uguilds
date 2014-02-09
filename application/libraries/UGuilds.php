@@ -41,11 +41,11 @@ class UGuilds
 	{
 		// Include all this library's files
 		$iterator = new RecursiveDirectoryIterator(APPPATH .'libraries/uGuilds');
-		foreach ( new RecursiveIteratorIterator($iterator) as $filename => $file ) 
+		foreach (new RecursiveIteratorIterator($iterator) as $filename => $file) 
 		{
-			if( substr( $file->getFileName(), -4 ) == '.php' )
+			if(substr($file->getFileName(), -4) == '.php')
 			{
-				require_once( $file->getPathName() );
+				require_once($file->getPathName());
 			}
 		}
 
@@ -62,12 +62,12 @@ class UGuilds
 	 * @var string $var
 	 * @return mixed
 	 */
-	function __get( $var )
+	function __get($var)
 	{
-		switch( $var )
+		switch($var)
 		{
 			case "domain":
-				if( is_null( $this->domain ) )
+				if(is_null($this->domain))
 				{
 					$this->_set_domain();
 				}
@@ -84,7 +84,7 @@ class UGuilds
 	 * then loads a guild, either from the cache or by creating a new one
 	 * 
 	 * @access private
-	 * @return Reference to uGuilds\Guild object
+	 * @return void
 	 */
 	private function _find_guild() 
 	{
@@ -97,17 +97,15 @@ class UGuilds
 		}
 
 		// Check if there's a cache file for this guild and it's valid
-		if( file_exists(APPPATH . 'cache/uGuilds/guild_objects/'. $this->domain .'.txt') 
-			&& filemtime(APPPATH . 'cache/uGuilds/guild_objects/'. $this->domain .'.txt') >= time() - $ci->config->item('battle.net')['GuildsTTL'] )
+		if(file_exists(APPPATH . 'cache/uGuilds/guild_objects/'. $this->domain .'.txt')
+			&& filemtime(APPPATH . 'cache/uGuilds/guild_objects/'. $this->domain .'.txt') >= time() - $ci->config->item('battle.net')['GuildsTTL'])
 		{
 			$ci->guild = unserialize(file_get_contents(APPPATH . 'cache/uGuilds/guild_objects/'. $this->domain .'.txt'));
 		}
 		else // No cache file, generate one from the database
 		{
-			$ci->guild = new uGuilds\Guild($this->domain);
+			$ci->guild = new uGuilds\WoW\Guild($this->domain);
 		}
-
-		return $ci->guild;
 	}
 
 	/** 

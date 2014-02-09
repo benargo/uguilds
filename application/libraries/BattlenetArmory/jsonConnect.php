@@ -1,7 +1,7 @@
 <?php
 namespace BattlenetArmory;
 
-class jsonConnect extends Battlenet {
+class jsonConnect extends \uGuilds\WoW\Battlenet {
 	
 	private $regions				= array('us'=>'us.battle.net',
 											'eu'=>'eu.battle.net',

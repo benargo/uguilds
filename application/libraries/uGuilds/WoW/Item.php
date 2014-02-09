@@ -1,4 +1,4 @@
-<?php namespace uGuilds;
+<?php namespace uGuilds\WoW;
 
 if (!defined('BASEPATH')) exit('No direct script access allowed');
 
@@ -28,11 +28,11 @@ class Item extends \BattlenetArmory\Item
 	 * @param int $id
 	 * @return void
 	 */
-	function __construct( $id )
+	function __construct($id)
 	{
 		$ci =& get_instance();
 
-		parent::__construct( strtolower( $ci->guild->region ), $id );
+		parent::__construct(strtolower($ci->guild->region), $id);
 
 		foreach( $this->itemData as $key => $datum )
 		{
@@ -56,16 +56,25 @@ class Item extends \BattlenetArmory\Item
 	 * @param string $param
 	 * @return mixed
 	 */
-	function __get( $param )
+	function __get($param)
 	{
-		if( property_exists( $this, $param ) )
+		switch($param)
 		{
-			return $this->$param;
+			case 'icon':
+				return $this->get_icon(18);
+				break;
+
+			default:
+				if(property_exists($this, $param) && $this->$param !== NULL)
+				{
+					return $this->$param;
+				}
+				break;
 		}
 	}
 
 	/**
-	 * getIcon()
+	 * get_icon()
 	 *
 	 * Gets the icon in the specified size and returns the URL
 	 *
@@ -73,8 +82,23 @@ class Item extends \BattlenetArmory\Item
 	 * @param int $size
 	 * @return string
 	 */
-	public function getIcon( $size = 18 )
+	public function get_icon($size = 18)
 	{
-		return parent::getIcon( $this->icon, $size );
+		return parent::get_icon($this->icon, $size);
+	}
+
+	/**
+	 * getIcon()
+	 *
+	 * @see get_icon()
+	 *
+	 * @access public
+	 * @param int $size
+	 * @return string
+	 */
+	public function getIcon($size = 18)
+	{
+		return $this->get_icon($size);	
 	}
 }
+

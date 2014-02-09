@@ -1,7 +1,7 @@
 <?php
 namespace BattlenetArmory;
 
-class Item extends Battlenet {
+class Item extends \uGuilds\WoW\Battlenet {
 	
 	protected $itemData;
 	protected $statID;

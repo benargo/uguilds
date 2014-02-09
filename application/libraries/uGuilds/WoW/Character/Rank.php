@@ -1,8 +1,8 @@
-<?php namespace uGuilds\Character;
+<?php namespace uGuilds\WoW\Character;
 
 if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Rank 
+class Rank
 {
 	public $rank;
 	public $rankName;

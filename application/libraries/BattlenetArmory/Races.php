@@ -1,7 +1,7 @@
 <?php
 namespace BattlenetArmory;
 
-class Races extends Battlenet {
+class Races extends \uGuilds\WoW\Battlenet {
 	
 	public $datas;
 

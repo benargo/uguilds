@@ -1,7 +1,7 @@
 <?php
 namespace BattlenetArmory;
 
-class Guild extends Battlenet {
+class Guild extends \uGuilds\WoW\Battlenet {
 	
 	protected $name;
 	protected $region;

@@ -15,6 +15,7 @@ class Table extends UG_Controller
 
 		header('Last-Modified: '. date('r', $this->guild->getData()['lastModified']/1000));
 		header('Cache-Control: max-age='. $this->config->item('battle.net')['GuildsTTL']);
+		header('Expires: '. date('r', $this->config->item('battle.net')['GuildsTTL'] + $this->guild->getData()['lastModified']/1000));
 
 		$this->theme->data(array('page_title' => 'Guild Roster',
                                  'author' => $this->guild->name));

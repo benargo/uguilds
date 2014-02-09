@@ -1,9 +1,43 @@
-<?php namespace uGuilds;
+<?php namespace uGuilds\WoW;
 
 if (!defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * 'uGuilds\WoW\Character' class
+ *
+ * This class handles the operations of an individual character
+ *
+ * @package uGuilds
+ * @author Ben Argo <ben@benargo.com>
+ * @version 1.0
+ * @copyright Copyright © 2013-2014, Ben Argo
+ * @license GPL v3
+ *
+ ** Table of Contents
+ * 1.  General Variables
+ * 2.  Inherited Variables
+ * 3.  Referenced Variables
+ *
+ * 4.  __construct()
+ * 5.  factory()
+ * 6.  __get()
+ * 7.  check_database()
+ * 8.  get_achievements_position()
+ * 9.  get_current_title();
+ * 10.  getCurrentTitle()
+ * 11. get_guild_rank()
+ * 12. getGuildRank()
+ * 13. get_image_url()
+ * 14. getImageURL()
+ * 15. get_professions()
+ * 16. get_profession()
+ * 17. _set_professions()
+ * 18. get_spec()
+ * 19. get_talent_calculator_url()
+ */
 class Character extends \BattlenetArmory\Character 
 {
+	// General variables
 	protected $name;
 	protected $class;
 	protected $currentTitle;
@@ -14,23 +48,28 @@ class Character extends \BattlenetArmory\Character
 	protected $region;
 	protected $specialisations = array();
 
-	// Other data
+	// Inherited Variables
 	protected $characterData;
 
-	// Referenced information
+	// Referenced variables
+	protected $account;
 	protected $guild;
 
 	/**
 	 * __construct()
 	 *
-	 * @param string $name
+	 * Initialises the class using a name
+	 *
+	 * @access public
+	 * @param (string) $name - the name of the character
+	 * @return void
 	 */
-	function __construct( $name )
+	function __construct($name)
 	{
 		// Load some models
 		$ci =& get_instance();
-		$ci->load->model( 'Classes' );
-		$ci->load->model( 'Races' );
+		$ci->load->model('Classes');
+		$ci->load->model('Races');
 		
 		// Construct the character
 		parent::__construct( strtolower( $ci->guild->region ), $ci->guild->realm, $name, false );
@@ -39,11 +78,53 @@ class Character extends \BattlenetArmory\Character
 		{
 			return;
 		}
+
+		// Check the database for this character
+		$this->check_database();
 		
 		// Construct some additional data
 		$this->guild =& $ci->guild;
-		$this->race  =& $ci->Races->getRace( $this->characterData['race'] );
-		$this->class =& $ci->Classes->getClass( $this->characterData['class'] );
+		$this->race  =& $ci->Races->getRace($this->characterData['race']);
+		$this->class =& $ci->Classes->getClass($this->characterData['class']);
+	}
+
+	/**
+	 * factory()
+	 *
+	 * Creates an instance of a character, 
+	 * either from a cache or from the API
+	 *
+	 * @access public
+	 * @param (string) $name - the name of the character
+	 * @static true
+	 * @return instanceof uGuilds\Character;
+	 */
+	public static function factory($name)
+	{
+		$ci =& get_instance();
+		$ci->load->model('cache');
+
+		$cache_file = 'cache/WoW/Characters/'. strtolower($ci->guild->region) .'/'. strformat($ci->guild->realm, '_') .'/'. $name;
+
+		if($ci->cache->read($cache_file) instanceof uGuilds\CacheFile && $ci->cache->read($cache_file)->last_modified >= $this->config()['CharactersTTL'])
+		{
+			return $ci->cache->read($cache_file)->contents;
+		}
+	
+		// Else create a new character	
+		$character = new Character($name);
+
+		// If we can't find the character in question
+		if(empty($character->name))
+		{
+			unset($character);
+			return false;
+		}
+
+		file_put_contents($cache_file, serialize($character));
+
+		return $character;
+		
 	}
 
 	/**
@@ -104,6 +185,19 @@ class Character extends \BattlenetArmory\Character
 	}
 
 	/**
+	 * check_database()
+	 *
+	 * Check whether a character in this database exists
+	 *
+	 * @access protected
+	 * @return void
+	 */
+	protected function check_database()
+	{
+		$ci =& get_instance();
+	}
+
+	/**
 	 * get_achievements_position()
 	 *
 	 * Gets the character's position in the achievement rankings
@@ -126,6 +220,20 @@ class Character extends \BattlenetArmory\Character
 	}
 
 	/**
+	 * get_current_title()
+	 *
+	 * @see getCurrentTitle()
+	 *
+	 * @access public
+	 * @param Boolean $withName: Set to FALSE if you want to use the %s instead of name
+   	 * @return A string with the title and name
+   	 */
+	public function get_current_title($withName = true)
+	{
+		$this->getCurrentTitle($withName);
+	}
+
+	/**
 	 * getCurrentTitle()
 	 *
 	 * Returns the users current title, and if we don't know it yet, finds it.
@@ -134,18 +242,18 @@ class Character extends \BattlenetArmory\Character
 	 * @param Boolean $withName: Set to FALSE if you want to use the %s instead of name
    	 * @return A string with the title and name
 	 */
-	public function getCurrentTitle( $withName = true )
+	public function getCurrentTitle($withName = true)
 	{
-		if( empty( $this->current_title ) )
+		if(empty($this->current_title))
 		{
 			$this->setTitles();
 		}
 
-		return parent::getCurrentTitle( $withName );
+		return parent::getCurrentTitle($withName);
 	}
 
 	/**
-	 * getGuildRank()
+	 * get_guild_rank()
 	 *
 	 * Sets the guild rank if we don't know it
 	 * and then returns it
@@ -153,18 +261,18 @@ class Character extends \BattlenetArmory\Character
 	 * @access protected
 	 * @return \uGuilds\Character\Rank object
 	 */
-	protected function getGuildRank()
+	protected function get_guild_rank()
 	{
-		if( is_null( $this->guild_rank ) )
+		if(is_null($this->guild_rank))
 		{
-			foreach( $this->guild->getMembers() as $member )
+			foreach($this->guild->getMembers() as $member)
 			{
-				if( $member->name === $this->name )
+				if($member->name === $this->name)
 				{
 					$this->guild_rank = new Character\Rank;
 					$this->guild_rank->rank = $member->rank;
 
-					if( isset( $member->rankname ) )
+					if(isset($member->rankname))
 					{
 						$this->guild_rank->rank_name = $member->rankname;
 					}
@@ -180,6 +288,35 @@ class Character extends \BattlenetArmory\Character
 		}
 
 		return $this->guild_rank;
+		
+	}
+
+	/**
+	 * getGuildRank()
+	 *
+	 * Sets the guild rank if we don't know it
+	 * and then returns it
+	 *
+	 * @access protected
+	 * @return \uGuilds\Character\Rank object
+	 */
+	protected function getGuildRank()
+	{
+		return $this->get_guild_rank();
+	}
+
+	/**
+	 * get_image_url()
+	 *
+	 * @see getImageURL()
+	 *
+	 * @access public
+	 * @param string $type: one of 'thumbnail' (default), 'pic' or 'inset'
+	 * @return string: url of the cached image
+	 */
+	public function get_image_url($type = 'thumbnail')
+	{
+		$this->getImageURL($type);
 	}
 
 	/**
@@ -191,7 +328,7 @@ class Character extends \BattlenetArmory\Character
 	 * @param string $type: one of 'thumbnail' (default), 'pic' or 'inset'
 	 * @return string: url of the cached image
 	 */
-	public function getImageURL( $type = 'thumbnail' )
+	public function getImageURL($type = 'thumbnail')
 	{
 		$dest_file = FCPATH .'media/images/characters/'
 					. strformat($this->region) .'/'
@@ -259,14 +396,14 @@ class Character extends \BattlenetArmory\Character
 	 * @param string $key
 	 * @return \uGuilds\Character\Profession object
 	 */
-	public function get_profession( $key )
+	public function get_profession($key)
 	{
-		if( empty( $this->professions ) )
+		if(empty($this->professions))
 		{
 			$this->_set_professions();
 		}
 
-		if( array_key_exists( strformat( $key ), $this->professions ) )
+		if( array_key_exists(strformat($key), $this->professions))
 		{
 			return $this->professions[ strformat( $key ) ];
 		}
@@ -371,3 +508,5 @@ class Character extends \BattlenetArmory\Character
 		return $this->class->talent_calculator_id . $this->get_spec( $type )->get_talent_calculator_url();
 	}
 }
+
+

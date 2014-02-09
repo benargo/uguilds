@@ -1,13 +1,38 @@
-<?php namespace uGuilds\Character;
+<?php namespace uGuilds\WoW\Character;
 
 if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Profession extends \BattlenetArmory\Battlenet
+/**
+ * 'uGuilds\WoW\Character\Profession' class
+ *
+ * This class handles a Character's professions
+ *
+ * @package uGuilds
+ * @author Ben Argo <ben@benargo.com>
+ * @version 1.0
+ * @copyright Copyright © 2013-2014, Ben Argo
+ * @license GPL v3
+ *
+ ** Table of Contents
+ * 1.  Constants
+ * 2.  Profession Variables
+ * 3.  Keys
+ *
+ * 4.  __construct()
+ * 5.  keys()
+ * 6.  get_icon()
+ * 7.  getIcon()
+ * 8.  get_percentage()
+ * 9.  get_recipe()
+ * 10. get_recipes()
+ * 11. has_recipes()
+ */
+class Profession extends \uGuilds\WoW\Battlenet
 {
 	// Constants
 	const SKILL_MAX = 600;
 
-	// Profession Data
+	// Profession Variables
 	protected $id;
 	protected $name;
 	protected $icon;
@@ -15,6 +40,7 @@ class Profession extends \BattlenetArmory\Battlenet
 	protected $max;
 	protected $recipes = array();
 
+	// Keys
 	private static $keys = array(
 
 		// Primary
@@ -46,33 +72,16 @@ class Profession extends \BattlenetArmory\Battlenet
 	 * @param array $data
 	 * @return void
 	 */
-	function __construct( array $data )
+	function __construct(array $data)
 	{
-		foreach( $data as $key => $datum )
+		foreach($data as $key => $datum)
 		{
 			$this->$key = $datum;
 		}
 	}
 
 	/**
-	 * __get()
-	 *
-	 * Gets params
-	 *
-	 * @access public
-	 * @param string $param
-	 * @return mixed
-	 */
-	function __get( $param )
-	{
-		if( property_exists( $this, $param ) )
-		{
-			return $this->$param;
-		}
-	}
-
-	/**
-	 * profession_keys()
+	 * keys()
 	 *
 	 * Returns the array of profession keys
 	 *
@@ -86,7 +95,7 @@ class Profession extends \BattlenetArmory\Battlenet
 	}
 
 	/**
-	 * getIcon()
+	 * get_icon()
 	 *
 	 * Gets the Profession's icon and returns the URL
 	 *
@@ -94,9 +103,23 @@ class Profession extends \BattlenetArmory\Battlenet
 	 * @param int $size
 	 * @return string
 	 */
-	public function getIcon( $size = 18 )
+	public function get_icon($size = 18)
 	{
-		return parent::getIcon( $this->icon, $size );
+		return parent::getIcon($this->icon, $size);
+	}
+
+	/**
+	 * getIcon()
+	 *
+	 * @see get_icon()
+	 *
+	 * @access public
+	 * @param int $size
+	 * @return string
+	 */
+	public function getIcon($size = 18)
+	{
+		return $this->get_icon($size);
 	}
 
 	/**
@@ -128,19 +151,19 @@ class Profession extends \BattlenetArmory\Battlenet
 	 * @param int $id
 	 * @return Profession\Recipe object
 	 */
-	public function get_recipe( $id )
+	public function get_recipe($id)
 	{
-		if( in_array( (int) $id, $this->recipes ) )
+		if( in_array((int) $id, $this->recipes))
 		{
 			// Get the key
-			$key = array_shift( array_keys( $this->recipes, (int) $id ) );
+			$key = array_shift(array_keys($this->recipes, (int) $id));
 
-			$this->recipes[ (int) $id ] = new Profession\Recipe( (int) $id );
+			$this->recipes[(int) $id] = new Profession\Recipe((int) $id);
 
-			unset( $this->recipes[ $key ] );
+			unset($this->recipes[$key]);
 		}
 
-		return $this->recipes[ (int) $id ];
+		return $this->recipes[(int) $id];
 	}
 
 	/**
@@ -153,13 +176,13 @@ class Profession extends \BattlenetArmory\Battlenet
 	 */
 	public function get_recipes()
 	{
-		foreach( $this->recipes as $key => $recipe )
+		foreach($this->recipes as $key => $recipe)
 		{
-			if( is_int( $recipe ) )
+			if(is_int($recipe))
 			{
-				$this->recipes[ $recipe ] = new Profession\Recipe( $recipe );
+				$this->recipes[$recipe] = new Profession\Recipe($recipe);
 
-				unset( $this->recipes[ $key ] );
+				unset($this->recipes[$key]);
 			}
 		}
 

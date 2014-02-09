@@ -1,7 +1,6 @@
-<?php
-namespace BattlenetArmory;
+<?php namespace BattlenetArmory;
 
-class AuctionHouse {
+class AuctionHouse extends \uGuilds\WoW\Battlenet {
 	
 	private $region;
 	private $realm;

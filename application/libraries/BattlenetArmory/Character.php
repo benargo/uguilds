@@ -1,7 +1,6 @@
-<?php
-namespace BattlenetArmory;
+<?php namespace BattlenetArmory;
 
-class Character extends Battlenet  {
+class Character extends \uGuilds\WoW\Battlenet  {
 	
 	protected $name;
 	protected $region;

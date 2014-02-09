@@ -13,7 +13,11 @@ class Character extends UG_Controller
 	{
 		parent::__construct();
 		
-		$this->character = new uGuilds\Character($this->uri->segments[2]);
+		$this->character = new uGuilds\WoW\Character($this->uri->segments[2]);
+
+		header('Last-Modified: '. date('r', $this->character->lastModified/1000));
+		header('Cache-Control: max-age='. $this->config->item('battle.net')['CharactersTTL']);
+		header('Expires: '. date('r', $this->config->item('battle.net')['CharactersTTL'] + $this->character->lastModified/1000));
 
 		$this->theme->data(array(
 			'page_title' => $this->character->name .' - '. $this->character->realm,

@@ -6,8 +6,7 @@
  * @version 3.5.1
  */
 
-
-require_once APPPATH . 'libraries/BattlenetArmory/Battlenet.php';
+require_once APPPATH . 'libraries/uGuilds/WoW/Battlenet.php';
 require_once APPPATH . 'libraries/BattlenetArmory/CacheControl.php';
 require_once APPPATH . 'libraries/BattlenetArmory/SafePDO.php';
 require_once APPPATH . 'libraries/BattlenetArmory/Guild.php';

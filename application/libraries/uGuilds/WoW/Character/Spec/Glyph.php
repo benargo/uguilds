@@ -1,8 +1,8 @@
-<?php namespace uGuilds\Character\Spec;
+<?php namespace uGuilds\WoW\Character\Spec;
 
 if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Glyph extends \BattlenetArmory\Battlenet
+class Glyph extends \uGuilds\WoW\Battlenet
 {
 	private $id;
 	private $name;
@@ -18,12 +18,12 @@ class Glyph extends \BattlenetArmory\Battlenet
 	 * @param array $data
 	 * @return void
 	 */
-	function __construct( array $data )
+	function __construct(array $data)
 	{
 		// Loop through the data
-		foreach( $data as $key => $datum )
+		foreach($data as $key => $datum)
 		{
-			if( $key == 'glyph' )
+			if($key == 'glyph')
 			{
 				$key = 'id';
 			}
@@ -31,7 +31,7 @@ class Glyph extends \BattlenetArmory\Battlenet
 			$this->$key = $datum;
 		}
 
-		$this->item = new \uGuilds\Item( (int) $this->item );
+		$this->item = new \uGuilds\WoW\Item((int) $this->item);
 	}
 
 	/**
