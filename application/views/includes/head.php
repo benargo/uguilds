@@ -24,5 +24,5 @@
 <?php endforeach; ?>
 
 <!-- Shortcut Icons -->
-<link type="image/png" rel="icon" href="<?php echo $guild->getEmblem(FALSE, 64); ?>" />
-<link rel="apple-touch-icon" href="<?php echo $guild->getEmblem(FALSE, 60); ?>" />
+<link type="image/png" rel="icon" href="<?php echo $guild->get_emblem(FALSE, 64); ?>" />
+<link rel="apple-touch-icon" href="<?php echo $guild->get_emblem(FALSE, 60); ?>" />

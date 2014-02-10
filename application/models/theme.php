@@ -242,8 +242,7 @@ class Theme extends CI_Model
 				$this->getIncludes();
 			}
 			
-			$ci =& get_instance();
-			return $ci->load->view($this->views[$name], $this->data, $asData);
+			return $this->load->view($this->views[$name], $this->data, $asData);
 		}
 	}
 

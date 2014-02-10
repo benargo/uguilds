@@ -34,13 +34,13 @@ class Table extends UG_Controller
 
 		$this->theme->data(array("races"   => $this->races,
 							 	 "classes" => $this->classes,
-							 	 "members" => $this->guild->getMembers('rank'),
+							 	 "members" => $this->guild->get_members('rank'),
 							 	 "ranks"   => $this->guild->ranks,
 							 	 "uri"	   => '/roster'));
 
 		$this->theme->data(array("content" => $this->load->view('controllers/Roster/table', $this->theme->data(), true)));
 
-		$this->theme->view('page');
+		$this->render();
 	}
 
 	/**
@@ -79,7 +79,7 @@ class Table extends UG_Controller
 
 		$this->theme->data($data);
 		$this->theme->data(array("content" => $this->load->view('controllers/Roster/table', $this->theme->data(), true)));
-		$this->theme->view('page');	
+		$this->render();
 	}
 }
 

@@ -3,6 +3,8 @@
 class UG_Controller extends CI_Controller {
 
 	protected static $controller_name;
+	public $domain;
+	public $guild;
 
 	/**
 	 * __construct()
@@ -16,10 +18,48 @@ class UG_Controller extends CI_Controller {
 	{
 		parent::__construct();
 
+		// Set the controller name
 		if(is_null(self::$controller_name))
 		{
 			self::$controller_name = get_class($this);
 		}
+
+		// Look up the domain name
+		if(is_null($this->domain)) 
+		{
+			// Determine the domain name from SERVER_NAME
+			$this->domain = $_SERVER['SERVER_NAME'];
+
+			// If they're running on the application domain name, then return a 403 Forbidden error
+			if($this->domain === "app.uguilds.net") 
+			{
+				show_error("The application cannot be run on 'app.uguilds.net'", 403);
+			}
+		}
+
+		$cache_path = APPPATH .'cache/uGuilds/WoW/guild_objects/'. $this->domain;
+
+		// Check if there's a cache file for this guild and it's valid
+		if(file_exists($cache_path)
+			&& filemtime($cache_path) >= time() - $this->config->item('battle.net')['GuildsTTL'])
+		{
+			$this->guild = unserialize(file_get_contents($cache_path));
+		}
+		else // No cache file, generate one from the database
+		{
+			$this->guild = new uGuilds\WoW\Guild($this->domain);
+
+			// If, for some reason, we were unable to fetch the guild from Battle.net
+			if(empty($this->guild->data))
+			{
+				unset($this->guild);
+
+				$this->guild = unserialize(file_get_contents($cache_path));
+			}
+		}
+
+		// Load the theme model
+		$this->load->model('theme');
 	}
 
 	/**
@@ -43,7 +83,7 @@ class UG_Controller extends CI_Controller {
 	 * @param $extra_data
 	 * @return array
 	 */
-	protected function data( array $extra_data = array() )
+	protected function data(array $extra_data = array())
 	{
 		return $this->theme->data($extra_data);
 	}
@@ -91,8 +131,7 @@ class UG_Controller extends CI_Controller {
 	 */
 	public function getControllerCSS() 
 	{
-		$ci =& get_instance();
-		$controller_name = get_class($ci);
+		$controller_name = get_class($this);
 		$files = array();
 
 		if(is_dir(FCPATH .'media/css/controller/'. ucwords($this->router->directory) . ucwords($controller_name)))
@@ -120,8 +159,7 @@ class UG_Controller extends CI_Controller {
 	 */
 	public function getControllerJS()
 	{
-		$ci =& get_instance();
-		$controller_name = str_replace('_', '/', get_class($ci));
+		$controller_name = str_replace('_', '/', get_class($this));
 		$files = array();
 
 		if(is_dir(FCPATH .'media/js/controller/'. ucwords($this->router->directory) . ucwords($controller_name) .'/'))

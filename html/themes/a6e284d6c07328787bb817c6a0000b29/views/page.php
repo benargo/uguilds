@@ -16,7 +16,7 @@
 		</nav>
 		<header>
 			<a href="/" rel="home">
-				<span><img src="<?php echo $guild->getEmblem(TRUE,150); ?>" alt="<?php echo $guild->name; ?> guild emblem" width="150" /></span>
+				<span><img src="<?php echo $guild->get_emblem(TRUE,150); ?>" alt="<?php echo $guild->name; ?> guild emblem" width="150" /></span>
 				<span class="guild-name">
 					<h1><?php echo $guild->name; ?></h1>
 					<h2><?php echo $guild->realm .' '. $guild->region; ?></h2>

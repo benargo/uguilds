@@ -14,14 +14,19 @@ if (!defined('BASEPATH')) exit('No direct script access allowed');
  * @license GPL v3
  *
  ** Table of Contents
- * 1.  Constants
- * 2.  Variables
- * 3.  Static Variables
+ * 1. Variables
+ * 1.1. Constants
+ * 1.2. Variables
+ * 1.3. Static Variables
+ * 1.4. Public Variables
  *
- * 4.  __construct()
- * 5.  __get()
- * 6.  get_emblem()
- * 7.  getEmblem()
+ * 2. Magic Methods
+ * 2.1. __construct()
+ * 2.2. __get()
+ *
+ * 3. Emblem Methods 
+ * 3.1. get_emblem()
+ * 3.2. delete_emblem()
  * 8.  get_faction()
  * 9.  getFaction()
  * 10.  _get_features()
@@ -39,16 +44,27 @@ class Guild extends \BattlenetArmory\Guild
 
 	// Variables
 	protected $_id; // Primary key
-	protected $domainName;
+	protected $domain_name;
 	protected $locale = 'en_GB';
 	protected $faction;
 	protected $ranks = array();
 	protected $features = array();
 	protected $levelRange = array('min' => self::MAXLEVEL,
 								  'max' => self::MINLEVEL);
+	protected $theme;
+
+	// Emblem Variables
+	protected $emblem_path;
 
 	// Static Variables
 	private static $params;
+
+	// Public Variables
+	private $public_variables = array(
+		'locale',
+		'faction',
+	);
+
 
 	/**
 	 * __construct()
@@ -57,50 +73,59 @@ class Guild extends \BattlenetArmory\Guild
 	 * @param string $domain
 	 * @return void
 	 */
-	function __construct($domain = NULL) 
+	function __construct($domain) 
 	{
 		$query = $this->db->query("SELECT 	
 								`_id`,
 								`region`,
 								`realm`,
 								`name`,
-								`domainName`,
+								`domain_name`,
 								`theme`,
 								`locale`
 						FROM `ug_Guilds`
-						WHERE `domainName` = '$domain'
+						WHERE `domain_name` = '$domain'
 						LIMIT 0, 1");
 
 		// Check we got a result
 		if($query->num_rows() > 0)
 		{
 			// Loop through the rows (there should only be one)
-  			foreach ($query->result() as $row)
-   			{
-	   			// Loop through the columns
-	    		foreach($row as $key => $value)
-	    		{
-	    			$this->$key = $value;
-	    		}
+			foreach ($query->result() as $row)
+			{
+				// Loop through the columns
+				foreach($row as $key => $value)
+				{
+					$this->$key = $value;
+				}
 
-	    		// Set the session
-	    		$this->session->set_userdata('guild_id', $this->_id);
+				// Set the session
+				$this->session->set_userdata('guild_id', $this->_id);
 
-	    		// Load the full guild from battle.net
-	    		parent::_load(strtolower($this->region), $this->realm, $this->name);
+				// Set the emblem path
+				$this->emblem_path = APPPATH .'cache/WoW/Guild_emblems/'. strtolower($this->region) .'/'. strformat($this->realm, '_') .'/'. strformat($this->guildName, '_') .'.png'; 
 
-	    		// Load the levels and ranks
-	    		$this->_setLowestLevelMember();
-	    		$this->_setHighestLevelMember();
-	    		$this->_setRanks();
-   			}
+				// Load the full guild from battle.net
+				parent::_load(strtolower($this->region), $this->realm, $this->name);
 
-   			// Encode this object and store it in the cache
-   			file_put_contents(APPPATH .'cache/uGuilds/guild_objects/'. $this->domainName .'.txt', serialize($this));
+				// Load the levels and ranks
+				$this->_set_lowest_level_member();
+				$this->_setHighestLevelMember();
+				$this->_setRanks();
+			}
+
+			// If the data loaded correctly, then save the cache
+			if($this->guildData)
+			{
+				$this->load->helper('save_file');
+
+				// Encode this object and store it in the cache
+				save_file(APPPATH .'cache/uGuilds/WoW/guild_objects/'. $this->domain_name, serialize($this));
+			}
 		}
 		else // No result from the database, this guild must not exist
 		{
-			throw new \Exception('This guild does not exist');
+			show_404('This guild does not exist');
 		}
 	}
 
@@ -125,7 +150,6 @@ class Guild extends \BattlenetArmory\Guild
 				break;
 
 			case "domain_name":
-			case "domainName":
 				return strtolower(preg_replace("![^a-z0-9\-\.]+!i", "-", $this->domainName));
 				break;
 
@@ -165,6 +189,11 @@ class Guild extends \BattlenetArmory\Guild
 				break;
 
 			default:
+				if(isset($this->guildData[$var]))
+				{
+					return (object) $this->guildData[$var];
+				}
+
 				return parent::__get($var);
 				break;
 		}
@@ -177,7 +206,7 @@ class Guild extends \BattlenetArmory\Guild
 	 * and return the string to it's URL
 	 *
 	 * @access public
-	 * @var bool $showlevel
+	 * @var bool $show_level
 	 * @var int $width
 	 * @return string $url
 	 */
@@ -186,14 +215,16 @@ class Guild extends \BattlenetArmory\Guild
 		$emblem_path = '/media/images/guild_emblems/'. strtolower($this->region) .'/'. strformat($this->realm, '_') .'/'. strformat($this->guildName, '_') .'_'. $width .'px.png';
 		$fq_emblem_path = rtrim(FCPATH, "/") . $emblem_path;
 
-		if(!file_exists($fq_emblem_path))
+		if(!file_exists($fq_emblem_path) 
+			|| filemtime($fq_emblem_path) + $this->config->item('emblem_ttl', 'battle.net') > time())
 		{
 			// Determine the true destination
 			$directory = explode('/', $fq_emblem_path);
 			$directory = array_slice($directory, 0, -1);
+			$directory = implode('/', $directory);
 
 			// Make the directory
-			if(!isdir($directory)) mkdir(implode('/', $directory), 0777, true);
+			if(!is_dir($directory)) mkdir($directory, 0777, true);
 
 			$this->showEmblem($show_level, $width);
 			$this->saveEmblem($fq_emblem_path);
@@ -203,18 +234,41 @@ class Guild extends \BattlenetArmory\Guild
 	}
 
 	/**
-	 * getEmblem()
+	 * delete_emblem()
 	 *
-	 * @see get_emblem()
+	 * Deletes the cached emblem file and all of the copied emblem files
 	 *
 	 * @access public
-	 * @var bool $showlevel
-	 * @var int $width
-	 * @return string $url
+	 * @return void
 	 */
-	public function getEmblem($show_level = TRUE, $width = 215)
+	public function delete_emblem()
 	{
-		return $this->get_emblem($show_level, $width);
+		if(is_file($this->emblem_path)) unlink($this->emblem_path);
+
+		$files = glob(FCPATH .'media/images/guild_emblems/'. strtolower($this->region) .'/'. strformat($this->realm, '_') .'/'. strformat($this->guildName, '_') .'_*px.png');
+		foreach($files as $file)
+		{
+			unlink($file);
+		}
+	}
+
+	/**
+	 * save_emblem()
+	 *
+	 * Saves the emblem of a specified size to the public media directory
+	 *
+	 * @access public
+	 * @param (string) $dest - the destination to save to
+	 * @return void or error
+	 */
+	public function save_emblem($dest)
+	{
+		if(!strstr($dest, FCPATH))
+		{
+			$dest = FCPATH . $dest;
+		}
+
+		return copy($this->emblem_path, $dest);
 	}
 
 	/**
@@ -241,19 +295,6 @@ class Guild extends \BattlenetArmory\Guild
 				return 'horde';
 				break;
 		}
-	}
-
-	/**
-	 * getFaction()
-	 *
-	 * @see get_faction()
-	 *
-	 * @access public
-	 * @return text
-	 */
-	public function getFaction()
-	{
-		return $this->get_faction();
 	}
 
 	/** FEATURES **/
@@ -328,21 +369,6 @@ class Guild extends \BattlenetArmory\Guild
 	}
 
 	/**
-	 * getMembers()
-	 *
-	 * @see get_members()
-	 *
-	 * @access public
-	 * @param string $sort
-	 * @param string $sortFlag
-	 * @return array
-	 */
-	public function getMembers($sort = FALSE, $sortFlag = 'asc')
-	{
-		return $this->get_members($sort, $sortFlag);
-	}
-
-	/**
 	 * filter()
 	 *
 	 * @access public
@@ -390,15 +416,15 @@ class Guild extends \BattlenetArmory\Guild
 	}
 
 	/**
-	 * _setLowestLevelMember()
+	 * _set_lowest_level_member()
 	 *
 	 * @access private
 	 * @return void
 	 */
-	private function _setLowestLevelMember()
+	private function _set_lowest_level_member()
 	{
 		// Loop through each of the members
-		foreach( $this->getData()['members'] as $member )
+		foreach($this->members as $member)
 		{
 			// If this member has a lower level than the max level
 			if( $member['character']['level'] < $this->levelRange['min'] )
@@ -446,7 +472,7 @@ class Guild extends \BattlenetArmory\Guild
 	 */
 	private function _setRanks()
 	{
-		$highestRank = $this->getMembers('rank','desc')[0]->rank;
+		$highestRank = $this->get_members('rank','desc')[0]->rank;
 
 		for( $i = 0; $i <= $highestRank; $i++ )
 		{

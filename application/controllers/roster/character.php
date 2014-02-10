@@ -48,8 +48,10 @@ class Character extends UG_Controller
 				'/roster/'. strtolower($this->character->name) => $this->character->name),
 			'character' => $this->character,
 			'inset_image' => $this->character->getImageURL('inset'),
-			'faction' => $this->guild->getFaction()
+			'faction' => $this->guild->get_faction()
 		));
+
+		dump($this);
 
 		$this->data(array(
 			'content' => $this->load->view('controllers/Roster/Character/Index', $this->data(), true)
@@ -68,16 +70,16 @@ class Character extends UG_Controller
 	public function profession()
 	{
 		// If this is empty the likelihood is the character can't be found due to inactivity or out of date caching
-		if( is_null( $this->character->class ) )
+		if(is_null($this->character->class))
 		{
 			$this->error_404();
 			return;
 		}
 
-		$profession = $this->character->get_profession( $this->uri->segments[3] );
+		$profession = $this->character->get_profession($this->uri->segments[3]);
 
 		// If this returns null then we've tried to view a profession which either this character does not have or the recipes are empty
-		if( !$profession->has_recipes() )
+		if(!$profession->has_recipes())
 		{
 			show_404($this->uri->uri_string());	
 		}

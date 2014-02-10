@@ -80,7 +80,7 @@ $autoload['helper'] = array('dump', 'strformat');
 |
 */
 
-$autoload['config'] = array('battle.net');
+$autoload['config'] = array();
 
 
 /*
@@ -109,7 +109,7 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array('theme');
+$autoload['model'] = array();
 
 
 /* End of file autoload.php */

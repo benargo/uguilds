@@ -22,6 +22,7 @@ if (!defined('BASEPATH')) exit('No direct script access allowed');
 abstract class Battlenet 
 {
 	private static $battlenet_config;
+	//protected static $instance;
 
 	/**
 	 * __get()
@@ -34,21 +35,17 @@ abstract class Battlenet
 	 */
 	function __get($name)
 	{
-		switch($name)
+		// Check if the default property exists
+		if(property_exists($this, $name))
 		{
-			default:
-				// Check if the default property exists
-				if(property_exists($this, $name))
-				{
-					return $this->$name;
-				}
+			return $this->$name;
+		}
 
-				// Handle properties of the main controller
-				$ci =& get_instance();
-				if(property_exists($ci, $name))
-				{
-					return $ci->$name;
-				}
+		// Handle properties of the main controller
+		$ci =& get_instance();
+		if(property_exists($ci, $name))
+		{
+			return $ci->$name;
 		}
 	}
 

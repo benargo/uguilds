@@ -9,14 +9,9 @@ if(!function_exists('save_file'))
 		$directory = array_slice($destination, 0, -1);
 
 		// Make the directory
-		$check = mkdir(implode('/', $directory), 0777, true);
+		if(!is_dir(implode('/', $directory))) mkdir(implode('/', $directory), 0777, true);
 		
 		// Save the file
-		if($check)
-		{
-			$check = file_put_contents(implode('/', $destination), $content);
-		}
-				
-		return $check;
+		file_put_contents(implode('/', $destination), $content);
 	}
 }

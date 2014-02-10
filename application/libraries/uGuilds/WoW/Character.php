@@ -52,8 +52,8 @@ class Character extends \BattlenetArmory\Character
 	protected $characterData;
 
 	// Referenced variables
-	protected $account;
 	protected $guild;
+	protected $account;
 
 	/**
 	 * __construct()
@@ -67,12 +67,11 @@ class Character extends \BattlenetArmory\Character
 	function __construct($name)
 	{
 		// Load some models
-		$ci =& get_instance();
-		$ci->load->model('Classes');
-		$ci->load->model('Races');
+		$this->load->model('Classes');
+		$this->load->model('Races');
 		
 		// Construct the character
-		parent::__construct( strtolower( $ci->guild->region ), $ci->guild->realm, $name, false );
+		parent::__construct(strtolower($this->guild->region), $this->guild->realm, $name, false);
 
 		if(empty($this->characterData['class']))
 		{
@@ -89,61 +88,22 @@ class Character extends \BattlenetArmory\Character
 	}
 
 	/**
-	 * factory()
-	 *
-	 * Creates an instance of a character, 
-	 * either from a cache or from the API
-	 *
-	 * @access public
-	 * @param (string) $name - the name of the character
-	 * @static true
-	 * @return instanceof uGuilds\Character;
-	 */
-	public static function factory($name)
-	{
-		$ci =& get_instance();
-		$ci->load->model('cache');
-
-		$cache_file = 'cache/WoW/Characters/'. strtolower($ci->guild->region) .'/'. strformat($ci->guild->realm, '_') .'/'. $name;
-
-		if($ci->cache->read($cache_file) instanceof uGuilds\CacheFile && $ci->cache->read($cache_file)->last_modified >= $this->config()['CharactersTTL'])
-		{
-			return $ci->cache->read($cache_file)->contents;
-		}
-	
-		// Else create a new character	
-		$character = new Character($name);
-
-		// If we can't find the character in question
-		if(empty($character->name))
-		{
-			unset($character);
-			return false;
-		}
-
-		file_put_contents($cache_file, serialize($character));
-
-		return $character;
-		
-	}
-
-	/**
 	 * __get()
 	 *
 	 * @access public
 	 * @param string $param
 	 * @return mixed
 	 */
-	function __get( $param )
+	function __get($param)
 	{
-		switch( $param )
+		switch( $param)
 		{
 			case 'class':
 				return $this->class;
 				break;
 
 			case 'guild_rank':
-				return $this->getGuildRank();
+				return $this->get_guild_rank();
 				break;
 
 			case 'name':
@@ -165,20 +125,17 @@ class Character extends \BattlenetArmory\Character
 				return strtoupper( $this->region );
 				break;
 
-
 			default:
-				if( property_exists( $this, $param ) )
+				if(in_array($param, Character\Profession::keys()))
 				{
-					return $this->$param;
+					return $this->get_profession($param);
 				}
-				elseif( in_array( $param, Character\Profession::keys() ) )
-				{
-					return $this->get_profession( $param );
-				}
-				elseif( array_key_exists( $param, $this->characterData ) )
+				elseif(is_array($this->characterData) && array_key_exists($param, $this->characterData))
 				{
 					return $this->characterData[$param];
 				}
+
+				parent::__get($param);
 
 				break;
 		}
@@ -265,7 +222,7 @@ class Character extends \BattlenetArmory\Character
 	{
 		if(is_null($this->guild_rank))
 		{
-			foreach($this->guild->getMembers() as $member)
+			foreach($this->guild->get_members() as $member)
 			{
 				if($member->name === $this->name)
 				{
@@ -337,7 +294,7 @@ class Character extends \BattlenetArmory\Character
 					. strformat($this->name) .'_'. $type .'.jpg';
 
 		if( !file_exists( $dest_file )
-			|| @filemtime( $dest_file ) >= $this->config()['CharactersTTL'])
+			|| @filemtime( $dest_file ) >= $this->last_modified)
 		{
 			// Generate the image
 			switch( $type )

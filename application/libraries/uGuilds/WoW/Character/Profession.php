@@ -105,7 +105,7 @@ class Profession extends \uGuilds\WoW\Battlenet
 	 */
 	public function get_icon($size = 18)
 	{
-		return parent::getIcon($this->icon, $size);
+		return parent::get_icon($this->icon, $size);
 	}
 
 	/**
