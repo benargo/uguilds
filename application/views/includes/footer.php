@@ -8,6 +8,7 @@
 	</nav>		
 	<p><strong>Disclaimers:</strong> World of Warcraft&trade;, Mists of Pandaria&trade; and Blizzard Entertainment&trade; are all trademarks or registered trademarks of Blizzard Entertainment SAS. internationally. All related materials, logos, and images are copyright &copy; Blizzard Entertainment SAS. uGuilds is in no way associated with or endorsed by Blizzard Entertainment.</p>
 	<p><a href="http://www.uguilds.com/">Guild Website Hosting by<br /><span class="logo">uGuilds.com</span></a></p>
+	<p>Memory Used: <?php echo round(memory_get_peak_usage() / 1024, 1); ?> KB</p>
 </section>
 <section id="footer-mobile">
 	<p><a href="http://www.uguilds.com/">Guild Website Hosting by<br /><span class="logo">uGuilds.com</span></a></p>
