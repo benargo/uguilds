@@ -14,14 +14,14 @@ class Races extends CI_Model {
     {
         parent::__construct();
         
-        $ci =& get_instance();
-        $races = new \BattlenetArmory\Races(strtolower($ci->guild->region));
+        $races = new \BattlenetArmory\Races(strtolower($this->guild->region));
+
+        asort($races->datas);
 
         foreach($races->datas as $key => $data)
         {
             $this->data[$key] = (object) $data;
         }
-        unset($this->datas);
     }
 
     /**
@@ -43,14 +43,16 @@ class Races extends CI_Model {
     }
 
     /**
-     * getRace()
+     * get_race()
+     *
+     * Get a specific race
      *
      * @access public
      * @param $id
      * @param $field
      * @return stdClass $datum
      */
-    public function getRace($id, $field = NULL)
+    public function get_race($id, $field = NULL)
     {
         if($field)
         {
@@ -60,20 +62,21 @@ class Races extends CI_Model {
     }
 
     /**
-     * getByName()
+     * get_by_name()
+     *
+     * Get a specific race by name
      *
      * @access public
      * @param string $name
      * @return array
      */
-    public function getByName($name)
+    public function get_by_name($name)
     {
-        $ci =& get_instance();
         $name = ucwords(str_replace('-', ' ', $name));
 
         foreach($this->data as $race)
         {
-            if($race->name == $name && $race->side == $ci->guild->getFaction())
+            if($race->name == $name && $race->side == $this->guild->get_faction())
             {
                 return $race;
             }
@@ -81,14 +84,16 @@ class Races extends CI_Model {
     }
 
 	/**
-	 * getIcon()
+	 * get_icon()
+     *
+     * Get a race's icon
 	 * 
 	 * @access public
 	 * @param int $id
 	 * @param bool $gender
 	 * @return string
 	 */
-	public function getIcon($id, $gender = 0) 
+	public function get_icon($id, $gender = 0) 
     {
         if(!file_exists(FCPATH ."media/images/races/race_". $id . '_'. $gender .'.jpg'))
         {
@@ -100,15 +105,17 @@ class Races extends CI_Model {
     }
 
     /**
-     * getALL()
+     * get_all()
+     *
+     * Get all the races
      *
      * @access public
      * @param mixed (string/int) $side
      * @return array
      */
-    public function getAll($input = 'both')
+    public function get_all($side = 'both')
     {
-        switch($input)
+        switch($side)
         {
             case 0:
             case "alliance":
@@ -117,16 +124,16 @@ class Races extends CI_Model {
 
             case 1:
             case "horde":
-               $side = 'horde';
-               break;
+                $side = 'horde';
+                break;
 
             case "both":
             default:
-
-               break;
+                unset($side);
+                break;
         }
          
-        $races = '';
+        $races = array();
 
         foreach($this->data as $race)
         {
@@ -138,15 +145,6 @@ class Races extends CI_Model {
             $races[$race->id] = $race->name;
          }
 
-        // Sort the races by name
-        asort($races);
-
-        // Generate the return
-        $return = array();
-        foreach($races as $id => $name)
-        {
-            $return[$id] = $this->data[$id];
-        }
-        return $return;
-      }
+        return $races;
+    }
 }

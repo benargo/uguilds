@@ -10,7 +10,6 @@
 require_once APPPATH . 'libraries/BattlenetArmory/Battlenet.php';
 require_once APPPATH . 'libraries/BattlenetArmory/CacheControl.php';
 require_once APPPATH . 'libraries/BattlenetArmory/SafePDO.php';
-require_once APPPATH . 'libraries/BattlenetArmory/Guild.php';
 require_once APPPATH . 'libraries/BattlenetArmory/Character.php';
 require_once APPPATH . 'libraries/BattlenetArmory/Item.php';
 require_once APPPATH . 'libraries/BattlenetArmory/jsonConnect.php';

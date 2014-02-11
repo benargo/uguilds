@@ -2,6 +2,8 @@
 
 if (!defined('BASEPATH')) exit('No direct script access allowed');
 
+
+
 /**
  * uGuilds\Guild
  *
@@ -48,23 +50,22 @@ class Guild extends \BattlenetArmory\Guild {
 		// Check we got a result
 		if($query->num_rows() > 0)
 		{
-			// Loop through the rows (there should only be one)
-  			foreach($query->result() as $row)
-   			{
-	   			// Loop through the columns
-	    		foreach($row as $key => $value)
-	    		{
-	    			$this->$key = $value;
-	    		}
+			$row = $query->row();
+	   			
+	   		// Loop through the columns
+    		foreach($row as $key => $value)
+    		{
+    			$this->$key = $value;
+    		}
 
-	    		// Load the full guild from battle.net
-	    		parent::_load(strtolower($this->region), $this->realm, $this->name);
+    		// Load the full guild from battle.net
+    		(strtolower($this->region), $this->realm, $this->name);
 
-	    		// Load the levels and ranks
-	    		$this->_setLowestLevelMember();
-	    		$this->_setHighestLevelMember();
-	    		$this->_setRanks();
-   			}
+    		// Load the levels and ranks
+    		$this->_setLowestLevelMember();
+    		$this->_setHighestLevelMember();
+    		$this->_setRanks();
+			}
 
    			// Encode this object and store it in the cache
    			file_put_contents(APPPATH .'cache/uGuilds/guild_objects/'. $this->domainName .'.txt', serialize($this));
