@@ -202,12 +202,12 @@ class Theme extends CI_Model
 	}
 
 	/**
-	 * getIncludes()
+	 * get_includes()
 	 * 
 	 * @access public
 	 * @return void
 	 */
-	private function getIncludes()
+	private function get_includes()
 	{
 		$ci =& get_instance();
 		$dir = scandir(APPPATH .'views/includes');
@@ -244,7 +244,7 @@ class Theme extends CI_Model
 	 * @param array $data
 	 * @return \CodeIgniter\View
 	 */
-	public function view($name, array $data = array(), $asData = false)
+	public function view($name, array $data = array(), $as_data = false)
 	{
 		$this->data = array_merge($this->data, $data);
 
@@ -255,17 +255,12 @@ class Theme extends CI_Model
 
 		if(file_exists(readlink(APPPATH .'views/themes/'. $this->_id) .'/'. $name .'.php'))
 		{
-			if(!array_key_exists($name, $this->views))
+			if($name === 'page')
 			{
-				$this->views[$name] = 'themes/'. $this->_id .'/'. $name;
-			}
-
-			if($name == 'page')
-			{
-				$this->getIncludes();
+				$this->get_includes();
 			}
 			
-			return $this->load->view($this->views[$name], $this->data, $asData);
+			return $this->load->view('themes/'. $this->_id .'/'. $name, $this->data, $as_data);
 		}
 	}
 
@@ -280,8 +275,6 @@ class Theme extends CI_Model
 	 */
 	public function set_controller_name($name)
 	{
-		$ci =& get_instance();
-
 		$this->controller_name = ucwords($name);	
 	}
 

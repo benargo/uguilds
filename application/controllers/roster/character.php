@@ -47,14 +47,14 @@ class Character extends UG_Controller
 				'/roster/rank='. (isset($this->character->guild_rank->rank_name) ? strformat($this->character->guild_rank->rank_name) : $this->character->guild_rank->rank) => (isset($this->character->guild_rank->rank_name) ? $this->character->guild_rank->rank_name : 'Rank '. $this->character->guild_rank->rank),
 				'/roster/'. strtolower($this->character->name) => $this->character->name),
 			'character' => $this->character,
-			'inset_image' => $this->character->getImageURL('inset'),
+			'inset_image' => $this->character->get_image_url('inset'),
 			'faction' => $this->guild->get_faction()
 		));
 
-		dump($this);
+		$ci =& get_instance();
 
 		$this->data(array(
-			'content' => $this->load->view('controllers/Roster/Character/Index', $this->data(), true)
+			'content' => $ci->load->view('controllers/Roster/Character/Index', $this->data(), true)
 		));
 
 		$this->render();

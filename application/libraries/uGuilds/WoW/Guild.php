@@ -75,7 +75,8 @@ class Guild extends \BattlenetArmory\Guild
 	 */
 	function __construct($domain) 
 	{
-		$query = $this->db->query("SELECT 	
+		$ci =& get_instance();
+		$query = $ci->db->query("SELECT 	
 								`_id`,
 								`region`,
 								`realm`,
@@ -99,9 +100,6 @@ class Guild extends \BattlenetArmory\Guild
 					$this->$key = $value;
 				}
 
-				// Set the session
-				$this->session->set_userdata('guild_id', $this->_id);
-
 				// Set the emblem path
 				$this->emblem_path = APPPATH .'cache/WoW/Guild_emblems/'. strtolower($this->region) .'/'. strformat($this->realm, '_') .'/'. strformat($this->guildName, '_') .'.png'; 
 
@@ -117,7 +115,7 @@ class Guild extends \BattlenetArmory\Guild
 			// If the data loaded correctly, then save the cache
 			if($this->guildData)
 			{
-				$this->load->helper('save_file');
+				$ci->load->helper('save_file');
 
 				// Encode this object and store it in the cache
 				save_file(APPPATH .'cache/uGuilds/WoW/guild_objects/'. $this->domain_name, serialize($this));

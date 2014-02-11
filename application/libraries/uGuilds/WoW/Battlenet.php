@@ -22,7 +22,6 @@ if (!defined('BASEPATH')) exit('No direct script access allowed');
 abstract class Battlenet 
 {
 	private static $battlenet_config;
-	//protected static $instance;
 
 	/**
 	 * __get()
@@ -40,13 +39,6 @@ abstract class Battlenet
 		{
 			return $this->$name;
 		}
-
-		// Handle properties of the main controller
-		$ci =& get_instance();
-		if(property_exists($ci, $name))
-		{
-			return $ci->$name;
-		}
 	}
 
 	/**
@@ -59,8 +51,9 @@ abstract class Battlenet
 	{
 		if(is_null(self::$battlenet_config))
 		{
-			$this->config->load('battle.net');
-			self::$battlenet_config =& $this->config->item('battle.net');
+			$ci =& get_instance();
+			$ci->config->load('battle.net');
+			self::$battlenet_config =& $ci->config->item('battle.net');
 		}
 
 		return self::$battlenet_config;
@@ -91,19 +84,6 @@ abstract class Battlenet
 		}
 
 		return '/media/images/icons/'. (int) $size .'/'. strtolower($string) .'.jpg';
-	}
-
-	/**
-	 * getIcon()
-	 *
-	 * @see get_icon()
-	 *
-	 * @access public
-	 * @return image/jpeg
-	 */
-	public function getIcon($string, $size = 56)
-	{
-		return $this->get_icon($string, $size);
 	}
 }
 
