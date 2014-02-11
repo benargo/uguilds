@@ -1,9 +1,9 @@
-<?php
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-if (!defined('BASEPATH')) exit('No direct script access allowed');
+require_once(APPPATH .'libraries/BattlenetArmory/Classes.php');
 
-class Classes extends CI_Model {
-
+class Classes extends CI_Model
+{
     private $data;
 
     private $names = array(
@@ -42,15 +42,15 @@ class Classes extends CI_Model {
     {
         parent::__construct();
 
-        $ci =& get_instance();
-        $classes = new \BattlenetArmory\Classes(strtolower($ci->guild->region));
+        $classes = new BattlenetArmory\Classes(strtolower($this->guild->region));
+
+        asort($classes->datas);
         
         foreach($classes->datas as $key => $data)
         {
             $this->data[$key] = (object) $data;
             $this->data[$key]->talent_calculator_id = $this->talent_calculator_ids[$key];
         }
-        unset($this->datas);
     }
 
     /**
@@ -72,14 +72,14 @@ class Classes extends CI_Model {
     }
 
     /**
-     * getClass()
+     * get_class()
      *
      * @access public
      * @param $id
      * @param $field
      * @return stdClass $datum
      */
-    public function getClass($id, $field = NULL)
+    public function get_class($id, $field = NULL)
     {
         if($field)
         {
@@ -95,7 +95,7 @@ class Classes extends CI_Model {
      * @param string $name
      * @return array
      */
-    public function getByName($name)
+    public function get_by_name($name)
     {
         $name = ucwords(str_replace('-', ' ', $name));
 
@@ -115,7 +115,7 @@ class Classes extends CI_Model {
 	 * @param int $id
 	 * @return string
 	 */
-	public function getIcon($id, $size = 18)
+	public function get_icon($id, $size = 18)
     {
         $name = strtolower(preg_replace('/\ /', '', $this->names[$id]));
 
@@ -126,22 +126,27 @@ class Classes extends CI_Model {
 
         if(!file_exists(FCPATH ."media/images/icons/$size/classicon_$name.jpg"))
         {
+            $this->load->helper('save_image');
+
         	$image = imagecreatefromjpeg("http://media.blizzard.com/wow/icons/$size/classicon_$name.jpg");
-        	imagejpeg($image, FCPATH ."media/images/icons/$size/classicon_$name.jpg", 100);
+        	save_jpeg($image, FCPATH ."media/images/icons/$size/classicon_$name.jpg", 100);
         }
 
     	return "/media/images/icons/$size/classicon_$name.jpg";
     }
 
     /**
-     * getAll()
+     * get_all()
+     *
+     * Returns all the classes
      * 
      * @access public
      * @return array
      */
-    public function getAll()
+    public function get_all()
     {
         $classes = array();
+
         foreach($this->data as $class)
         {
         	$classes[$class->id] = $class->name;

@@ -7,14 +7,13 @@ if (!defined('BASEPATH')) exit('No direct script access allowed');
  *
  * @author Ben Argo <ben@benargo.com>
  */
-
 class Guild extends \BattlenetArmory\Guild {
 
 	const MINLEVEL = 1;
 	const MAXLEVEL = 100;
 
 	private $_id;
-	private $domainName;
+	private $domain_name;
 	private $theme;
 	private $locale = 'en_GB';
 	private $faction;
@@ -30,11 +29,49 @@ class Guild extends \BattlenetArmory\Guild {
 	 * @param string $domain
 	 * @return void
 	 */
-	function __construct( $domain = NULL ) 
+	function __construct($domain) 
 	{
-		if($domain)
+		$ci =& get_instance();
+
+		$query = $ci->db->query( "SELECT 	
+								`_id`,
+								`region`,
+								`realm`,
+								`name`,
+								`domain_name`,
+								`theme`,
+								`locale`
+						FROM `ug_Guilds`
+						WHERE `domain_name` = '$domain'
+						LIMIT 0, 1" );
+
+		// Check we got a result
+		if($query->num_rows() > 0)
 		{
-			$this->_load( $domain );
+			// Loop through the rows (there should only be one)
+  			foreach($query->result() as $row)
+   			{
+	   			// Loop through the columns
+	    		foreach($row as $key => $value)
+	    		{
+	    			$this->$key = $value;
+	    		}
+
+	    		// Load the full guild from battle.net
+	    		parent::_load(strtolower($this->region), $this->realm, $this->name);
+
+	    		// Load the levels and ranks
+	    		$this->_setLowestLevelMember();
+	    		$this->_setHighestLevelMember();
+	    		$this->_setRanks();
+   			}
+
+   			// Encode this object and store it in the cache
+   			file_put_contents(APPPATH .'cache/uGuilds/guild_objects/'. $this->domainName .'.txt', serialize($this));
+		}
+		else // No result from the database, this guild must not exist
+		{
+			throw new \Exception('This guild does not exist');
 		}
 	}
 
@@ -45,7 +82,7 @@ class Guild extends \BattlenetArmory\Guild {
 	 * @access public
 	 * @return mixed
 	 */
-	function __get( $var )
+	function __get($var)
 	{
 		switch($var)
 		{
@@ -54,20 +91,19 @@ class Guild extends \BattlenetArmory\Guild {
 				break;
 
 			case "region":
-				return strtoupper( $this->region );
+				return strtoupper($this->region);
 				break;
 
 			case "realm":
-				return ucwords( $this->realm );
+				return ucwords($this->realm);
 				break;
 
-			case "guildName": /* preferred */
-			case "name":
-				return ucwords( $this->name );
+			case "name": /* preferred */
+				return ucwords($this->name);
 				break;
 
-			case "domainName":
-				return strtolower( preg_replace( "![^a-z0-9\-\.]+!i", "-", $this->domainName ) );
+			case "domain_name":
+				return strtolower(preg_replace("![^a-z0-9\-\.]+!i", "-", $this->domain_name));
 				break;
 
 			case "ranks":
@@ -124,51 +160,7 @@ class Guild extends \BattlenetArmory\Guild {
 	 */
 	protected function _load($domain)
 	{
-		$ci =& get_instance();
 
-		$query = $ci->db->query( "SELECT 	
-								`_id`,
-								`region`,
-								`realm`,
-								`name`,
-								`domainName`,
-								`theme`,
-								`locale`
-						FROM `ug_Guilds`
-						WHERE `domainName` = '$domain'
-						LIMIT 0, 1" );
-
-		// Check we got a result
-		if( $query->num_rows() > 0 )
-		{
-			// Loop through the rows (there should only be one)
-  			foreach ( $query->result() as $row )
-   			{
-	   			// Loop through the columns
-	    		foreach( $row as $key => $value )
-	    		{
-	    			$this->$key = $value;
-	    		}
-
-	    		// Set the session
-	    		$ci->session->set_userdata( 'guild_id', $this->_id );
-
-	    		// Load the full guild from battle.net
-	    		parent::_load( strtolower( $this->region ), $this->realm, $this->name );
-
-	    		// Load the levels and ranks
-	    		$this->_setLowestLevelMember();
-	    		$this->_setHighestLevelMember();
-	    		$this->_setRanks();
-   			}
-
-   			// Encode this object and store it in the cache
-   			file_put_contents( APPPATH .'cache/uGuilds/guild_objects/'. $this->domainName .'.txt', serialize( $this ) );
-		}
-		else // No result from the database, this guild must not exist
-		{
-			throw new \Exception( 'This guild does not exist' );
-		}
 	}
 
 	/**

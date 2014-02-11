@@ -19,7 +19,6 @@ require_once APPPATH . 'libraries/BattlenetArmory/Realms.php';
 require_once APPPATH . 'libraries/BattlenetArmory/Achievements.php';
 require_once APPPATH . 'libraries/BattlenetArmory/ArenaTeam.php';
 require_once APPPATH . 'libraries/BattlenetArmory/Races.php';
-require_once APPPATH . 'libraries/BattlenetArmory/Classes.php';
 require_once APPPATH . 'libraries/BattlenetArmory/Perks.php';
 require_once APPPATH . 'libraries/BattlenetArmory/Quest.php';
 require_once APPPATH . 'libraries/BattlenetArmory/WowHead.php';
