@@ -8,13 +8,19 @@ require_once(APPPATH .'libraries/BattlenetArmory/Guild.php');
  * This model implements a specific guild. 
  * At present it's linked to World of Warcraft, in the future it will become game independant
  *
+ * @package uGuilds
  * @author Ben Argo <ben@benargo.com>
- * 
+ * @version 1.0
+ * @copyright Copyright © 2013-2014, Ben Argo
+ * @license GPL v3
  * 
  ** Table of Contents
  * 1. Constants
  * 2. Variables
- * 
+ *
+ * 3. Magic Variables
+ * 3.1. __construct()
+ * 3.2. __get()
  */
 class Guild extends CI_Model 
 {
@@ -61,7 +67,25 @@ class Guild extends CI_Model
 			WHERE `domain_name` = '". $this->domain_name ."'
 			LIMIT 0, 1");
 
+		// Check we got a result
+		if($query->num_rows() > 0)
+		{
+			$row = $query->row();
+	   			
+	   		// Loop through the columns
+    		foreach($row as $key => $value)
+    		{
+    			$this->$key = $value;
+    		}
 
+    		// Load the full guild from battle.net
+    		$guild = BattlenetArmory\Guild(strtolower($this->region), $this->realm, $this->name);
+
+    		// Load the levels and ranks
+    		$this->_setLowestLevelMember();
+    		$this->_setHighestLevelMember();
+    		$this->_setRanks();
+		}
 	}
 }
 
