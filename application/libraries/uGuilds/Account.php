@@ -114,8 +114,6 @@ class Account
 	}
 
 	/**
-	 * THIS FUNCTION IS NOT PRESENTLY IN USE
-	 *
 	 * factory()
 	 *
 	 * Loads the Account based on a character's name. 
@@ -127,7 +125,6 @@ class Account
 	 * @param (string) $character_name
 	 * @return instance of uGuilds\Account OR FALSE
 	 */
-	/*
 	public static function factory($character_name)
 	{
 		$ci =& get_instance();
@@ -147,9 +144,10 @@ class Account
 			return new Account($row->account_id);
 		}
 	}
-	*/
 
 	/**
+	 * THIS FUNCTION IS NOT PRESENTLY IN USE
+	 *
 	 * factory()
 	 *
 	 * Loads the Account based on an email address.
@@ -159,6 +157,7 @@ class Account
 	 * @param (string) $email
 	 * @return instance of uGuilds\Account OR FALSE
 	 */
+	/*
 	public static function &factory($email)
 	{
 		$ci =& get_instance();

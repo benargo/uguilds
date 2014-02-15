@@ -242,7 +242,7 @@ class Guild extends \BattlenetArmory\Guild {
 	 * @var string $feature
 	 * @return bool
 	 */
-	public function hasFeature( $feature )
+	public function hasFeature($feature)
 	{
 		return array_key_exists( $feature, $this->_getFeatures() );
 	}
@@ -255,7 +255,7 @@ class Guild extends \BattlenetArmory\Guild {
 	 * @param string $sortFlag
 	 * @return array
 	 */
-	public function getMembers( $sort = FALSE, $sortFlag = 'asc' )
+	public function getMembers($sort = FALSE, $sortFlag = 'asc')
 	{
 		$members = parent::getMembers( $sort, $sortFlag );
 

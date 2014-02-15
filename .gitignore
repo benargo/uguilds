@@ -7,6 +7,7 @@ application/config/production/
 application/config/testing/
 application/logs/
 application/views/themes/
+documentation/user_guide/
 user_guide/
 html/media/BattlenetArmory/
 html/media/images/
