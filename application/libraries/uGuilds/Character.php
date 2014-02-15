@@ -25,15 +25,32 @@ class Character extends \BattlenetArmory\Character
 	 *
 	 * @param string $name
 	 */
-	function __construct( $name )
+	function __construct($name, $lite = FALSE)
 	{
 		// Load some models
 		$ci =& get_instance();
-		$ci->load->model( 'Classes' );
-		$ci->load->model( 'Races' );
+		$ci->load->model('Classes');
+		$ci->load->model('Races');
+
+		if($lite)
+		{
+			$lite = array(
+				'items',
+				'reputation',
+				'professions',
+				'appearance',
+				'companions',
+				'mounts',
+				'achievements',
+				'progression',
+				'pvp',
+				'quests',
+				'pets',
+				'guild');
+		}
 		
 		// Construct the character
-		parent::__construct( strtolower( $ci->guild->region ), $ci->guild->realm, $name, false );
+		parent::__construct(strtolower($ci->guild->region), $ci->guild->realm, $name, $lite);
 
 		if(empty($this->characterData['class']))
 		{
@@ -42,8 +59,24 @@ class Character extends \BattlenetArmory\Character
 		
 		// Construct some additional data
 		$this->guild =& $ci->guild;
-		$this->race  =& $ci->Races->getRace( $this->characterData['race'] );
-		$this->class =& $ci->Classes->getClass( $this->characterData['class'] );
+		$this->race  =& $ci->Races->getRace($this->characterData['race']);
+		$this->class =& $ci->Classes->getClass($this->characterData['class']);
+
+		$result = $ci->db->query(
+			"SELECT account_id
+			FROM ug_Characters
+			WHERE region = '". $ci->guild->region ."'
+				AND realm = '". $ci->guild->realm ."'
+				AND `name` = '$character_name'
+			LIMIT 0, 1");
+
+		if($result->num_rows() === 0)
+		{
+			$ci->db->query(
+				"INSERT INTO ug_Characters
+				(region, realm, `name`, guild)
+				VALUES ('". $this->region ."', '". $this->realm ."', '". $this->name ."', ". $ci->guild->id .")");
+		}
 	}
 
 	/**
@@ -53,7 +86,7 @@ class Character extends \BattlenetArmory\Character
 	 * @param string $param
 	 * @return mixed
 	 */
-	function __get( $param )
+	function __get($param)
 	{
 		switch( $param )
 		{

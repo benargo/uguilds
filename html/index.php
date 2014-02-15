@@ -21,6 +21,7 @@
 	switch(getenv('UGUILDS_HOST'))
 	{
 		case 'local.uguilds.vhost':
+		case 'weeb01.cems.uwe.ac.uk':
 			define('ENVIRONMENT', 'development');
 			break;
 

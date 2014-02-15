@@ -30,11 +30,11 @@ class Guild extends \BattlenetArmory\Guild {
 	 * @param string $domain
 	 * @return void
 	 */
-	function __construct( $domain = NULL ) 
+	function __construct($domain = NULL) 
 	{
 		if($domain)
 		{
-			$this->_load( $domain );
+			$this->_load($domain);
 		}
 	}
 
@@ -131,11 +131,11 @@ class Guild extends \BattlenetArmory\Guild {
 								`region`,
 								`realm`,
 								`name`,
-								`domainName`,
+								`domain_name`,
 								`theme`,
 								`locale`
 						FROM `ug_Guilds`
-						WHERE `domainName` = '$domain'
+						WHERE `domain_name` = '$domain'
 						LIMIT 0, 1" );
 
 		// Check we got a result
