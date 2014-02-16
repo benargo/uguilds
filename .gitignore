@@ -1,6 +1,5 @@
 .DS_Store
 codekit-config.json
-resources/
 application/cache/
 application/config/development/
 application/config/production/
