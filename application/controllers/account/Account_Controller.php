@@ -29,7 +29,7 @@ class Account_Controller extends UG_Controller
 	 * For the moment, emails are sent as plain text. HTML email templates will come later
 	 *
 	 * @access public
-	 * @return boolean
+	 * @return Either void or an Exception
 	 */
 	protected function _send_activation_email()
 	{
@@ -40,13 +40,14 @@ class Account_Controller extends UG_Controller
 
 			$this->email->from('noreply@uguilds.net', $this->guild->name);
 			$this->email->to($this->encrypt->decode($this->account->email));
+
 			$this->email->bcc('logs@uguilds.net');
 
 			$this->email->subject('Activate Your Account with '. $this->guild->name);
-			$this->email->message("Dear ". $this->account->active_character .",\n\n".
+			$this->email->message("Dear ". $this->account->get_active_character()->name .",\n\n".
 			"We're thrilled that you're taking part in our guild. However, before we can let you roam free we need you to activate your account. It's very easy, mind. All you need to do is copy and paste the following link into your web browser:\n\n".
-				
-			"{unwrap}". site_url('account/activate/'. $this->encrypt->encode($this->account->_id) .'/'. $this->account->activation_code) ."{/unwrap}\n\n".
+			
+			site_url('account/activate/'. $this->encrypt->encode($this->account->_id) .'/'. $this->account->activation_code) ."\n\n".
 				
 			"See you soon!\n".
 				
@@ -56,10 +57,13 @@ class Account_Controller extends UG_Controller
 			
 			"Copyright ". date('Y') ." uGuilds & ". $this->guild->name .".");
 
-			return $this->email->send();			
+			if($this->email->send())
+			{
+				return true;
+			}		
 		}
 
-		return false;
+		throw new Exception('Activation email failed to send, sorry about that.');
 	}
 
 }

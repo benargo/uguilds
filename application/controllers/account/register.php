@@ -9,6 +9,9 @@ require_once(APPPATH .'controllers/account/Account_Controller.php');
 
 class Register extends Account_Controller 
 {
+	private $character;
+	private $members;
+
 	/**
 	 * __construct()
 	 *
@@ -46,151 +49,183 @@ class Register extends Account_Controller
 	 * verify()
 	 *
 	 * Verifies a user's registration
+	 *
+	 * @access public
+	 * @param (string) $character_name
+	 * @param (string) $email
+	 * @param (string) $password
+	 * @return void
 	 */
 	public function verify()
 	{
-		$character = new uGuilds\Character($this->input->post('character'));
+		// Helpers and libraries we need
+		$this->load->helper(array('form', 'url'));
+		$this->load->library('form_validation');
+
+		// Load the list of members
+		$this->members = $this->guild->get_unlinked_members();
+		foreach($this->members as $key => $member)
+		{
+			$this->members[$key] = $member->name;
+		}
+		sort($this->members);
+
+		// Form Validation Rules
+		$this->form_validation->set_rules(array(
+			array(
+				'field' => 'email',
+				'label' => 'Email Address',
+				'rules' => 'trim|required|valid_email|xss_clean'
+			),
+			array(
+				'field' => 'password',
+				'label' => 'Password',
+				'rules' => 'trim|required|matches[password_confirm]'
+			),
+			array(
+				'field' => 'password_confirm',
+				'label' => 'Confirm Password',
+				'rules' => 'trim|required|matches[password]'
+			)));
 
 		/**
-		 * 1. Email Address exists in Database?
+		 * 1. Form validates?
 		 *
-		 * if   = No  -> Show full registration form
-		 * else = Yes -> Account Authenticates?
+		 * if   = No  -> Show registration form with errors
+		 * else = Yes -> Character Verifies?
 		 */
-		if($query->num_rows() === 0) // No -> Show full registration form
+		if($this->form_validation->run() === FALSE) // No -> Show registration form with errors
 		{
+			$this->theme->data(array('content' => $this->load->view('account/login/register', array(
+				'character_name' 	=> '',
+				'email'			 	=> $this->input->post('email'),
+				'password' 		 	=> $this->input->post('password'),
+				'password_confirm' 	=> '',
+				'members'		 	=> $this->members,
+				'remainder'		 	=> false
+			), true)));
+		}
+		else // Yes -> Show character verification form
+		{
+			// Turn the cache off
+			$config = $this->config->item('battle.net');
+			$config['cachestatus'] = FALSE;
+			$this->config->set_item('battle.net', $config);
+
 			// Load the character
-			$items = $character->items;
+			$this->character = new uGuilds\Character($this->input->post('character'));
+
+			// Calculate items to verify
+			$items = $this->character->items;
 			unset($items['averageItemLevel'], $items['averageItemLevelEquipped']);
 			
 			foreach($items as $slot => $item)
 			{
 				$items[$slot]['slot'] = $slot;
-				$items[$slot]['icon'] = $character->getIcon($item['icon'], 1800);
+				$items[$slot]['icon'] = $this->character->getIcon($item['icon'], 18);
 			}
-			shuffle($items);
-
-			$this->theme->data(array('content' => $this->load->view('account/login/register', array(
-				'character_name' => $this->input->post('character'), 
-				'email' 		 => $this->input->post('email'),
-				'password' 		 => $this->input->post('password'),
-				'remainder'		 => true,
-				'items' => array($items[0]['slot'] => $items[0], $items[1]['slot'] => $items[1])), true)));
-		}
-		else // Yes -> Account has characters in this guild?
-		{
-			$row = $query->row();
-
-			$this->account = new uGuilds\Account($row->id);
 
 			/**
-			 * 2. Account has characters in this guild?
+			 * 2. Full form submitted?
 			 *
-			 * if   = No  -> Show add Character form
-			 * else = Yes -> Account authenticates?
+			 * if   = No  -> Show character verification form
+			 * else = Yes -> Character verifies?
 			 */
-			if($this->account->get_all_characters()) // No -> Show add Character Form
+			if(!$this->input->post('slot1') && !$this->input->post('slot2')) // No -> Show character verification form
 			{
-				
-			} 
-
-			if($this->input->post('password') === NULL)
-			{
-				$this->load->helper('url');
-
-				redirect('account/login/')
+				$this->_show_character_verification_form($items);
 			}
+			else // Yes -> Character verifies?
+			{
 				/**
-			 	 * 3. Account Authenticates?
+				 * 3. Character verifies?
 				 *
-				 * if   = No  -> Check if login attempts >= 3
-				 * else = Yes -> Check if Account is active
+				 * if   = No  -> Show character verification form
+				 * else = Yes -> Create account
 				 */
-				if(!$this->account->authenticate($this->input->post('password'))) // No -> Check if login attempts >= 3
+				if(array_key_exists($this->input->post('slot1'), $this->character->items)
+					&& array_key_exists($this->input->post('slot2'), $this->character->items)) // No -> Show character verification form
 				{
-					$login_attempts = 1;
-
-					if($this->session->userdata('login_attempts'))
-					{
-						$login_attempts = $this->session->userdata('login_attempts') + 1;
-					}
-
-					$this->session->set_userdata(array('login_attempts' => $login_attempts));
+					$this->_show_character_verification_form($items);
+				}
+				else // Yes -> Create account
+				{
+					$this->load->library('encrypt');
 
 					/**
-					 * 3.5. Login Attempts >= 3?
+					 * 4. Create account
 					 *
-					 * if   = No  -> Show login form
-					 * else = Yes -> Lock out for 30 minutes
+					 * try 	 = Yes -> Send activation email
+					 * catch = No  -> Show error
 					 */
-					if($this->session->userdata('login_attempts') >= 3) // No -> Show login form
+					try // Yes -> Send activation email
 					{
-						$this->theme->data(array('authentication_error' => "<p>Sorry, but either your email address or password was incorrect.</p>"));
-						$this->theme->data(array('content' => $this->load->view('account/login/index', $this->theme->data(), true)));
-					}
-					else // Yes -> Lock out for 30 minutes
-					{
-						if(!$this->session->userdata('login_locked') || $this->session->userdata('login_locked') <= time())
-						{
-							$this->session->set_userdata(array('login_locked' => time() + 1800));
-						}
+						$this->db->query(
+							"INSERT INTO ug_Accounts (
+								email,
+								password,
+								activation_code,
+								active_character)
+							VALUES (
+								'". $this->encrypt->encode($this->input->post('email')) ."',
+								'". password_hash($this->input->post('password'), PASSWORD_DEFAULT) ."',
+								'". md5(time()) ."',
+								 ". $this->character->id .")");
 
-						$this->theme->data(array('content' => $this->load->view('account/login/locked', $this->theme->data(), true)));
+						$insert_id = $this->db->insert_id();
+
+						$this->db->query(
+							"UPDATE ug_Characters
+							SET account_id = ". $insert_id ."
+							WHERE _id = ". $this->character->id);
+
+						$this->account = new uGuilds\Account($insert_id);
+
+						$this->_send_activation_email();
+
+						$this->theme->data(array('content' => $this->load->view('account/login/activate', array(
+							'character_name' => $this->character->name,
+							'email' 		 => $this->input->post('email')
+						), true)));
+		
+					}
+					catch(Exception $e) // No -> Show error
+					{
+						show_error($e->getMessage());
 					}
 				}
-				else // Yes -> Check if Account is active
-				{
-					/**
-					 * 4. Account is Active?
-					 *
-					 * if   = No  -> Send activation email
-					 * else = Yes -> Check if Account is suspended
-					 */
-					if(!$this->account->is_active) // No -> Send activation email
-					{
-						$this->_send_activation_email();
-						$this->theme->data(array('content' => $this->load->view('account/login/inactive', $this->theme->data(), true)));
-					}
-					else // Yes -> Check if Account is suspended
-					{
-						/**
-						 * 5. Account is Suspended?
-						 *
-						 * if   = No  -> Prevent authentication attempt
-						 * else = Yes -> Log in & set session data
-						 */
-						if(!$this->account->is_suspended) // No -> Prevent authentication attempt
-						{
-							$this->theme->data(array('content' => $this->load->view('account/login/suspended', $this->theme->data(), true)));
-						}
-						else // Yes -> Log in & set session data
-						{
-							$this->session->set_userdata(array(
-								'user_id' => $account->_id, 
-								'character_name' => $this->input->post('character')));
+			}
 
-							/**
-							 * 6. Referer Set?
-							 *
-							 * if   = No  -> Redirect to root
-							 * else = Yes -> Redirect to referer
-							 */
-							if(!$this->session->userdata('login_referer')) // No -> Redirect to root
-							{
-								redirect(site_url());
-							}
-							else // Yes -> Redirect to referer
-							{
-								redirect($this->session->userdata('login_referer'));
-							} // END: 6. Referer Set?
+		} // END: 1. Form Validates
 
-						} // END: 5. Account is Suspended?
-
-					} // END: 4. Account is Active?
-
-				} // END: 3. Account Authenticates?
-		}
 
 		// Render the page
 		$this->theme->view('page');
 	}
+
+	/**
+	 * _show_character_verification_form()
+	 *
+	 * Renders the verification form given some items
+	 *
+	 * @access private
+	 * @param (array) $items - An array containing all the items
+	 * @return void
+	 */
+	private function _show_character_verification_form(array $items)
+	{
+		shuffle($items);
+
+		$this->theme->data(array('content' => $this->load->view('account/login/register', array(
+			'character_name' 	=> $this->character->name, 
+			'email' 		 	=> $this->input->post('email'),
+			'password' 		 	=> $this->input->post('password'),
+			'password_confirm' 	=> $this->input->post('password_confirm'),
+			'members'		 	=> $this->members,
+			'remainder'		 	=> true,
+			'items' => array($items[0]['slot'] => $items[0], $items[1]['slot'] => $items[1])), true)));
+	}
+}
+
+
+

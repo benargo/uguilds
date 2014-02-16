@@ -4,6 +4,7 @@ if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 class Character extends \BattlenetArmory\Character 
 {
+	protected $id;
 	protected $name;
 	protected $class;
 	protected $currentTitle;
@@ -64,7 +65,7 @@ class Character extends \BattlenetArmory\Character
 		$this->class =& $ci->Classes->getClass($this->characterData['class']);
 
 		$result = $ci->db->query(
-			"SELECT account_id
+			"SELECT _id
 			FROM ug_Characters
 			WHERE region = '". $ci->guild->region ."'
 				AND realm = '". $ci->guild->realm ."'
@@ -76,7 +77,14 @@ class Character extends \BattlenetArmory\Character
 			$ci->db->query(
 				"INSERT INTO ug_Characters
 				(region, realm, `name`, guild_id)
-				VALUES ('". $this->region ."', '". $this->realm ."', '". $this->name ."', ". $ci->guild->id .")");
+				VALUES ('". strtoupper($this->region) ."', '". $this->realm ."', '". $this->name ."', ". $ci->guild->id .")");
+
+			$this->id = $ci->db->insert_id();
+		}
+		else
+		{
+			$row = $result->row();
+			$this->id = $row->_id;
 		}
 	}
 

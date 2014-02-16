@@ -110,11 +110,12 @@ class Login extends Account_Controller
 				sort($members);
 
 				$this->theme->data(array('content' => $this->load->view('account/login/register', array(
-					'email'			 => $this->input->post('email'),
-					'password' 		 => $this->input->post('password'),
-					'members'		 => $members,
-					'character_name' => '',
-					'remainder'		 => false
+					'email'			 	=> $this->input->post('email'),
+					'password' 		 	=> $this->input->post('password'),
+					'password_confirm' 	=> '',
+					'members'		 	=> $members,
+					'character_name' 	=> '',
+					'remainder'		 	=> false
 				), true)));
 			}
 			else // Yes -> Check if Account authenticates
@@ -156,7 +157,7 @@ class Login extends Account_Controller
 							$this->session->set_userdata(array('login_locked' => time() + 1800));
 						}
 
-						$this->theme->data(array('content' => $this->load->view('account/login/locked', $this->theme->data(), true)));
+						$this->theme->data(array('content' => $this->load->view('account/login/locked', array(), true)));
 					}
 				}
 				else // Yes -> Check if Account is active
@@ -170,7 +171,10 @@ class Login extends Account_Controller
 					if(!$this->account->is_active) // No -> Send activation email
 					{
 						$this->_send_activation_email();
-						$this->theme->data(array('content' => $this->load->view('account/login/inactive', $this->theme->data(), true)));
+						$this->theme->data(array('content' => $this->load->view('account/login/activate', array(
+							'character_name' => $this->account->get_active_character()->name,
+							'email' 		 => $this->input->post('email')
+						), true)));
 					}
 					else // Yes -> Check if Account is suspended
 					{
@@ -180,15 +184,15 @@ class Login extends Account_Controller
 						 * if   = No  -> Prevent authentication attempt
 						 * else = Yes -> Log in & set session data
 						 */
-						if(!$this->account->is_suspended) // No -> Prevent authentication attempt
+						if($this->account->is_suspended) // No -> Prevent authentication attempt
 						{
-							$this->theme->data(array('content' => $this->load->view('account/login/suspended', $this->theme->data(), true)));
+							$this->theme->data(array('content' => $this->load->view('account/login/suspended', array(), true)));
 						}
 						else // Yes -> Log in & set session data
 						{
 							$this->session->set_userdata(array(
-								'user_id' => $account->_id, 
-								'character_name' => $this->input->post('character')));
+								'user_id' => $this->account->_id, 
+								'character_name' => $this->account->get_active_character()->name));
 
 							/**
 							 * 6. Referer Set?

@@ -41,7 +41,7 @@ class Account
 	protected $_id;
 	protected $email;
 	protected $password;
-	protected $activiation_code;
+	protected $activation_code;
 	protected $is_active;
 	protected $is_suspended;
 	protected $battletag;
@@ -72,27 +72,32 @@ class Account
 				a.is_active,
 				a.is_suspended,
 				a.battletag,
+				a.active_character,
+				c._id AS character_id,
 				c.name AS character_name
-			FROM Accounts a
-			RIGHT OUTER JOIN Characters c ON c.account_id = a._id
+			FROM ug_Accounts a
+			RIGHT OUTER JOIN ug_Characters c ON c.account_id = a._id
 			WHERE a._id = ". $id ."
-			AND c.guild_id = ". $this->guild->id);
+			AND c.guild_id = ". $ci->guild->id ."
+			LIMIT 0, 1");
 
 		if($result->num_rows() > 0)
 		{
-			foreach($query->result() as $row)
-			{
-				foreach($row as $key => $value)
-				{
-					// Account parameters
-					if(property_exists($this, $key))
-					{
-						$this->$key = $value;
-					}
-				}
+			$this->_id = $id;
 
-				$this->characters[strtolower($row->character_name)] = $row->character_name;
+			$row = $result->row();
+			
+			foreach($row as $key => $value)
+			{
+				// Account parameters
+				if(property_exists($this, $key))
+				{
+					$this->$key = $value;
+				}
 			}
+
+			$this->characters[$row->character_id] = $row->character_name;
+	
 		}
 	}
 
@@ -166,16 +171,22 @@ class Account
 		$ci =& get_instance();
 		$ci->load->library('encrypt');
 
-		$result = $ci->db->query(
-			"SELECT _id 
-			FROM ug_Accounts 
-			WHERE email = '". $ci->encrypt->encode($email) ."' 
-			LIMIT 0, 1");
+		$query = $ci->db->query(
+			"SELECT 
+				_id,
+				email
+			FROM ug_Accounts");
 			
-		if($result->num_rows() > 0)
+		if($query->num_rows() > 0)
 		{
-			$row = $result->row();
-			return new Account($row->_id);
+			foreach($query->result() as $row)
+			{
+				if($email == $ci->encrypt->decode($row->email))
+				{
+					return new Account($row->_id);
+					break;
+				}
+			}
 		}
 		
 		return false;
@@ -245,24 +256,9 @@ class Account
 	 * @param (string) $password - The raw, unhashed password to authenticate with
 	 * @return boolean
 	 */
-	public function authenticate($password) {
-		
-		$ci =& get_instance();
-
-		$result = $ci->db->query(
-			"SELECT password
-			FROM Accounts
-			WHERE _id = ". $this->id ."
-			LIMIT 0, 1");
-
-		if($result->num_rows() > 0)
-		{
-			$row = $result->row();
-
-			return password_verify($password, $row->password);
-		}
-		
-		return false;
+	public function authenticate($password) 
+	{
+		return password_verify($password, $this->password);
 	}
 
 	/**
@@ -296,7 +292,7 @@ class Account
 	 */
 	public function get_character($name)
 	{
-		if(($key = array_search($this->characters, $name)) !== FALSE)
+		if(array_search($name, $this->characters) !== FALSE)
 		{
 			return new Character($name);
 		}
@@ -316,7 +312,7 @@ class Account
 	{
 		if(isset($this->active_character))
 		{
-			return $this->get_character(strtolower($this->characters[$this->active_character]));
+			return $this->get_character($this->characters[$this->active_character]);
 		}
 
 		return false;

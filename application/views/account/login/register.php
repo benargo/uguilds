@@ -12,7 +12,11 @@
 <?php echo form_open('account/register/verify'); ?>
 
 	<p><label for="character">Character Name:</label>
-	<?php echo form_dropdown('character', $members, $character_name); ?></p>
+	<select name="character">
+	<?php foreach($members as $member): ?>
+		<option value="<?php echo $member; ?>" <?php if($member === $character_name) echo 'selected'; ?>><?php echo $member; ?></option>
+	<?php endforeach; ?>
+	</select>
 
 	<p><label for="email">Email Address:</label>
 	<?php echo form_input(array('name' => 'email',
@@ -24,7 +28,7 @@
 	<?php echo form_password('password', $password); ?></p>
 
 	<p><label for="password_confirm">Confirm Password:</label>
-	<?php echo form_password('password_confirm'); ?></p>
+	<?php echo form_password('password_confirm', $password_confirm); ?></p>
 
 	<?php if($remainder): ?>
 

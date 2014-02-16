@@ -15,16 +15,22 @@
 
 	<p><label for="email">Email Address:</label>
 	<?php echo form_input(array(
-		'name' => 'email',
-		'placeholder' => 'john.smith@example.com',
-		'type' => 'email',
-		'value' => $email)); ?>
+		'name' 			=> 'email',
+		'placeholder' 	=> 'john.smith@example.com',
+		'required' 		=> true,
+		'type' 			=> 'email',
+		'value' 		=> $email
+	)); ?>
 
 	<p><label for="password">Password:</label>
-	<?php echo form_password('password', $password); ?></p>
+	<?php echo form_password(array(
+		'name' 		=> 'password',
+		'required' 	=> true,
+		'value' 	=> $password
+	)); ?></p>
 
 	<p><?php echo form_submit('login_submit', 'Log in'); ?></p>
 
-	<p><a href="/account/login/recover">Forgot your password?</a></p>
+	<p><a href="/account/password/recover">Forgot your password?</a></p>
 
 </form>

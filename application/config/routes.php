@@ -52,5 +52,8 @@ $route['roster\/.+\/profile-picture'] = "roster/character/profile_picture";
 $route['roster\/.+\/[a-zA-Z\-]+(\/)?'] = "roster/character/profession";
 $route['roster\/.+(\/)?'] = "roster/character";
 
+// Account
+$route['account/activate/(.*)'] = "account/activate/verify";
+
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
