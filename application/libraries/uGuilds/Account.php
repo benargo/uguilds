@@ -31,9 +31,9 @@ if (!defined('BASEPATH')) exit('No direct script access allowed');
  * 8.  activate()
  *
  * 9.  get_character()
- * 10. get_primary_character()
+ * 10. get_active_character()
  * 11. get_all_characters()
- * 12. set_primary_character()
+ * 12. set_active_character()
  */
 class Account
 {
@@ -47,7 +47,7 @@ class Account
 	protected $battletag;
 
 	// Characters
-	protected $primary_character;
+	protected $active_character;
 	protected $characters = array();
 
 	/**
@@ -71,12 +71,12 @@ class Account
 				a.activation_code,
 				a.is_active,
 				a.is_suspended,
-				a.primary_character,
 				a.battletag,
 				c.name AS character_name
 			FROM Accounts a
 			RIGHT OUTER JOIN Characters c ON c.account_id = a._id
-			WHERE a._id = $id");
+			WHERE a._id = ". $id ."
+			AND c.guild_id = ". $this->guild->id);
 
 		if($result->num_rows() > 0)
 		{
@@ -114,6 +114,8 @@ class Account
 	}
 
 	/**
+	 * THIS FUNCTION IS NOT PRESENTLY IN USE
+	 *
 	 * factory()
 	 *
 	 * Loads the Account based on a character's name. 
@@ -125,6 +127,7 @@ class Account
 	 * @param (string) $character_name
 	 * @return instance of uGuilds\Account OR FALSE
 	 */
+	/*
 	public static function factory($character_name)
 	{
 		$ci =& get_instance();
@@ -135,6 +138,7 @@ class Account
 			WHERE region = '". $ci->guild->region ."'
 				AND realm = '". $ci->guild->realm ."'
 				AND `name` = '$character_name'
+				AND account_id IS NOT NULL
 			LIMIT 0, 1");
 
 		if($result->num_rows() > 0)
@@ -143,11 +147,11 @@ class Account
 
 			return new Account($row->account_id);
 		}
+
+		return false;
 	}
 
 	/**
-	 * THIS FUNCTION IS NOT PRESENTLY IN USE
-	 *
 	 * factory()
 	 *
 	 * Loads the Account based on an email address.
@@ -157,24 +161,21 @@ class Account
 	 * @param (string) $email
 	 * @return instance of uGuilds\Account OR FALSE
 	 */
-	/*
-	public static function &factory($email)
+	public static function factory($email)
 	{
 		$ci =& get_instance();
 		$ci->load->library('encrypt');
 
 		$result = $ci->db->query(
-			"SELECT `_id` 
-			FROM `Accounts` 
-			WHERE `email` = '". $ci->encrypt->encode($email) ."' 
+			"SELECT _id 
+			FROM ug_Accounts 
+			WHERE email = '". $ci->encrypt->encode($email) ."' 
 			LIMIT 0, 1");
 			
 		if($result->num_rows() > 0)
 		{
 			$row = $result->row();
-			$ci->account = new Account($row->_id);
-
-			return $ci->account;
+			return new Account($row->_id);
 		}
 		
 		return false;
@@ -304,20 +305,21 @@ class Account
 	}
 
 	/**
-	 * get_primary_character()
+	 * get_active_character()
 	 *
-	 * Returns an Account's primary character
+	 * Returns an Account's active character
 	 *
 	 * @access public
 	 * @return uGuilds\WoW\Character object OR FALSE
 	 */
-	public function get_primary_character() 
+	public function get_active_character() 
 	{
-		if(isset($this->primary_character))
+		if(isset($this->active_character))
 		{
-			return $this->get_character($this->characters[$this->primary_character]);
+			return $this->get_character(strtolower($this->characters[$this->active_character]));
 		}
 
+		return false;
 	 }
 	 
 	/**
@@ -340,28 +342,27 @@ class Account
 			}
 
 			return $response;
-		}	 
+		}
+
+		return false; 
 	}
 	 
 	/**
-	 * set_primary_character
+	 * set_active_character()
 	 *
-	 * Sets a primary character for the account, based on a given name
+	 * Sets an active character for the account, based on a given name
 	 *
 	 * @access public
 	 * @param (string) $character_name
 	 * @return boolean
 	 */
-	public function set_primary_character($character_name) 
+	public function set_active_character($character_name) 
 	{	 
-		if(($key = array_search($this->characters, $name)) !== FALSE)
+		if(in_array($this->characters, $character_name))
 		{
-			$ci =& get_instance();
+			$this->active_character = ucfirst($character_name);
 
-			return $ci->db->simple_query(
-				"UPDATE Accounts
-				SET primary_character = $key
-				WHERE _id = ". $this->_id);
+			return true;
 		}
 		
 		return false;	 

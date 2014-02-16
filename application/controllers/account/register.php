@@ -1,13 +1,13 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * CI -> Controllers -> Account -> Login
+ * CI -> Controllers -> Account -> Register
  *
  * Handles the login to the web service
  */
 require_once(APPPATH .'controllers/account/Account_Controller.php');
 
-class Login extends Account_Controller 
+class Register extends Account_Controller 
 {
 	/**
 	 * __construct()
@@ -30,99 +30,78 @@ class Login extends Account_Controller
 	/**
 	 * index()
 	 *
-	 * Renders the login form
+	 * Redirects to the main login page
 	 *
 	 * @access public
-	 * @return output
+	 * @return void
 	 */
 	public function index()
 	{
-		if($this->session->userdata('login_locked') >= time())
-		{
-			$this->theme->data(array('content' => $this->load->view('account/login/locked', $this->theme->data(), true)));
-			$this->theme->view('page');
-			exit;
-		}
+		$this->load->helper('url');
 
-		if(isset($_SERVER['HTTP_REFERER']))
-		{
-			$this->session->set_userdata(array('login_referer' => $_SERVER['HTTP_REFERER']));
-		}
-
-		$this->_show_login_form();
-
-		$this->theme->view('page');
+		redirect('account/login');
 	}
 
 	/**
-	 * authenticate()
+	 * verify()
 	 *
-	 * Attempts to authenticate the User.
-	 * A data flow diagram on the method is available at:
-	 * @link https://github.com/benargo/uguilds/blob/master/documentation/authentication_flow_diagram.png
-	 *
-	 * @access public
-	 * @return output
+	 * Verifies a user's registration
 	 */
-	public function authenticate()
+	public function verify()
 	{
-		$this->load->helper(array('form', 'url'));
-		$this->load->library('form_validation');
-
-		$this->form_validation->set_rules(array(
-			array(
-				'field' => 'email',
-				'label' => 'Email Address',
-				'rules' => 'trim|required|valid_email|xss_clean'
-			),
-			array(
-				'field' => 'password',
-				'label' => 'Password',
-				'rules' => 'trim|required')
-			));
+		$character = new uGuilds\Character($this->input->post('character'));
 
 		/**
-		 * 1. Login Form Validates?
+		 * 1. Email Address exists in Database?
 		 *
-		 * if   = No  -> Show validation errors -> Show login form
-		 * else = Yes -> Check if Account exists
+		 * if   = No  -> Show full registration form
+		 * else = Yes -> Account Authenticates?
 		 */
-		if($this->form_validation->run() === FALSE) // No -> Show validation errors -> Show login form
+		if($query->num_rows() === 0) // No -> Show full registration form
 		{
-			$this->_show_login_form();
+			// Load the character
+			$items = $character->items;
+			unset($items['averageItemLevel'], $items['averageItemLevelEquipped']);
 			
-		}
-		else // Yes -> Check if Account exists
-		{
-			/**
-			 * 2. Account Exists?
-			 *
-			 * if   = No  -> Load registration form
-			 * else = Yes -> Check if Account authenticates
-			 */
-			if(!uGuilds\Account::factory($this->input->post('email'))) // No -> Load registration form
+			foreach($items as $slot => $item)
 			{
-				$members = $this->guild->get_unlinked_members();
-				foreach($members as $key => $member)
-				{
-					$members[$key] = $member->name;
-				}
-				sort($members);
-
-				$this->theme->data(array('content' => $this->load->view('account/login/register', array(
-					'email'			 => $this->input->post('email'),
-					'password' 		 => $this->input->post('password'),
-					'members'		 => $members,
-					'character_name' => '',
-					'remainder'		 => false
-				), true)));
+				$items[$slot]['slot'] = $slot;
+				$items[$slot]['icon'] = $character->getIcon($item['icon'], 1800);
 			}
-			else // Yes -> Check if Account authenticates
-			{
-				$this->account = uGuilds\Account::factory($this->input->post('email'));
+			shuffle($items);
 
+			$this->theme->data(array('content' => $this->load->view('account/login/register', array(
+				'character_name' => $this->input->post('character'), 
+				'email' 		 => $this->input->post('email'),
+				'password' 		 => $this->input->post('password'),
+				'remainder'		 => true,
+				'items' => array($items[0]['slot'] => $items[0], $items[1]['slot'] => $items[1])), true)));
+		}
+		else // Yes -> Account has characters in this guild?
+		{
+			$row = $query->row();
+
+			$this->account = new uGuilds\Account($row->id);
+
+			/**
+			 * 2. Account has characters in this guild?
+			 *
+			 * if   = No  -> Show add Character form
+			 * else = Yes -> Account authenticates?
+			 */
+			if($this->account->get_all_characters()) // No -> Show add Character Form
+			{
+				
+			} 
+
+			if($this->input->post('password') === NULL)
+			{
+				$this->load->helper('url');
+
+				redirect('account/login/')
+			}
 				/**
-				 * 3. Account Authenticates?
+			 	 * 3. Account Authenticates?
 				 *
 				 * if   = No  -> Check if login attempts >= 3
 				 * else = Yes -> Check if Account is active
@@ -210,31 +189,8 @@ class Login extends Account_Controller
 					} // END: 4. Account is Active?
 
 				} // END: 3. Account Authenticates?
-
-			} // END: 2. Account Exists?
-
-		} // END: 1. Login Form Validates?
+		}
 
 		// Render the page
 		$this->theme->view('page');
 	}
-
-	/**
-	 * _show_login_form()
-	 *
-	 * Shows the login form
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function _show_login_form()
-	{
-		$this->load->helper('form');
-
-		$this->theme->data(array('content' => $this->load->view('account/login/index', array(
-			'email' => $this->input->post('email'),
-			'password' => $this->input->post('password')
-		), true)));
-	}
-}
-

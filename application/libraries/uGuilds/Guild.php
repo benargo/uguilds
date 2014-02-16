@@ -257,21 +257,104 @@ class Guild extends \BattlenetArmory\Guild {
 	 */
 	public function getMembers($sort = FALSE, $sortFlag = 'asc')
 	{
-		$members = parent::getMembers( $sort, $sortFlag );
+		$members = parent::getMembers($sort, $sortFlag);
 
-		foreach( $members as $key => $member )
+		foreach($members as $key => $member)
 		{
-			$members[ $key ] = (object) $member;
-			foreach( $member['character'] as $trait => $value)
+			$members[$key] = (object) $member;
+			foreach($member['character'] as $trait => $value)
 			{
-				if( $trait == 'spec' )
+				if($trait == 'spec')
 				{
 					$value = (object) $value;
 				}
 
-				$members[ $key ]->$trait = $value;
+				$members[$key]->$trait = $value;
 			}
-			unset( $members[ $key ]->character );
+			unset($members[$key]->character);
+		}
+
+		return $members;
+	}
+
+	/**
+	 * get_linked_members()
+	 *
+	 * Get members which do have accounts linked to them
+	 *
+	 * @access public
+	 * @param (string) $sort
+	 * @param (string) $sortFlag
+	 * @return array
+	 */
+	public function get_linked_members()
+	{
+		$ci =& get_instance();
+
+		$query = $ci->db->query(
+			"SELECT 
+				`name`,
+				account_id
+			FROM Characters
+			WHERE guild_id = ". $this->_id);
+
+		if($query->num_rows() > 0)
+		{
+			$result = $query->result();
+			$filter = array();
+
+			foreach($result as $row)
+			{
+				$filter = array_merge($filter, $this->filter(array('name' => $row->name)));
+			}
+
+			foreach($filter as $key => $member)
+			{
+				$row = array_search($member->name, $result);
+				$member->account = new Account($result[$row]->account_id);
+			}
+
+			return $filter;
+		}
+	}
+
+	/**
+	 * get_unlinked_members()
+	 *
+	 * Get members which do NOT have accounts linked to them
+	 *
+	 * @access public
+	 * @param (string) $sort
+	 * @param (string) $sortFlag
+	 * @return array
+	 */
+	public function get_unlinked_members($sort = FALSE, $sortFlag = 'asc')
+	{
+		$members = $this->getMembers();
+
+		$ci =& get_instance();
+
+		$query = $ci->db->query(
+			"SELECT 
+				`name`,
+				account_id
+			FROM ug_Characters
+			WHERE guild_id = ". $this->_id);
+
+		if($query->num_rows() > 0)
+		{
+			$result = $query->result();
+			$filter = array();
+
+			foreach($result as $row)
+			{
+				$filter = array_merge($filter, $this->filter(array('name' => $row->name)));
+			}
+
+			foreach($filter as $key => $member)
+			{
+				unset($members[$key]);
+			}
 		}
 
 		return $members;
@@ -284,11 +367,11 @@ class Guild extends \BattlenetArmory\Guild {
 	 * @param array $params
 	 * @return array $members
 	 */
-	public function filter( array $params = array() )
+	public function filter(array $params = array())
 	{
 		$this->params = $params;
-		$members = array_values( array_filter( $this->getMembers(), array( $this, '_filter' ) ) );
-		unset( $this->params );
+		$members = array_values(array_filter($this->getMembers(), array($this, '_filter')));
+		unset($this->params);
 		return $members;
 	}
 
@@ -299,11 +382,11 @@ class Guild extends \BattlenetArmory\Guild {
 	 * @param array $member
 	 * @return array
 	 */
-	private function _filter( $member )
+	private function _filter($member)
 	{
-		foreach( $this->params as $key => $value )
+		foreach($this->params as $key => $value)
 		{
-			if( $member->$key == $value )
+			if($member->$key == $value)
 			{
 				return true;
 			}

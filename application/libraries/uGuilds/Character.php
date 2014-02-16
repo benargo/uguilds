@@ -46,7 +46,8 @@ class Character extends \BattlenetArmory\Character
 				'pvp',
 				'quests',
 				'pets',
-				'guild');
+				'guild'
+			);
 		}
 		
 		// Construct the character
@@ -67,14 +68,14 @@ class Character extends \BattlenetArmory\Character
 			FROM ug_Characters
 			WHERE region = '". $ci->guild->region ."'
 				AND realm = '". $ci->guild->realm ."'
-				AND `name` = '$character_name'
+				AND `name` = '". $this->name ."'
 			LIMIT 0, 1");
 
 		if($result->num_rows() === 0)
 		{
 			$ci->db->query(
 				"INSERT INTO ug_Characters
-				(region, realm, `name`, guild)
+				(region, realm, `name`, guild_id)
 				VALUES ('". $this->region ."', '". $this->realm ."', '". $this->name ."', ". $ci->guild->id .")");
 		}
 	}

@@ -1,16 +1,30 @@
 <h1>Login &amp; Register</h1>
-<?php echo validation_errors(); ?>
-<?php if($authentication_error) echo $authentication_error; ?>
+
+<p>Please login to your <span class="uguilds">uGuilds.com</span> account using your email address and password.</p>
+<p>Not registered yet? No problem, enter your email address and a password below and we'll get you going.</p>
+
+<section class="validation_errors">
+	<?php echo validation_errors(); ?>
+
+	<?php if(isset($authentication_error)): ?>
+		<?php echo $authentication_error; ?>
+	<?php endif; ?>
+</section>
+
 <?php echo form_open('account/login/authenticate'); ?>
 
-<p><label for="character">Character Name:</label>
-<?php echo form_input(array('name' => 'character', 
-							'maxlength' => 12, 
-							'placeholder' => 'e.g. '. $this->guild->getMembers('rank')[0]->name)); ?></p>
+	<p><label for="email">Email Address:</label>
+	<?php echo form_input(array(
+		'name' => 'email',
+		'placeholder' => 'john.smith@example.com',
+		'type' => 'email',
+		'value' => $email)); ?>
 
-<p><label for="password">Password:</label>
-<?php echo form_password('password'); ?></p>
+	<p><label for="password">Password:</label>
+	<?php echo form_password('password', $password); ?></p>
 
-<p><?php echo form_submit('login_submit', 'Log in'); ?></p>
+	<p><?php echo form_submit('login_submit', 'Log in'); ?></p>
 
-<?php echo form_close(); ?>
+	<p><a href="/account/login/recover">Forgot your password?</a></p>
+
+</form>
