@@ -94,7 +94,7 @@ uGuilds");
 
 	private function get_test_email_address()
 	{
-		$query = $this->db->query("SELECT _id FROM ug_Accounts ORDER BY _id DESC LIMIT 0, 1");
+		$query = $this->db->query("SELECT COUNT(_id) AS _id FROM ug_Accounts ORDER BY _id DESC");
 
 		if($query->num_rows() > 0)
 		{
