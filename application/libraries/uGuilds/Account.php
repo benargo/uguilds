@@ -77,7 +77,7 @@ class Account
 				c.name AS character_name
 			FROM ug_Accounts a
 			RIGHT OUTER JOIN ug_Characters c ON c.account_id = a._id
-			WHERE a._id = ". $id ."
+			WHERE a._id = ". $ci->db->escape($id) ."
 			AND c.guild_id = ". $ci->guild->id ."
 			LIMIT 0, 1");
 

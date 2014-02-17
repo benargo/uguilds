@@ -69,7 +69,7 @@ class Activate extends Account_Controller
 				"UPDATE ug_Accounts
 				SET is_active = 1,
 					activation_code = '". md5(time()) ."
-				WHERE _id = ". $this->account->_id));
+				WHERE _id = ". $this->account->_id);
 
 			/**
 			 * 2. Is password field null?
@@ -104,9 +104,7 @@ class Activate extends Account_Controller
 		}
 		else // No -> Show error
 		{
-			$this->theme->data(array('content' => $this->load->view('account/activate/error', array(
-				'character_name' => $this->account->get_active_character()->name
-			), true)));
+			$this->theme->data(array('content' => $this->load->view('account/activate/error', array(), true)));
 
 		} // END: 1. Activation code matches URI?
 

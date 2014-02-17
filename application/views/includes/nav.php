@@ -8,7 +8,7 @@
 	<select name="url">
 		<option value="/">Home</option>
 		<option value="/roster">Guild Roster</option>
-		<option value="/account/login">Login</option>
+		<option value="/account/login">Login/Register</option>
 	</select>
 	<input type="submit" value="Go" />
 </form>
