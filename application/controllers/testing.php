@@ -100,7 +100,7 @@ uGuilds");
 		{
 			$row = $query->row();
 
-			return 'test'. ($row->_id + 1) .'@uguilds.net';
+			return 'test'. ((int) $row->_id + 1) .'@uguilds.net';
 		}
 	}
 
