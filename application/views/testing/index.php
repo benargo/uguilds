@@ -120,7 +120,11 @@ Please sign below indicating that you agree to take part in the Session.</li>
 				)); ?>
 
 
-				<p><label for="terms"><?php echo form_checkbox('terms', 'accept', FALSE); ?> I have read and accept the Terms &amp; Conditions and consent to taking part in this Session.</label></p>
+				<p><label for="terms"><?php echo form_checkbox(array(
+					'name' => 'terms',
+					'id' => 'terms',
+					'value' => 'accept'
+				)); ?> I have read and accept the Terms &amp; Conditions and consent to taking part in this Session.</label></p>
 
 				<p style="text-align: center"><input type="submit" value="Begin!"></p>
 			</form>
