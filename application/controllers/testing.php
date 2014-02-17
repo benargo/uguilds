@@ -56,7 +56,7 @@ By taking part in this user test you agree to the following terms and conditions
 - You agree that the data gathered during the Session will be retained and used for the improvement of the Service as provided under applicable law.
 - You consent to audio recordings taking place during the course of the Session.
 - You acknowledge that, where possible, data gathered during the Session will be anonymised. Unfortunately, it may not be possible to anonymise all information gathered.
-- You have the right to withdraw from the Session at any time no questions asked. However, any anonymous data gathered prior to withdrawal will be retained.</p>
+- You have the right to withdraw from the Session at any time no questions asked. However, any anonymous data gathered prior to withdrawal will be retained.
 - You acknowledge that all data gathered is done so in accordance Data Protection Act 1998.
 - You acknowledge that the registered data controller for the Session is University of the West of England, Frenchay Campus, Coldharbour Lane, Bristol, BS16 1QY.
 - You acknowledge that whilst every effort is made to ensure that the content of the Service is accurate, the Service is provided \"as is\" and makes no representations or warranties in relation to the accuracy or completeness of the information found on it.
