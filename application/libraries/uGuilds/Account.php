@@ -181,7 +181,7 @@ class Account
 		{
 			foreach($query->result() as $row)
 			{
-				if($email == $ci->encrypt->decode($row->email))
+				if($email == $row->email)
 				{
 					return new Account($row->_id);
 					break;

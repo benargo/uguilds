@@ -132,6 +132,8 @@ class Login extends Account_Controller
 				{
 					$login_attempts = 1;
 
+					dump($this->account);
+
 					if($this->session->userdata('login_attempts'))
 					{
 						$login_attempts = $this->session->userdata('login_attempts') + 1;

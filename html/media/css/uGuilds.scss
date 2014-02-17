@@ -4,28 +4,28 @@
 
 @font-face { 
 	font-family: 'WebSymbolsLigaRegular';
-		src: url ('../fonts/WebSymbolsLiga-Regular/websymbolsligaregular.eot');
-		src: url ('../fonts/WebSymbolsLiga-Regular/websymbolsligaregular.eot?#iefix') format ('embedded-opentype'),
-			 url ('../fonts/WebSymbolsLiga-Regular/websymbolsligaregular.woff') format ('woff'),
-			 url ('../fonts/WebSymbolsLiga-Regular/websymbolsligaregular.ttf') format ('truetype'),
-			 url ('../fonts/WebSymbolsLiga-Regular/websymbolsligaregular.svg#WebSymbolsRegular') format ('svg');
+		src: url ('/media/fonts/WebSymbolsLiga-Regular/websymbolsligaregular.eot');
+		src: url ('/media/fonts/WebSymbolsLiga-Regular/websymbolsligaregular.eot?#iefix') format ('embedded-opentype'),
+			 url ('/media/fonts/WebSymbolsLiga-Regular/websymbolsligaregular.woff') format ('woff'),
+			 url ('/media/fonts/WebSymbolsLiga-Regular/websymbolsligaregular.ttf') format ('truetype'),
+			 url ('/media/fonts/WebSymbolsLiga-Regular/websymbolsligaregular.svg#WebSymbolsRegular') format ('svg');
 }
 
 // http://www.dafont.com/arabolical.font
 @font-face {
     font-family: 'arabolical1';
-    src: url('../fonts/arabolical/arabolical-webfont.eot');
-    src: url('../fonts/arabolical/arabolical-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/arabolical/arabolical-webfont.woff') format('woff'),
-         url('../fonts/arabolical/arabolical-webfont.ttf') format('truetype'),
-         url('../fonts/arabolical/arabolical-webfont.svg#arabolical1') format('svg');
+    src: url('/media/fonts/arabolical/arabolical-webfont.eot');
+    src: url('/media/fonts/arabolical/arabolical-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/media/fonts/arabolical/arabolical-webfont.woff') format('woff'),
+         url('/media/fonts/arabolical/arabolical-webfont.ttf') format('truetype'),
+         url('/media/fonts/arabolical/arabolical-webfont.svg#arabolical1') format('svg');
     font-weight: normal;
     font-style: normal;
 }
 
 /* uGuilds Font */
 .uguilds {
-	font-family: 'arabolical1', sans-serif;
+	font-family: 'arabolical', 'arabolical1', sans-serif;
 }
 
 /* Class Colours */
