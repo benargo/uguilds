@@ -60,52 +60,62 @@ class Activate extends Account_Controller
 		/**
 		 * 1. Activation code matches URI?
 		 *
-		 * if   = Yes -> Set account as active
-		 * else = No  -> Show error
+		 * if   = No -> SHow error
+		 * else = Yes -> Show error
 		 */
-		if($this->account->activation_code === $this->uri->segment(4)) // Yes -> Set account as active
+		if($this->account->activation_code !== $this->uri->segment(4)) // No -> Show error
 		{
-			$this->db->simple_query(
+			$this->theme->data(array('content' => $this->load->view('account/activate/error', array(), true)));
+		}
+		else // Yes -> Set account as active
+		{
+			/**
+			 * 2. Activate the Account in the database
+			 *
+			 * if   = No  -> Show error
+			 * else = Yes -> Is password field null?
+			 */
+			if(!$this->db->simple_query(
 				"UPDATE ug_Accounts
 				SET is_active = 1,
 					activation_code = '". md5(time()) ."'
-				WHERE id = '". $this->account->id);
-
-			/**
-			 * 2. Is password field null?
-			 *
-			 * if   = Yes -> Show password reset form
-			 * else = No  -> Set session data
-			 */
-			if(is_null($this->account->password)) // Yes -> Show password reset form
+				WHERE id = '". $this->account->id ."'"))
 			{
-				$this->load->helper('form');
-
-				$this->theme->data(array('content' => $this->load->view('account/activate/password_null', array(
-					'account_id' => $this->account->id,
-					'character_name' => $this->account->get_active_character()->name
-				), true)));
+				$this->theme->data(array('content' => $this->load->view('account/activate/error', array(), true)));
 			}
-			else // No -> Set session data
+			else
 			{
-				// Set the session data, we can automatically log them in :)
-				$this->session->set_userdata(array(
-					'user_id' => $this->account->id, 
-					'character_name' => $this->account->get_active_character()->name
-				));
+				/**
+				 * 3. Is password field null?
+				 *
+				 * if   = Yes -> Show password reset form
+				 * else = No  -> Set session data
+				 */
+				if(is_null($this->account->password)) // Yes -> Show password reset form
+				{
+					$this->load->helper('form');
 
-				$this->theme->data(array(
-					'content' => $this->load->view('account/activate/success', array(
+					$this->theme->data(array('content' => $this->load->view('account/activate/password_null', array(
+						'account_id' => $this->account->id,
 						'character_name' => $this->account->get_active_character()->name
-				), true),
-					'account' => $this->account));
+					), true)));
+				}
+				else // No -> Set session data
+				{
+					// Set the session data, we can automatically log them in :)
+					$this->session->set_userdata(array(
+						'user_id' => $this->account->id, 
+						'character_name' => $this->account->get_active_character()->name
+					));
 
-			} // END 2. Is Password field null?
-		}
-		else // No -> Show error
-		{
-			$this->theme->data(array('content' => $this->load->view('account/activate/error', array(), true)));
+					$this->theme->data(array(
+						'content' => $this->load->view('account/activate/success', array(
+							'character_name' => $this->account->get_active_character()->name
+					), true),
+						'account' => $this->account));
 
+				} // END 3. Is Password field null?
+			} // END 2. Activate the Account in the database
 		} // END: 1. Activation code matches URI?
 
 		// Render the page
