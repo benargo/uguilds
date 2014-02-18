@@ -82,7 +82,7 @@ class Activate extends Account_Controller
 				$this->load->helper('form');
 
 				$this->theme->data(array('content' => $this->load->view('account/activate/password_null', array(
-					'account_id' => $this->encrypt->encode($this->account->id),
+					'account_id' => $this->account->id,
 					'character_name' => $this->account->get_active_character()->name
 				), true)));
 			}
@@ -94,9 +94,11 @@ class Activate extends Account_Controller
 					'character_name' => $this->account->get_active_character()->name
 				));
 
-				$this->theme->data(array('content' => $this->load->view('account/activate/success', array(
-					'character_name' => $this->account->get_active_character()->name
-				), true)));
+				$this->theme->data(array(
+					'content' => $this->load->view('account/activate/success', array(
+						'character_name' => $this->account->get_active_character()->name
+				), true),
+					'account' => $this->account)));
 
 			} // END 2. Is Password field null?
 		}
