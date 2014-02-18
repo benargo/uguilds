@@ -151,9 +151,6 @@ class Guild extends \BattlenetArmory\Guild {
 	    			$this->$key = $value;
 	    		}
 
-	    		// Set the session
-	    		$ci->session->set_userdata( 'guild_id', $this->_id );
-
 	    		// Load the full guild from battle.net
 	    		parent::_load(strtolower($this->region), $this->realm, $this->guild_name);
 
@@ -164,7 +161,7 @@ class Guild extends \BattlenetArmory\Guild {
    			}
 
    			// Encode this object and store it in the cache
-   			file_put_contents(APPPATH .'cache/uGuilds/guild_objects/'. $this->domainName .'.txt', serialize($this));
+   			file_put_contents(APPPATH .'cache/uGuilds/guild_objects/'. $this->domain_name .'.txt', serialize($this));
 		}
 		else // No result from the database, this guild must not exist
 		{
