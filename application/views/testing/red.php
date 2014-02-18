@@ -90,18 +90,18 @@
 
 				<?php echo form_hidden('route', 'red'); ?>
 
-				<section id="instructions1" class="two-thirds column alpha">
+				<section id="instructions1" class="eight columns alpha">
 					<h3>Instructions</h3>
 
-					<p>Starting Page: <a href="http://mercenariesinc.beta.uguilds.net/roster/animorphus" target="_blank">http://mercenariesinc.beta.uguilds.net/roster/animorphus</a></p>
+					<p>Starting Page: <a href="<?php echo site_url('roster'); ?>" target="_blank"><?php echo site_url('roster'); ?></a></p>
 
-					<p>1. Click the 'Login/Register' button in the main navigation.</p>
-
-					<p>2. Log in first of all leaving the Email Address and Password field blank.</p>
-
-					<p>3. Log in a second time using:</p>
+					<p>Form Information:</p>
 
 					<table>
+						<tr>
+							<td>Character Name:</td>
+							<td>Animorphus</td>
+						</tr>
 						<tr>
 							<td>Email Address:</td>
 							<td><?php echo $test_email; ?></td>
@@ -110,17 +110,15 @@
 							<td>Password:</td>
 							<td><?php echo $password; ?></td>
 						</tr>
+						<tr>
+							<td>Confirm Password:</td>
+							<td><?php echo $password; ?></td>
+						</tr>
 					</table>
-
-					<h4>Important Question!</h4>
-					<p><label for="account_exists_test"><?php echo form_checkbox(array(
-						'name' => 'account_exists_test',
-						'id' => 'account_exists_test',
-						'value' => 'Yes'
-					)); ?> Did the Registration Form appear when you logged in using the provided details?</label></p>
+					
 				</section>
 
-				<section id="feedback1" class="one-third column omega">
+				<section id="feedback1" class="eight columns omega">
 					<h3>Feedback</h3>
 
 					<p><label for="loading_time">How long did the Starting Page take to load?</label>
@@ -137,71 +135,13 @@
 						'id' => 'login_validation_test',
 						'value' => 'Yes'
 					)); ?> Did the Login Form throw an error when you tried to log in with a blank email address and password?</label></p>
-				</section>
 
-				<section id="instructions2" class="two-thirds column alpha row clearfix">
-					<p>4. Fill in and submit the form as follows:</p>
-
-					<table>
-						<tr>
-							<td>Character Name:</td>
-							<td>Animorphus</td>
-						</tr>
-						<tr>
-							<td>Email Address:</td>
-							<td><em>LEAVE BLANK</em></td>
-						</tr>
-						<tr>
-							<td>Password:</td>
-							<td><em>LEAVE BLANK</em></td>
-						</tr>
-						<tr>
-							<td>Confirm Password:</td>
-							<td><em>LEAVE BLANK</em></td>
-						</tr>
-					</table>
-
-					<p>5. Fill in and submit the form a second time as follows:</p>
-
-					<table>
-						<tr>
-							<td>Character Name:</td>
-							<td>Animorphus</td>
-						</tr>
-						<tr>
-							<td>Email Address:</td>
-							<td><?php echo $test_email; ?></td>
-						</tr>
-						<tr>
-							<td>Password:</td>
-							<td><?php echo $password; ?></td>
-						</tr>
-						<tr>
-							<td>Confirm Password:</td>
-							<td><?php echo $password; ?></td>
-						</tr>
-					</table>
-
-					<p>6. Try to submit the form, which should now include the header 'Verify Your Character' straight away.</p>
-
-					<p><em>At this point, call Ben over who will need to do the next step for you. The next step requires logging in and out of my World of Warcraft account.</em></p>
-
-					<p>7. While you're waiting, give the following URL a try: <a href="http://mercenariesinc.beta.uguilds.net/account/activate/132423/51e03b518158f1c6945e81bf14d8ea93">http://mercenariesinc.beta.uguilds.net/account/activate/132423/51e03b518158f1c6945e81bf14d8ea93</a></p>
-
-					<p>8. Head over to <a href="https://wcc.secureserver.net/email">https://wcc.secureserver.net/email</a>. If it doesn't log you in automatically let Ben know.</p>
-
-					<p>9. Copy and paste the activation link into a new tab and go!</p>
-
-					<h4>Final Question</h4>
-					<p><label for="final_question_test"><?php echo form_checkbox(array(
-						'name' => 'final_question_test',
-						'id' => 'final_question_test',
+					<p><label for="account_exists_test"><?php echo form_checkbox(array(
+						'name' => 'account_exists_test',
+						'id' => 'account_exists_test',
 						'value' => 'Yes'
-					)); ?> Did we arrive back at <a href="http://mercenariesinc.beta.uguilds.net/roster/animorphus">http://mercenariesinc.beta.uguilds.net/roster/animorphus</a>?</label></p>
+					)); ?> Did the Registration Form appear when you logged in using the provided details?</label></p>
 
-				</section>
-
-				<section id="feedback2" class="one-third column omega">
 					<p><label for="registration_character_validation_test"><?php echo form_checkbox(array(
 						'name' => 'registration_character_validation_test',
 						'id' => 'registration_character_validation_test',
@@ -232,11 +172,14 @@
 						'value' => 'Yes'
 					)); ?> Did the Registration Form throw an error when you tried to submit without completing the Character verification task?</label></p>
 
-					<p><label for="arbitrary_activation_link_test"><?php echo form_checkbox(array(
-						'name' => 'arbitrary_activation_link_test',
-						'id' => 'arbitrary_activation_link_test',
+
+					<h4>Final Question</h4>
+					<p><label for="final_question_test"><?php echo form_checkbox(array(
+						'name' => 'final_question_test',
+						'id' => 'final_question_test',
 						'value' => 'Yes'
-					)); ?> Did the arbitrary activation link provided in part 7 throw an error?</label></p>
+					)); ?> Did we arrive back at <a href="http://mercenariesinc.beta.uguilds.net/roster/animorphus">http://mercenariesinc.beta.uguilds.net/roster/animorphus</a>?</label></p>
+
 				</section>
 
 				<hr class="clearfix">

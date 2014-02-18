@@ -109,6 +109,7 @@ uGuilds");
 		if($this->session->userdata('testing') === true)
 		{
 			$this->load->helper('form');
+			$this->load->helper('url');
 
 			$this->load->view('testing/red', array(
 				'test_email' => $this->get_test_email_address(),
@@ -120,6 +121,11 @@ uGuilds");
 			$this->load->helper('url');
 			redirect('/testing');
 		}
+	}
+
+	public function feedback()
+	{
+		
 	}
 }
 
