@@ -87,38 +87,26 @@
 			<?php echo form_open('testing/begin'); ?>
 				<p>Fantastic! I just need a little bit more information first though.</p>
 
-				<section class="terms">
-					<h5>Terms &amp; Conditions</h5>
-					<p>Thank you for taking part in uGuilds’ (‘the Service’) user testing session (‘the Session’) today. This test will follow a supervised pre-planned methodology with the option for open questions and comments after the session.</p>
-					<p>By taking part in this user test you agree to the following terms and conditions:</p>
-					<ol>
-						<li>You agree that the data gathered during the Session will be retained and used for the improvement of the Service as provided under applicable law.</li>
-						<li>You consent to audio recordings taking place during the course of the Session.</li>
-						<li>You acknowledge that, where possible, data gathered during the Session will be anonymised. Unfortunately, it may not be possible to anonymise all information gathered.</li>
-						<li>You have the right to withdraw from the Session at any time no questions asked. However, any anonymous data gathered prior to withdrawal will be retained.</p>
-						<li>You acknowledge that all data gathered is done so in accordance Data Protection Act 1998.</li>
-						<li>You acknowledge that the registered data controller for the Session is University of the West of England, Frenchay Campus, Coldharbour Lane, Bristol, BS16 1QY.</li>
-						<li>You acknowledge that whilst every effort is made to ensure that the content of the Service is accurate, the Service is provided "as is" and makes no representations or warranties in relation to the accuracy or completeness of the information found on it.</li>
-						<li>We do not warrant that the Service will be error, virus or bug free and you accept that it is Your responsibility to make adequate provision for protection against such threats.
+				<h5>Terms &amp; Conditions</h5>
+				<p>Thank you for taking part in uGuilds’ (‘the Service’) user testing session (‘the Session’) today. This test will follow a supervised pre-planned methodology with the option for open questions and comments after the session.</p>
+				<p>By taking part in this user test you agree to the following terms and conditions:</p>
+				<ol>
+					<li>You agree that the data gathered during the Session will be retained and used for the improvement of the Service as provided under applicable law.</li>
+					<li>You consent to audio recordings taking place during the course of the Session.</li>
+					<li>You acknowledge that, where possible, data gathered during the Session will be anonymised. Unfortunately, it may not be possible to anonymise all information gathered.</li>
+					<li>You have the right to withdraw from the Session at any time no questions asked. However, any anonymous data gathered prior to withdrawal will be retained.</p>
+					<li>You acknowledge that all data gathered is done so in accordance Data Protection Act 1998.</li>
+					<li>You acknowledge that the registered data controller for the Session is University of the West of England, Frenchay Campus, Coldharbour Lane, Bristol, BS16 1QY.</li>
+					<li>You acknowledge that whilst every effort is made to ensure that the content of the Service is accurate, the Service is provided "as is" and makes no representations or warranties in relation to the accuracy or completeness of the information found on it.</li>
+					<li>We do not warrant that the Service will be error, virus or bug free and you accept that it is Your responsibility to make adequate provision for protection against such threats.
 Please sign below indicating that you agree to take part in the Session.</li>
-					</ol>
-				</section>
+				</ol>
 
 				<?php if(validation_errors()): ?>
 				<section class="error">
 				<?php echo validation_errors(); ?>
 				</section>
 				<?php endif; ?>
-
-				<p><label for="email">Email Address:</label>
-				<?php echo form_input(array(
-					'id'			=> 'email',
-					'name' 			=> 'email',
-					'placeholder' 	=> 'john2.smith@live.uwe.ac.uk',
-					'required'		=> true,
-					'type' 			=> 'email',
-				)); ?>
-
 
 				<p><label for="terms"><?php echo form_checkbox(array(
 					'name' => 'terms',
