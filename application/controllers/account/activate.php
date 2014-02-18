@@ -53,7 +53,7 @@ class Activate extends Account_Controller
 	public function verify()
 	{
 		// Load some libraries
-		$this->load->library('encrypt');
+		//$this->load->library('encrypt');
 
 		$this->account = new uGuilds\Account($this->uri->segment(3));
 
