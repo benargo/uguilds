@@ -162,24 +162,24 @@ class Register extends Account_Controller
 					{
 						$this->db->query(
 							"INSERT INTO ug_Accounts (
+								id,
 								email,
 								password,
 								activation_code,
 								active_character)
 							VALUES (
-								'". $this->encrypt->encode($this->input->post('email')) ."',
+								". $this->db->escape(sha1($this->input->post('email'))) .",
+								". $this->db->escape($this->encrypt->encode($this->input->post('email'))) .",
 								'". password_hash($this->input->post('password'), PASSWORD_DEFAULT) ."',
 								'". md5(time()) ."',
 								 ". $this->character->id .")");
 
-						$insert_id = $this->db->insert_id();
-
 						$this->db->query(
 							"UPDATE ug_Characters
-							SET account_id = ". $insert_id ."
-							WHERE _id = ". $this->character->id);
+							SET account_id = ". $this->db->escape(sha1($this->input->post('email'))) ."
+							WHERE id = ". $this->character->id);
 
-						$this->account = new uGuilds\Account($insert_id);
+						$this->account = uGuilds\Account::factory($this->input->post('email'));
 
 						$this->_send_activation_email();
 

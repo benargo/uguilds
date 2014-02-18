@@ -38,7 +38,7 @@ if (!defined('BASEPATH')) exit('No direct script access allowed');
 class Account
 {
 	// Variables
-	protected $_id;
+	protected $id;
 	protected $email;
 	protected $password;
 	protected $activation_code;
@@ -66,6 +66,7 @@ class Account
 
 		$result = $ci->db->query(
 			"SELECT 
+				a.id,
 				a.email,
 				a.password,
 				a.activation_code,
@@ -73,17 +74,17 @@ class Account
 				a.is_suspended,
 				a.battletag,
 				a.active_character,
-				c._id AS character_id,
+				c.id AS character_id,
 				c.name AS character_name
 			FROM ug_Accounts a
-			RIGHT OUTER JOIN ug_Characters c ON c.account_id = a._id
-			WHERE a._id = ". $ci->db->escape($id) ."
+			RIGHT OUTER JOIN ug_Characters c ON c.account_id = a.id
+			WHERE a.id = ". $ci->db->escape($id) ."
 			AND c.guild_id = ". $ci->guild->id ."
 			LIMIT 0, 1");
 
 		if($result->num_rows() > 0)
 		{
-			$this->_id = $id;
+			$this->id = $id;
 
 			$row = $result->row();
 			
@@ -172,21 +173,16 @@ class Account
 		$ci->load->library('encrypt');
 
 		$query = $ci->db->query(
-			"SELECT 
-				_id,
-				email
-			FROM ug_Accounts");
+			"SELECT id
+			FROM ug_Accounts
+			WHERE id = ". $ci->db->escape(sha1($email)) ."
+			LIMIT 0, 1");
 			
 		if($query->num_rows() > 0)
 		{
-			foreach($query->result() as $row)
-			{
-				if($email == $row->email)
-				{
-					return new Account($row->_id);
-					break;
-				}
-			}
+			$row = $query->row();
+			
+			return new Account($row->id);
 		}
 		
 		return false;
@@ -211,7 +207,7 @@ class Account
 			"UPDATE `Accounts` 
 			SET `email` = '". $ci->encrypt->encode($value) ."', 
 			`active` = 0
-			WHERE `_id` = ". $this->_id)) return true;
+			WHERE `id` = ". $this->id)) return true;
 		
 		return false;
 	}
@@ -237,7 +233,7 @@ class Account
 				"UPDATE Accounts 
 				SET password = NULL, 
 				active = 0 WHERE 
-				_id = ". $this->_id);
+				_id = ". $this->id);
 		}
 
 		return $ci->db->simple_query(

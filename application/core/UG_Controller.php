@@ -3,6 +3,7 @@
 class UG_Controller extends CI_Controller {
 
 	protected static $controller_name;
+	protected $account;
 
 	/**
 	 * __construct()
@@ -19,6 +20,12 @@ class UG_Controller extends CI_Controller {
 		if(is_null(self::$controller_name))
 		{
 			self::$controller_name = get_class($this);
+		}
+
+		if($this->session->userdata('user_id'))
+		{
+			$this->account = new uGuilds\Account($this->session->userdata('user_id'));
+			$this->theme->data(array('account' => $this->account));
 		}
 	}
 

@@ -65,7 +65,7 @@ class Character extends \BattlenetArmory\Character
 		$this->class =& $ci->Classes->getClass($this->characterData['class']);
 
 		$result = $ci->db->query(
-			"SELECT _id
+			"SELECT id
 			FROM ug_Characters
 			WHERE region = '". $ci->guild->region ."'
 				AND realm = '". $ci->guild->realm ."'
@@ -84,7 +84,7 @@ class Character extends \BattlenetArmory\Character
 		else
 		{
 			$row = $result->row();
-			$this->id = $row->_id;
+			$this->id = $row->id;
 		}
 	}
 

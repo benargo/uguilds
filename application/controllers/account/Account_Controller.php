@@ -7,8 +7,6 @@
  */
 class Account_Controller extends UG_Controller 
 {
-	protected $account;
-
 	/**
 	 * __construct()
 	 *
@@ -47,7 +45,7 @@ class Account_Controller extends UG_Controller
 			$this->email->message("Dear ". $this->account->get_active_character()->name .",\n\n".
 			"We're thrilled that you're taking part in our guild. However, before we can let you roam free we need you to activate your account. It's very easy, mind. All you need to do is copy and paste the following link into your web browser:\n\n".
 			
-			site_url('account/activate/'. $this->encrypt->encode($this->account->_id) .'/'. $this->account->activation_code) ."\n\n".
+			site_url('account/activate/'. $this->account->id .'/'. $this->account->activation_code) ."\n\n".
 				
 			"See you soon!\n".
 				
@@ -59,8 +57,10 @@ class Account_Controller extends UG_Controller
 
 			if($this->email->send())
 			{
-				return true;
-			}		
+				//return true;
+			}
+
+			dump($this->email->print_debugger());
 		}
 
 		throw new Exception('Activation email failed to send, sorry about that.');

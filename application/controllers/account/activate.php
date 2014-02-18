@@ -55,7 +55,7 @@ class Activate extends Account_Controller
 		// Load some libraries
 		$this->load->library('encrypt');
 
-		$this->account = new uGuilds\Account($this->encrypt->decode($this->uri->segment(3)));
+		$this->account = new uGuilds\Account($this->uri->segment(3));
 
 		/**
 		 * 1. Activation code matches URI?
@@ -68,8 +68,8 @@ class Activate extends Account_Controller
 			$this->db->simple_query(
 				"UPDATE ug_Accounts
 				SET is_active = 1,
-					activation_code = '". md5(time()) ."
-				WHERE _id = ". $this->account->_id);
+					activation_code = '". md5(time()) ."'
+				WHERE id = ". $this->db->escape($this->account->id));
 
 			/**
 			 * 2. Is password field null?
@@ -90,7 +90,7 @@ class Activate extends Account_Controller
 			{
 				// Set the session data, we can automatically log them in :)
 				$this->session->set_userdata(array(
-					'user_id' => $account->_id, 
+					'user_id' => $this->account->id, 
 					'character_name' => $this->account->get_active_character()->name
 				));
 

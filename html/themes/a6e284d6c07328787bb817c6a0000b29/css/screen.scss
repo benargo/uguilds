@@ -425,9 +425,10 @@ body {
 					}
 				}
 
-				&.align.right {
-					float: right;
-				}
+			}
+
+			.align.right {
+				float: right;
 			}
 
 			@media only screen and (max-width: 767px) {

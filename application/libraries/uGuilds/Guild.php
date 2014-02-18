@@ -13,15 +13,16 @@ class Guild extends \BattlenetArmory\Guild {
 	const MINLEVEL = 1;
 	const MAXLEVEL = 100;
 
-	private $_id;
-	private $domainName;
-	private $theme;
-	private $locale = 'en_GB';
-	private $faction;
-	private $ranks = array();
-	private $features = array();
-	private $levelRange = array( 'min' => self::MAXLEVEL,
-								 'max' => self::MINLEVEL );
+	protected $id;
+	protected $guild_name;
+	protected $domain_name;
+	protected $theme;
+	protected $locale = 'en_GB';
+	protected $faction;
+	protected $ranks = array();
+	protected $features = array();
+	protected $levelRange = array('min' => self::MAXLEVEL,
+								 'max' => self::MINLEVEL);
 
 	/**
 	 * __construct()
@@ -45,33 +46,33 @@ class Guild extends \BattlenetArmory\Guild {
 	 * @access public
 	 * @return mixed
 	 */
-	function __get( $var )
+	function __get($var)
 	{
 		switch($var)
 		{
 			case "id":
-				return $this->_id;
+				return $this->id;
 				break;
 
 			case "region":
-				return strtoupper( $this->region );
+				return strtoupper($this->region);
 				break;
 
 			case "realm":
-				return ucwords( $this->realm );
+				return ucwords($this->realm);
 				break;
 
-			case "guildName": /* preferred */
+			case "guild_name": /* preferred */
 			case "name":
-				return ucwords( $this->name );
+				return ucwords($this->guild_name);
 				break;
 
-			case "domainName":
-				return strtolower( preg_replace( "![^a-z0-9\-\.]+!i", "-", $this->domainName ) );
+			case "domain_name":
+				return strtolower(preg_replace("![^a-z0-9\-\.]+!i", "-", $this->domainName));
 				break;
 
 			case "ranks":
-				if( empty( $this->ranks ) )
+				if(empty($this->ranks))
 				{
 					$this->_setRanks();
 				}
@@ -84,7 +85,7 @@ class Guild extends \BattlenetArmory\Guild {
 				break;
 
 			case "locale":
-				if( !preg_match( "/([a-z]+)_([A-Z]+)/", $this->locale ) )
+				if(!preg_match("/([a-z]+)_([A-Z]+)/", $this->locale))
 				{
 					$this->locale = 'en_GB';
 				}
@@ -127,10 +128,10 @@ class Guild extends \BattlenetArmory\Guild {
 		$ci =& get_instance();
 
 		$query = $ci->db->query( "SELECT 	
-								`_id`,
+								`id`,
 								`region`,
 								`realm`,
-								`name`,
+								`guild_name`,
 								`domain_name`,
 								`theme`,
 								`locale`
@@ -139,13 +140,13 @@ class Guild extends \BattlenetArmory\Guild {
 						LIMIT 0, 1" );
 
 		// Check we got a result
-		if( $query->num_rows() > 0 )
+		if($query->num_rows() > 0)
 		{
 			// Loop through the rows (there should only be one)
-  			foreach ( $query->result() as $row )
+  			foreach ($query->result() as $row)
    			{
 	   			// Loop through the columns
-	    		foreach( $row as $key => $value )
+	    		foreach($row as $key => $value)
 	    		{
 	    			$this->$key = $value;
 	    		}
@@ -154,7 +155,7 @@ class Guild extends \BattlenetArmory\Guild {
 	    		$ci->session->set_userdata( 'guild_id', $this->_id );
 
 	    		// Load the full guild from battle.net
-	    		parent::_load( strtolower( $this->region ), $this->realm, $this->name );
+	    		parent::_load(strtolower($this->region), $this->realm, $this->guild_name);
 
 	    		// Load the levels and ranks
 	    		$this->_setLowestLevelMember();
@@ -163,11 +164,11 @@ class Guild extends \BattlenetArmory\Guild {
    			}
 
    			// Encode this object and store it in the cache
-   			file_put_contents( APPPATH .'cache/uGuilds/guild_objects/'. $this->domainName .'.txt', serialize( $this ) );
+   			file_put_contents(APPPATH .'cache/uGuilds/guild_objects/'. $this->domainName .'.txt', serialize($this));
 		}
 		else // No result from the database, this guild must not exist
 		{
-			throw new \Exception( 'This guild does not exist' );
+			throw new \Exception('This guild does not exist');
 		}
 	}
 
@@ -339,7 +340,7 @@ class Guild extends \BattlenetArmory\Guild {
 				`name`,
 				account_id
 			FROM ug_Characters
-			WHERE guild_id = ". $this->_id);
+			WHERE guild_id = ". $this->id);
 
 		if($query->num_rows() > 0)
 		{
