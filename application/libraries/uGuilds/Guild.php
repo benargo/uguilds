@@ -177,15 +177,15 @@ class Guild extends \BattlenetArmory\Guild {
 	 * @var int $width
 	 * @return string $url
 	 */
-	public function getEmblem( $showlevel = TRUE, $width = 215 )
+	public function getEmblem($showlevel = TRUE, $width = 215)
 	{
-		if( !file_exists( FCPATH .'media/BattlenetArmory/emblem_'. strtoupper( $this->region ) .'_'. preg_replace( '/\ /', '_', $this->realm ) .'_'. preg_replace( '/\ /', '_', $this->guildName ) .'_'. $width .'.png' ) )
+		if(!file_exists(FCPATH .'media/BattlenetArmory/emblem_'. strtoupper($this->region) .'_'. preg_replace('/\ /', '_', $this->realm) .'_'. preg_replace('/\ /', '_', $this->guild_name) .'_'. $width .'.png'))
 		{
-			$this->showEmblem( $showlevel, $width );
-			$this->saveEmblem( FCPATH . 'media/BattlenetArmory/emblem_'. strtoupper( $this->region ) .'_'. preg_replace( '/\ /', '_', $this->realm ) .'_'. preg_replace( '/\ /', '_', $this->guildName ) .'_'. $width .'.png' );
+			$this->showEmblem($showlevel, $width);
+			$this->saveEmblem(FCPATH . 'media/BattlenetArmory/emblem_'. strtoupper($this->region) .'_'. preg_replace('/\ /', '_', $this->realm) .'_'. preg_replace('/\ /', '_', $this->guild_name) .'_'. $width .'.png');
 		}
 		
-		return '/media/BattlenetArmory/emblem_'. strtoupper( $this->region ) .'_'. preg_replace( '/\ /', '_', $this->realm ) .'_'. preg_replace( '/\ /', '_', $this->guildName ) .'_'. $width .'.png';
+		return '/media/BattlenetArmory/emblem_'. strtoupper($this->region) .'_'. preg_replace('/\ /', '_', $this->realm) .'_'. preg_replace('/\ /', '_', $this->guild_name) .'_'. $width .'.png';
 	}
 
 	/**
