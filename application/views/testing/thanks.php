@@ -6,7 +6,7 @@
 <head>
 	<!-- Meta -->
 	<meta charset="utf-8">
-	<title>Red Route</title>
+	<title>Thanks!</title>
 	<meta name="description" content="UFCEWT-20-3: Advanced Topics in Web Development">
 	<meta name="author" content="10008548">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -80,32 +80,26 @@
 		</header>
 
 		<article>
-			<h2>Red Route</h2>
+			<h2>Thanks!</h2>
 
-			<p>&#8592; <a href="routes">Other Routes</a></p>
-			
-			<img src="//www.cems.uwe.ac.uk/~b2-argo/images/red_route.svg" alt="Red Route" style="width: 100%;" class="red-route">
+			<p>Amazing, thanks! Fancy taking another route?</p>
 
-			<hr class="row clearfix">
+			<a href="red" class="one-third column red-route alpha omega">
+				<h3>Red Route</h3>
+				<img src="//www.cems.uwe.ac.uk/~b2-argo/images/red_route.svg" alt="Red Route" style="width: inherit;">
+			</a>
+			<a href="green" class="one-third column green-route alpha omega">
+				<h3>Green Route</h3>
+				<img src="//www.cems.uwe.ac.uk/~b2-argo/images/green_route.svg" alt="Green Route" style="width: inherit;">
+			</a>
+			<a href="purple" class="one-third column purple-route alpha omega">
+				<h3>Purple Route</h3>
+				<img src="//www.cems.uwe.ac.uk/~b2-argo/images/purple_route.svg" alt="Purple Route" style="width: inherit;">
+			</a>
 
-			<?php echo form_open('testing/feedback'); ?>
+			<hr>
 
-				<?php echo form_hidden('route', 'red'); ?>
-
-				
-				<p><label for="comments">Comments, questions or thoughts?</label>
-				<?php echo form_textarea(array(
-					'name' => 'comments',
-					'id' => 'comments',
-					'rows' => '10',
-					'style' => 'width: 100%'
-				)); ?>
-				<p style="text-align: center;"><label for="submit">All done? Fantastic!</label>
-				<?php echo form_submit('submit', 'Send Feedback'); ?></p>
-
-			</form>
-
-			<p><a href="routes">&#8592; Other Routes</a></p>
+			<p style="text-align: center;"><a class="button" href="/testing/logout">Log Out</a></p>
 			
 		</article>
 

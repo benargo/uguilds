@@ -6,7 +6,7 @@
 <head>
 	<!-- Meta -->
 	<meta charset="utf-8">
-	<title>Red Route</title>
+	<title>Green Route</title>
 	<meta name="description" content="UFCEWT-20-3: Advanced Topics in Web Development">
 	<meta name="author" content="10008548">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -80,17 +80,17 @@
 		</header>
 
 		<article>
-			<h2>Red Route</h2>
+			<h2>Green Route</h2>
 
 			<p>&#8592; <a href="routes">Other Routes</a></p>
 			
-			<img src="//www.cems.uwe.ac.uk/~b2-argo/images/red_route.svg" alt="Red Route" style="width: 100%;" class="red-route">
+			<img src="//www.cems.uwe.ac.uk/~b2-argo/images/green_route.svg" alt="Green Route" style="width: 100%;" class="green-route">
 
 			<hr class="row clearfix">
 
 			<?php echo form_open('testing/feedback'); ?>
 
-				<?php echo form_hidden('route', 'red'); ?>
+				<?php echo form_hidden('route', 'green'); ?>
 
 				
 				<p><label for="comments">Comments, questions or thoughts?</label>

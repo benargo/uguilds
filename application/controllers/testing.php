@@ -94,7 +94,7 @@ uGuilds");
 
 	private function get_test_email_address()
 	{
-		$query = $this->db->query("SELECT COUNT(_id) AS _id FROM ug_Accounts ORDER BY _id DESC");
+		$query = $this->db->query("SELECT COUNT(_id) AS id FROM ug_Accounts ORDER BY id DESC");
 
 		if($query->num_rows() > 0)
 		{
@@ -111,10 +111,39 @@ uGuilds");
 			$this->load->helper('form');
 			$this->load->helper('url');
 
-			$this->load->view('testing/red', array(
-				'test_email' => $this->get_test_email_address(),
-				'password'	 => 'test'. date('Ymd'),
-			));
+			$this->load->view('testing/red');
+		}
+		else
+		{
+			$this->load->helper('url');
+			redirect('/testing');
+		}
+	}
+
+	public function green()
+	{
+		if($this->session->userdata('testing') === true)
+		{
+			$this->load->helper('form');
+			$this->load->helper('url');
+
+			$this->load->view('testing/green');
+		}
+		else
+		{
+			$this->load->helper('url');
+			redirect('/testing');
+		}
+	}
+
+	public function purple()
+	{
+		if($this->session->userdata('testing') === true)
+		{
+			$this->load->helper('form');
+			$this->load->helper('url');
+
+			$this->load->view('testing/purple');
 		}
 		else
 		{
@@ -125,7 +154,27 @@ uGuilds");
 
 	public function feedback()
 	{
-		
+		$this->load->helper('form');
+
+		$this->load->library('email');
+
+		$this->email->from('noreply@uguilds.net', 'uGuilds');
+		$this->email->to('logs@uguilds.net');
+
+		$this->email->subject('uGuilds Beta Testing: '. ucfirst($this->input->post('route')) .' Route Feedback');
+		$this->email->message($this->input->post('comments'));
+
+		$this->email->send();
+
+		$this->load->view('testing/thanks');
+	}
+
+	public function logout()
+	{
+		$this->session->unset_userdata('testing');
+		$this->load->helper('url');
+
+		redirect('testing');
 	}
 }
 
