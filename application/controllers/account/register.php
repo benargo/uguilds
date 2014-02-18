@@ -97,9 +97,9 @@ class Register extends Account_Controller
 		if($this->form_validation->run() === FALSE) // No -> Show registration form with errors
 		{
 			$this->theme->data(array('content' => $this->load->view('account/login/register', array(
-				'character_name' 	=> '',
+				'character_name' 	=> $this->input->post('character'),
 				'email'			 	=> $this->input->post('email'),
-				'password' 		 	=> $this->input->post('password'),
+				'password' 		 	=> '',
 				'password_confirm' 	=> '',
 				'members'		 	=> $this->members,
 				'remainder'		 	=> false
