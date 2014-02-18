@@ -48,7 +48,7 @@ class Character extends UG_Controller
 		));
 
 		$this->data(array(
-			'content' => $this->load->view('controllers/Roster/Character/Index', $this->data(), true)
+			'content' => $this->load->view('controllers/Roster/Character/index', $this->data(), true)
 		));
 
 		$this->render();
