@@ -14,7 +14,7 @@
 	<p><label for="character">Character Name:</label>
 	<select name="character">
 	<?php foreach($members as $member): ?>
-		<option value="<?php echo $member; ?>" <?php if($member === $character_name) echo 'selected'; ?>><?php echo $member; ?></option>
+		<option value="<?php echo $member; ?>" <?php if($member == $character_name) echo 'selected'; ?>><?php echo $member; ?></option>
 	<?php endforeach; ?>
 	</select>
 
