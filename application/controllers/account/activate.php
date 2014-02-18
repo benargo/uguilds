@@ -65,7 +65,7 @@ class Activate extends Account_Controller
 		 */
 		if($this->account->activation_code !== $this->uri->segment(4)) // No -> Show error
 		{
-			$this->theme->data(array('content' => $this->load->view('account/activate/error', array(), true)));
+			//$this->theme->data(array('content' => $this->load->view('account/activate/error', array(), true)));
 		}
 		else // Yes -> Set account as active
 		{
@@ -81,7 +81,7 @@ class Activate extends Account_Controller
 					activation_code = '". md5(time()) ."'
 				WHERE id = '". $this->account->id ."'"))
 			{
-				$this->theme->data(array('content' => $this->load->view('account/activate/error', array(), true)));
+				//$this->theme->data(array('content' => $this->load->view('account/activate/error', array(), true)));
 			}
 			else
 			{
