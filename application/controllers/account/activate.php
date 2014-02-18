@@ -82,7 +82,7 @@ class Activate extends Account_Controller
 				$this->load->helper('form');
 
 				$this->theme->data(array('content' => $this->load->view('account/activate/password_null', array(
-					'account_id' => $this->encrypt->encode($this->account->_id),
+					'account_id' => $this->encrypt->encode($this->account->id),
 					'character_name' => $this->account->get_active_character()->name
 				), true)));
 			}

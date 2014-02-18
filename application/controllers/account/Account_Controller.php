@@ -57,13 +57,13 @@ class Account_Controller extends UG_Controller
 
 			if($this->email->send())
 			{
-				//return true;
+				return true;
 			}
 
-			dump($this->email->print_debugger());
+			show_error($this->email->print_debugger());
 		}
 
-		throw new Exception('Activation email failed to send, sorry about that.');
+		show_error('Activation email failed to send, sorry about that.');
 	}
 
 }
