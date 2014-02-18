@@ -98,7 +98,7 @@ class Activate extends Account_Controller
 					'content' => $this->load->view('account/activate/success', array(
 						'character_name' => $this->account->get_active_character()->name
 				), true),
-					'account' => $this->account)));
+					'account' => $this->account));
 
 			} // END 2. Is Password field null?
 		}
