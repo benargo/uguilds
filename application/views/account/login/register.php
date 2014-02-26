@@ -11,13 +11,6 @@
 
 <?php echo form_open('account/register/verify'); ?>
 
-	<p><label for="character">Character Name:</label>
-	<select id="character" name="character">
-	<?php foreach($members as $member): ?>
-		<option value="<?php echo $member; ?>" <?php if($member == $character_name) echo 'selected'; ?>><?php echo $member; ?></option>
-	<?php endforeach; ?>
-	</select>
-
 	<p><label for="email">Email Address:</label>
 	<?php echo form_input(array('name' => 'email',
 								'id' => 'email',
@@ -38,6 +31,13 @@
 		'id' => 'password_confirm',
 		'value' => $password_confirm,
 		'autocomplete' => 'off')); ?></p>
+
+	<p><label for="character">Character Name:</label>
+	<select id="character" name="character">
+	<?php foreach($members as $member): ?>
+		<option value="<?php echo $member; ?>" <?php if($member == $character_name) echo 'selected'; ?>><?php echo $member; ?></option>
+	<?php endforeach; ?>
+	</select>
 
 	<?php if($remainder): ?>
 
@@ -70,6 +70,5 @@
 
 	<p><?php echo form_submit('verify', 'Continue'); ?></p>
 
-<?php echo form_close(); ?>
-
+</form>
 
