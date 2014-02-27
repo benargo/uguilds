@@ -28,12 +28,11 @@ if (!defined('BASEPATH')) exit('No direct script access allowed');
  * 5.  set_email()
  * 6.  set_password()
  * 7.  authenticate()
- * 8.  activate()
  *
- * 9.  get_character()
- * 10. get_active_character()
- * 11. get_all_characters()
- * 12. set_active_character()
+ * 8.  get_character()
+ * 9.  get_active_character()
+ * 10. get_all_characters()
+ * 11. set_active_character()
  */
 class Account
 {
@@ -189,6 +188,22 @@ class Account
 	}
 
 	/**
+	 * get_email()
+	 *
+	 * Returns the decrypted email address for us to use.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function get_email()
+	{
+		$ci =& get_instance();
+		$ci->load->library('encrypt');
+
+		return $ci->encrypt->decode($this->email);
+	}
+
+	/**
 	 * set_email()
 	 *
 	 * Change an Account's email address and update it in the database.
@@ -255,22 +270,6 @@ class Account
 	public function authenticate($password) 
 	{
 		return password_verify($password, $this->password);
-	}
-
-	/**
-	 * activate()
-	 *
-	 * This function takes in an activation code and account ID as provided and successfully activates the account.
-	 * If the password field is also NULL, as a result of a password reset or this is the first time someone is activating
-	 * their account after applying to the guild, then it will also prompt them to enter a new password.
-	 *
-	 * @access public
-	 * @param (string) $code - The activation code to verify against
-	 * @return boolean
-	 */
-	public function activate($code)
-	{
-		return ($this->activation_code === $code);
 	}
 	 
 	/**************

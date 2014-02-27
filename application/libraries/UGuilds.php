@@ -17,6 +17,7 @@
  * 3. __get($var)
  * 4. _find_guild()
  * 5. _set_domain()
+ * 6. override_domain()
  */
 
 // Remember library class names need to be capitalised.
@@ -41,12 +42,19 @@ class UGuilds
 	{
 		// Include all this library's files
 		$iterator = new RecursiveDirectoryIterator(APPPATH .'libraries/uGuilds');
-		foreach ( new RecursiveIteratorIterator($iterator) as $filename => $file ) 
+		foreach (new RecursiveIteratorIterator($iterator) as $filename => $file) 
 		{
 			if( substr( $file->getFileName(), -4 ) == '.php' )
 			{
 				require_once( $file->getPathName() );
 			}
+		}
+
+		$ci =& get_instance();
+
+		if(ENVIRONMENT === 'production' && $ci->input->is_cli_request())
+		{
+			$this->override_domain();
 		}
 
 		// Find the guild
@@ -62,12 +70,12 @@ class UGuilds
 	 * @var string $var
 	 * @return mixed
 	 */
-	function __get( $var )
+	function __get($var)
 	{
-		switch( $var )
+		switch($var)
 		{
 			case "domain":
-				if( is_null( $this->domain ) )
+				if(is_null($this->domain))
 				{
 					$this->_set_domain();
 				}
@@ -78,7 +86,7 @@ class UGuilds
 	}
 
 	/**
-	 * _find_guild()
+	 *_find_guild()
 	 *
 	 * Sets the domain if it's not been set yet,
 	 * then loads a guild, either from the cache or by creating a new one
@@ -128,6 +136,17 @@ class UGuilds
 		{
 			show_error("The application cannot be run on 'app.uguilds.net'", 403);
 		}
+	}
+
+	/**
+	 * override_domain()
+	 *
+	 * If we're running via the CLI, we won't have a domain name set. 
+	 * Therefore we need to set one manually, which we can use for testing via the command line
+	 */
+	public function override_domain()
+	{
+		$this->domain = 'mercenariesinc.uguilds.vhost';
 	}
 }
 

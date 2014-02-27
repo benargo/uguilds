@@ -3,9 +3,9 @@
 /**
  * CI -> Controllers -> Account
  *
- * Handles the login to the web service
+ * Root controller for the Account system
  */
-class Account_Controller extends UG_Controller 
+class Account extends UG_Controller 
 {
 	/**
 	 * __construct()
@@ -21,15 +21,43 @@ class Account_Controller extends UG_Controller
 	}
 
 	/**
-	 * _send_activation_email()
+	 * is_logged_in()
+	 *
+	 * Checks whether there is an authenticated session
+	 * and whether $this->account is set to a valid account object.
+	 *
+	 * @access protected
+	 * @return boolean
+	 */
+	protected function is_logged_in()
+	{
+		// Return true or false
+		return (bool) $this->session->userdata('user_id');
+	}
+
+	/**
+	 * is_officer()
+	 *
+	 * Checks whether or not the character is either the guild master or a registered officer
+	 *
+	 * @access protected
+	 * @return boolean
+	 */
+	protected function is_officer()
+	{
+		
+	}
+
+	/**
+	 * send_activation_email()
 	 *
 	 * Loads the Email library, preprares an activation email and sends it out.
 	 * For the moment, emails are sent as plain text. HTML email templates will come later
 	 *
-	 * @access public
+	 * @access protected
 	 * @return Either void or an Exception
 	 */
-	protected function _send_activation_email()
+	protected function send_activation_email()
 	{
 		if(isset($this->account))
 		{

@@ -176,14 +176,14 @@ class Character extends \BattlenetArmory\Character
 	 * @param Boolean $withName: Set to FALSE if you want to use the %s instead of name
    	 * @return A string with the title and name
 	 */
-	public function getCurrentTitle( $withName = true )
+	public function getCurrentTitle($withName = true)
 	{
-		if( empty( $this->current_title ) )
+		if(empty($this->current_title))
 		{
 			$this->setTitles();
 		}
 
-		return parent::getCurrentTitle( $withName );
+		return parent::getCurrentTitle($withName);
 	}
 
 	/**
@@ -233,7 +233,7 @@ class Character extends \BattlenetArmory\Character
 	 * @param string $type: one of 'thumbnail' (default), 'pic' or 'inset'
 	 * @return string: url of the cached image
 	 */
-	public function getImageURL( $type = 'thumbnail' )
+	public function getImageURL($type = 'thumbnail')
 	{
 		$dest_file = FCPATH .'media/images/characters/'
 					. strformat($this->region) .'/'

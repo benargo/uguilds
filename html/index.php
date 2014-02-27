@@ -22,6 +22,7 @@
 	{
 		case 'local.uguilds.vhost':
 		case 'weeb01.cems.uwe.ac.uk':
+		default:
 			define('ENVIRONMENT', 'development');
 			break;
 

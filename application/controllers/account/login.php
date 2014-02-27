@@ -5,9 +5,9 @@
  *
  * Handles the login to the web service
  */
-require_once(APPPATH .'controllers/account/Account_Controller.php');
+require_once(APPPATH .'controllers/account/account.php');
 
-class Login extends Account_Controller 
+class Login extends Account
 {
 	/**
 	 * __construct()
@@ -46,7 +46,7 @@ class Login extends Account_Controller
 
 		if(isset($_SERVER['HTTP_REFERER']))
 		{
-			$this->session->set_userdata(array('login_referer' => $_SERVER['HTTP_REFERER']));
+			$this->session->set_flashdata('login_referer', $_SERVER['HTTP_REFERER']);
 		}
 
 		$this->_show_login_form();
@@ -68,6 +68,7 @@ class Login extends Account_Controller
 	{
 		$this->load->helper(array('form', 'url'));
 		$this->load->library('form_validation');
+		$this->session->keep_flashdata('login_referer');
 
 		$this->form_validation->set_rules(array(
 			array(
@@ -193,7 +194,7 @@ class Login extends Account_Controller
 						else // Yes -> Log in & set session data
 						{
 							$this->session->set_userdata(array(
-								'user_id' => $this->account->_id, 
+								'user_id' => $this->account->id, 
 								'character_name' => $this->account->get_active_character()->name));
 
 							/**
@@ -202,13 +203,13 @@ class Login extends Account_Controller
 							 * if   = No  -> Redirect to root
 							 * else = Yes -> Redirect to referer
 							 */
-							if(!$this->session->userdata('login_referer')) // No -> Redirect to root
+							if(!$this->session->flashdata('login_referer')) // No -> Redirect to root
 							{
 								redirect(site_url());
 							}
 							else // Yes -> Redirect to referer
 							{
-								redirect($this->session->userdata('login_referer'));
+								redirect($this->session->flashdata('login_referer'));
 							} // END: 6. Referer Set?
 
 						} // END: 5. Account is Suspended?
@@ -223,6 +224,23 @@ class Login extends Account_Controller
 
 		// Render the page
 		$this->theme->view('page');
+	}
+
+	/**
+	 * logout()
+	 *
+	 * Logs the user out, ending their session.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function logout()
+	{
+		$this->session->unset_userdata('user_id');
+		$this->session->unset_userdata('character_name');
+
+		$this->load->helper('url');
+		redirect('/');
 	}
 
 	/**

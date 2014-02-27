@@ -54,6 +54,8 @@ $route['roster\/.+(\/)?'] = "roster/character";
 
 // Account
 $route['account/activate/(.*)'] = "account/activate/verify";
+$route['account/logout'] = "account/login/logout";
+$route['account\/?'] = "account/manage";
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

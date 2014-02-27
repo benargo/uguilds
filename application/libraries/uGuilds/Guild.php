@@ -247,6 +247,14 @@ class Guild extends \BattlenetArmory\Guild {
 
 	/**
 	 * getMembers
+	 *
+	 * Get members, sorted by one of the following fields:
+	 * 1. name
+	 * 2. class
+	 * 3. race
+	 * 4. gender
+	 * 5. level
+	 * 6. rank
 	 * 
 	 * @access public
 	 * @param string $sort
@@ -269,6 +277,7 @@ class Guild extends \BattlenetArmory\Guild {
 
 				$members[$key]->$trait = $value;
 			}
+
 			unset($members[$key]->character);
 		}
 
@@ -278,14 +287,20 @@ class Guild extends \BattlenetArmory\Guild {
 	/**
 	 * get_linked_members()
 	 *
-	 * Get members which do have accounts linked to them
+	 * Get members which do have accounts linked to them, sorted by one of the following fields
+	 * 1. name
+	 * 2. class
+	 * 3. race
+	 * 4. gender
+	 * 5. level
+	 * 6. rank
 	 *
 	 * @access public
 	 * @param (string) $sort
 	 * @param (string) $sortFlag
 	 * @return array
 	 */
-	public function get_linked_members()
+	public function get_linked_members($sort = FALSE, $sortFlag = 'asc')
 	{
 		$ci =& get_instance();
 
@@ -326,7 +341,7 @@ class Guild extends \BattlenetArmory\Guild {
 	 * @param (string) $sortFlag
 	 * @return array
 	 */
-	public function get_unlinked_members($sort = FALSE, $sortFlag = 'asc')
+	public function get_unlinked_members($sort = false, $sortFlag = 'asc')
 	{
 		$members = $this->getMembers();
 
@@ -337,25 +352,26 @@ class Guild extends \BattlenetArmory\Guild {
 				`name`,
 				account_id
 			FROM ug_Characters
-			WHERE guild_id = ". $this->id);
+			WHERE guild_id = ". $this->id ."
+			AND account_id IS NOT NULL");
 
 		if($query->num_rows() > 0)
 		{
 			$result = $query->result();
-			$filter = array();
 
 			foreach($result as $row)
 			{
-				$filter = array_merge($filter, $this->filter(array('name' => $row->name)));
+				$filter = $this->filter(array('name' => $row->name));
 			}
 
 			foreach($filter as $key => $member)
 			{
 				unset($members[$key]);
 			}
+
 		}
 
-		return $members;
+		return $this->sort($members, $sort, $sortFlag);
 	}
 
 	/**
@@ -368,7 +384,9 @@ class Guild extends \BattlenetArmory\Guild {
 	public function filter(array $params = array())
 	{
 		$this->params = $params;
-		$members = array_values(array_filter($this->getMembers(), array($this, '_filter')));
+
+		$members = array_filter($this->getMembers(), array($this, '_filter'));
+
 		unset($this->params);
 		return $members;
 	}
@@ -377,8 +395,8 @@ class Guild extends \BattlenetArmory\Guild {
 	 * _filter()
 	 * 
 	 * @access private
-	 * @param array $member
-	 * @return array
+	 * @param $member
+	 * @return boolean
 	 */
 	private function _filter($member)
 	{
@@ -392,6 +410,47 @@ class Guild extends \BattlenetArmory\Guild {
 
 		return false;
 	}
+
+	/**
+	 * sort()
+	 *
+	 * Sorts the given members based on a key and a flag.
+	 *
+	 * Keys can be one of the following: 
+	 * 1. name
+	 * 2. class
+	 * 3. race
+	 * 4. gender
+	 * 5. level
+	 * 6. rank
+	 *
+	 * @access private
+	 * @param array $members
+	 * @param string $sortKey
+	 * @param string $sortFlag
+	 * @return array
+	 */
+	protected function sort(array $members, $sort_key, $sort_flag)
+    {
+   		foreach(array_keys($members) as $key)
+        {
+   			$temp_array[$key] = $members[$key]->$sort_key;
+   		}
+
+   		natsort($temp_array);
+   		
+   		if ($sort_flag == 'desc')
+        {
+   			$temp_array = array_reverse($temp_array, true);
+   		}
+
+   		foreach(array_keys($temp_array) as $key)
+        {
+   			$return_array[] = $members[$key]; 
+   		}
+
+   		return $return_array;
+   	}
 
 	/**
 	 * getLowestLevelMember()

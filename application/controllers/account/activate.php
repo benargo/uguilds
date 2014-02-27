@@ -5,9 +5,9 @@
  *
  * Handles the login to the web service
  */
-require_once(APPPATH .'controllers/account/Account_Controller.php');
+require_once(APPPATH .'controllers/account/account.php');
 
-class Activate extends Account_Controller
+class Activate extends Account
 {
 	/**
 	 * __construct()
