@@ -51,14 +51,6 @@ class Theme extends CI_Model
 	function __construct()
 	{
 		parent::__construct();
-
-		// Get some properties from the controller
-		$ci =& get_instance();
-
-		$this->controller_name = ucwords($ci->router->directory) . ucwords(get_class($ci)) .'/')
-
-		// Search for the theme
-		$this->find_by_id($ci->guild->theme);
 	}
 
 	/**
@@ -89,15 +81,19 @@ class Theme extends CI_Model
 	 *
 	 * Search to find the theme based on a given ID number.
 	 * 
-	 * @access private
+	 * @access public
+	 * @param string $id - The ID of the given theme
 	 * @return void
 	 */
-	private function find_by_id($id = self::DEFAULT_THEME)
+	public function find_by_id($id = self::DEFAULT_THEME)
 	{
 		$this->id = $id;
 
 		if(file_exists(FCPATH .'themes/'. $this->id .'/theme.xml'))
 		{
+			$ci = get_instance();
+			$this->controller = $ci->controller();
+
 			$this->xml = simplexml_load_file(FCPATH .'themes/'. $this->id .'/theme.xml');
 
 			$this->get_css_files();
@@ -162,7 +158,7 @@ class Theme extends CI_Model
 			{
 				if(substr($file->getFileName(), -4) == '.css')
 				{
-					$this->css[] = str_replace(FCPATH, '', $file->getPathName());
+					$this->css[] = str_replace(FCPATH, '/', $file->getPathName());
 				}
 			}
 
@@ -187,14 +183,14 @@ class Theme extends CI_Model
 	{	
 		$files = array();
 
-		if(is_dir(FCPATH .'media/css/controller/'. $this->controller_name))
+		if(is_dir(FCPATH .'media/css/controller/'. $this->controller))
 		{
-			$files = scandir(FCPATH .'media/css/controller/'. $this->controller_name .'/');
+			$files = scandir(FCPATH .'media/css/controller/'. $this->controller .'/');
 			$files = preg_grep('/\.css$/', $files);
 
 			foreach($files as $key => $value)
 			{
-				$files[$key] = '/media/css/controller/'. $this->controller_name .'/'. $value;
+				$files[$key] = '/media/css/controller/'. $this->controller .'/'. $value;
 			}
 		}
 
@@ -221,7 +217,7 @@ class Theme extends CI_Model
 			{
 				if(substr($file->getFileName(), -7) == '.min.js')
 				{
-					$this->javascript[] = str_replace(FCPATH, '', $file->getPathName());
+					$this->javascript[] = str_replace(FCPATH, '/', $file->getPathName());
 				}
 			}
 		}
@@ -245,14 +241,14 @@ class Theme extends CI_Model
 	{
 		$files = array();
 
-		if(is_dir(FCPATH .'media/js/controller/'. $this->controller_name .'/'))
+		if(is_dir(FCPATH .'media/js/controller/'. $this->controller .'/'))
 		{
-			$files = scandir(FCPATH .'media/js/controller/'. $this->controller_name .'/');
+			$files = scandir(FCPATH .'media/js/controller/'. $this->controller .'/');
 			$files = preg_grep('/\.min\.js/', $files);
 
 			foreach($files as $key => $value)
 			{
-				$files[$key] = '/media/js/controller/'. $this->controller_name .'/'. $value;
+				$files[$key] = '/media/js/controller/'. $this->controller .'/'. $value;
 			}
 		}
 
@@ -277,7 +273,7 @@ class Theme extends CI_Model
 			$iterator = new RecursiveDirectoryIterator($this->get_path(true));
 			foreach (new RecursiveIteratorIterator($iterator) as $filename => $file) 
 			{
-				if(preg_grep('/\.(gif|jpe?g|png|tiff|svg)$/', $file->getFileName())
+				if(preg_match('/\.(gif|jpe?g|png|tiff|svg)$/', $file->getFileName()))
 				{
 					$this->images[] = str_replace(FCPATH, '', $file->getPathName());
 				}
@@ -289,52 +285,24 @@ class Theme extends CI_Model
 	}
 
 	/**
-	 * data()
+	 * get_page()
 	 *
+	 * Renders the final page
+	 * 
 	 * @access public
-	 * @param array $data
-	 * @return views
+	 * @return string
 	 */
-	public function data(array $data = array())
+	public function get_page()
 	{
-		$this->data = array_merge($this->data, $data);
-		return $this->data;
-	}
-
-	/**
-	 * view()
-	 *
-	 * Gets the requested view and returns it as data
-	 * @see http://ellislab.com/codeigniter/user-guide/general/views.html
-	 * @access public
-	 * @param string $name
-	 * @param array $data
-	 * @return \CodeIgniter\View
-	 */
-	public function view($name, array $data = array(), $asData = false)
-	{
-		$this->data = array_merge($this->data, $data);
-
-		if(!is_link(APPPATH .'views/themes/'. $this->_id) && is_dir(FCPATH .'themes/'. $this->_id .'/views'))
+		if(!is_link(APPPATH .'views/themes/'. $this->id) && is_dir(FCPATH .'themes/'. $this->id .'/views'))
 		{
-			symlink(FCPATH .'themes/'. $this->_id .'/views', APPPATH .'views/themes/'. $this->_id);
+			symlink(FCPATH .'themes/'. $this->id .'/views', APPPATH .'views/themes/'. $this->id);
 		}
 
-		if(file_exists(readlink(APPPATH .'views/themes/'. $this->_id) .'/'. $name .'.php'))
+		if(file_exists(readlink(APPPATH .'views/themes/'. $this->id) .'/page.php'))
 		{
-			if(!array_key_exists($name, $this->views))
-			{
-				$this->views[$name] = 'themes/'. $this->_id .'/'. $name;
-			}
-
-			if($name == 'page')
-			{
-				$this->getIncludes();
-			}
-			
-			$ci =& get_instance();
-			return $ci->load->view($this->views[$name], $this->data, $asData);
+			return 'themes/'. $this->id .'/page.php';
 		}
 	}
-
 }
+

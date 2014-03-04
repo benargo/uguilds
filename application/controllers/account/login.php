@@ -21,10 +21,7 @@ class Login extends Account
 	{
 		parent::__construct();
 
-		$this->theme->data(array(
-			'page_title' => 'Login',
-			'author' => $this->guild->name,
-		));
+		$this->data['page_title'] = 'Login/Register';
 	}
 
 	/**
@@ -39,8 +36,8 @@ class Login extends Account
 	{
 		if($this->session->userdata('login_locked') >= time())
 		{
-			$this->theme->data(array('content' => $this->load->view('account/login/locked', $this->theme->data(), true)));
-			$this->theme->view('page');
+			$this->data['subview'] = 'account/login/locked';
+			$this->render();
 			exit;
 		}
 
@@ -51,7 +48,7 @@ class Login extends Account
 
 		$this->_show_login_form();
 
-		$this->theme->view('page');
+		$this->render();
 	}
 
 	/**
@@ -110,14 +107,14 @@ class Login extends Account
 				}
 				sort($members);
 
-				$this->theme->data(array('content' => $this->load->view('account/login/register', array(
-					'email'			 	=> $this->input->post('email'),
-					'password' 		 	=> $this->input->post('password'),
-					'password_confirm' 	=> '',
-					'members'		 	=> $members,
-					'character_name' 	=> '',
-					'remainder'		 	=> false
-				), true)));
+				$this->data['email']			= $this->input->post('email');
+				$this->data['password']			= $this->input->post('password');
+				$this->data['password_confirm'] = '';
+				$this->data['members']		 	= $members;
+				$this->data['character_name'] 	= '';
+				$this->data['remainder']		= false;
+
+				$this->data['subview'] = 'account/login/register';
 			}
 			else // Yes -> Check if Account authenticates
 			{
@@ -132,8 +129,6 @@ class Login extends Account
 				if(!$this->account->authenticate($this->input->post('password'))) // No -> Check if login attempts >= 3
 				{
 					$login_attempts = 1;
-
-					dump($this->account);
 
 					if($this->session->userdata('login_attempts'))
 					{
@@ -150,8 +145,8 @@ class Login extends Account
 					 */
 					if($this->session->userdata('login_attempts') >= 3) // No -> Show login form
 					{
-						$this->theme->data(array('authentication_error' => "<p>Sorry, but either your email address or password was incorrect.</p>"));
-						$this->theme->data(array('content' => $this->load->view('account/login/index', $this->theme->data(), true)));
+						$this->data['authentication_error'] = "<p>Sorry, but either your email address or password was incorrect.</p>";
+						$this->data['subview'] = 'account/login/index';
 					}
 					else // Yes -> Lock out for 30 minutes
 					{
@@ -160,7 +155,7 @@ class Login extends Account
 							$this->session->set_userdata(array('login_locked' => time() + 1800));
 						}
 
-						$this->theme->data(array('content' => $this->load->view('account/login/locked', array(), true)));
+						$this->data['subview'] = 'account/login/locked';
 					}
 				}
 				else // Yes -> Check if Account is active
@@ -174,10 +169,11 @@ class Login extends Account
 					if(!$this->account->is_active) // No -> Send activation email
 					{
 						$this->_send_activation_email();
-						$this->theme->data(array('content' => $this->load->view('account/login/activate', array(
-							'character_name' => $this->account->get_active_character()->name,
-							'email' 		 => $this->input->post('email')
-						), true)));
+
+						$this->data['character_name'] = $this->account->get_active_character()->name;
+						$this->data['email']		  = $this->input->post('email');
+
+						$this->data['subview'] = 'account/login/activate';
 					}
 					else // Yes -> Check if Account is suspended
 					{
@@ -189,7 +185,7 @@ class Login extends Account
 						 */
 						if($this->account->is_suspended) // No -> Prevent authentication attempt
 						{
-							$this->theme->data(array('content' => $this->load->view('account/login/suspended', array(), true)));
+							$this->data['subview'] = 'account/login/suspended';
 						}
 						else // Yes -> Log in & set session data
 						{
@@ -223,7 +219,7 @@ class Login extends Account
 		} // END: 1. Login Form Validates?
 
 		// Render the page
-		$this->theme->view('page');
+		$this->render();
 	}
 
 	/**
@@ -255,10 +251,9 @@ class Login extends Account
 	{
 		$this->load->helper('form');
 
-		$this->theme->data(array('content' => $this->load->view('account/login/index', array(
-			'email' => $this->input->post('email'),
-			'password' => $this->input->post('password')
-		), true)));
+		$this->data['email'] = $this->input->post('email');
+		$this->data['password'] = $this->input->post('password');
+		$this->data['subview'] = 'account/login/index';
 	}
 }
 

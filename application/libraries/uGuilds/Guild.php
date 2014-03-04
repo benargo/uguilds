@@ -423,6 +423,7 @@ class Guild extends \BattlenetArmory\Guild {
 	 * 4. gender
 	 * 5. level
 	 * 6. rank
+	 * 7. achievementPoints
 	 *
 	 * @access private
 	 * @param array $members
@@ -434,7 +435,14 @@ class Guild extends \BattlenetArmory\Guild {
     {
    		foreach(array_keys($members) as $key)
         {
-   			$temp_array[$key] = $members[$key]->$sort_key;
+        	$subtotal = 0;
+
+        	if(array_key_exists($sort_key, $members[$key]))
+        	{
+        		$subtotal = $members[$key][$sort_key];
+        	}
+
+   			$temp_array[$key] = $subtotal;
    		}
 
    		natsort($temp_array);

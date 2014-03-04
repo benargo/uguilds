@@ -1,18 +1,14 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); ?>
 <!DOCTYPE html>
-<html lang="<?php echo $locale; ?>" manifest="/manifest">
+<html lang="<?php echo $guild->locale; ?>" manifest="/manifest">
 <head>
-	<?php echo $head; ?>
-
-	<!-- Theme Files -->
-	<link rel="stylesheet" href="<?php echo $theme_path; ?>/css/screen.css">
-	<script src="<?php echo $theme_path; ?>/js/theme.min.js"></script>
+	<?php get_include('head'); ?>
 </head>
 <body class="nojs">
 	<div class="container">
 		<!-- Header -->
 		<nav class="menu-bar">
-			<?php echo $nav; ?>
+			<?php get_include('nav'); ?>
 		</nav>
 		<header>
 			<a href="/" rel="home">
@@ -24,11 +20,11 @@
 			</a>
 		</header>
 		<article>
-			<?php echo $content; ?>
+			<?php get_subview(); ?>
 		</article>
 		<!-- Footer -->
 		<footer>
-			<?php echo $footer; ?>
+			<?php get_include('footer'); ?>
 		</footer>
 		<!-- End Footer -->
 	</div>

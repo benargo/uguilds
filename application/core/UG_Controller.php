@@ -1,10 +1,12 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class UG_Controller extends CI_Controller {
-
-	protected static $controller_name;
+class UG_Controller extends CI_Controller 
+{
+	protected $controller_name;
+	private $domain;
 	protected $account;
-	protected $data;
+	public $guild;
+	public $data;
 
 	/**
 	 * __construct()
@@ -18,32 +20,32 @@ class UG_Controller extends CI_Controller {
 	{
 		parent::__construct();
 
-		self::$controller_name = get_class($this);
+		$this->controller_name = ucwords($this->router->directory) . get_class($this);
+
+		$this->find_guild();
+		$this->data['locale'] = $this->guild->locale;
+
+		$this->theme->find_by_id($this->guild->theme);
+		$this->data['theme'] =& $this->theme;
 
 		if($this->session->userdata('user_id'))
 		{
 			$this->account = new uGuilds\Account($this->session->userdata('user_id'));
-			$this->theme->data(array('account' => $this->account));
+			$this->data['account'] =& $this->account;
 		}
-
-		$this->get_includes();
 	}
 
 	/**
-	 * data()
+	 * controller()
 	 *
-	 * Merges additional data into the $this->data array,
-	 * and then returns the global data array
+	 * Returns the controller name
 	 *
-	 * @access protected
-	 * @param array $data
-	 * @return views
+	 * @access public
+	 * @return string
 	 */
-	protected function data(array $data = array())
+	public function controller()
 	{
-		$this->data = array_merge($this->data, $data);
-
-		return $this->data;
+		return $this->controller_name;
 	}
 
 	/**
@@ -52,30 +54,61 @@ class UG_Controller extends CI_Controller {
 	 * Renders the final page
 	 *
 	 * @access protected
-	 * @return text/html
+	 * @return void
 	 */
 	protected function render()
 	{
-		$this->theme->view('page');
+		$this->load->view($this->theme->get_page(), $this->data);
 	}
 
 	/**
-	 * getIncludes()
+	 * find_guild()
+	 *
+	 * Sets the domain if it's not been set yet,
+	 * then loads a guild, either from the cache or by creating a new one
 	 * 
-	 * @access public
+	 * @access private
 	 * @return void
 	 */
-	private function get_includes()
+	private function find_guild() 
 	{
-		$ci =& get_instance();
-		$dir = scandir(APPPATH .'views/includes');
-		foreach($dir as $file)
+		// Look up the domain name
+		if(is_null($this->domain)) 
 		{
-			if(preg_match('/.*\.php$/', $file))
-			{
-				$file = str_replace('.php', '', $file);
-				$this->data[$file] = $ci->load->view('includes/'. $file, $this->data, true);
-			}
+			$this->set_domain();
 		}
-	} 
+
+		// Check if there's a cache file for this guild and it's valid
+		if(file_exists(APPPATH . 'cache/uGuilds/guild_objects/'. $this->domain .'.txt') 
+			&& filemtime(APPPATH . 'cache/uGuilds/guild_objects/'. $this->domain .'.txt') >= time() - $this->config->item('GuildTTL', 'battle.net'))
+		{
+			$this->guild = unserialize(file_get_contents(APPPATH . 'cache/uGuilds/guild_objects/'. $this->domain .'.txt'));
+			$this->data['guild'] =& $this->guild;
+		}
+		else // No cache file, generate one from the database
+		{
+			$this->guild = new uGuilds\Guild($this->domain);
+			$this->data['guild'] =& $this->guild;
+		}
+	}
+
+	/** 
+	 * set_domain()
+	 *
+	 * If the domain is null, set it, simple.
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function set_domain() 
+	{
+		// Determine the domain name from SERVER_NAME
+		$this->domain = $_SERVER['SERVER_NAME'];
+
+		// If they're running on the application domain name, then return a 403 Forbidden error
+		if($this->domain === "app.uguilds.net") 
+		{
+			show_error("The application cannot be run on 'app.uguilds.net'", 403);
+		}
+	}
 }

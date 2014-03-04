@@ -3,7 +3,15 @@
 /**
  * CI -> Controllers -> Account
  *
- * Root controller for the Account system
+ * Root controller for the Account system.
+ *
+ * This controller should be the basis for all account based systems.
+ *
+ * @package uGuilds
+ * @author Ben Argo <ben@benargo.com>
+ * @version 1.0
+ * @copyright Copyright © 2013-2014, Ben Argo
+ * @license GPL v3
  */
 class Account extends UG_Controller 
 {
@@ -18,6 +26,24 @@ class Account extends UG_Controller
 	function __construct() 
 	{
 		parent::__construct();
+	}
+
+	/**
+	 * check_login()
+	 *
+	 * Checks whether there is an authenticated session.
+	 * If not, redirect to the login page
+	 *
+	 * @access protected
+	 * @return void
+	 */
+	protected function check_login()
+	{
+		if(!$this->is_logged_in())
+		{
+			$this->load->helper('url');
+			redirect('account/login');
+		}
 	}
 
 	/**

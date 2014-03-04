@@ -16,8 +16,7 @@ class Table extends UG_Controller
 		header('Last-Modified: '. date('r', $this->guild->getData()['lastModified']/1000));
 		header('Cache-Control: max-age='. $this->config->item('battle.net')['GuildsTTL']);
 
-		$this->theme->data(array('page_title' => 'Guild Roster',
-                                 'author' => $this->guild->name));
+		$this->data['page_title'] = 'Guild Roster';
 	}
 
 
@@ -31,15 +30,15 @@ class Table extends UG_Controller
 		$this->load->model('races');
 		$this->load->model('classes');
 
-		$this->theme->data(array("races"   => $this->races,
-							 	 "classes" => $this->classes,
-							 	 "members" => $this->guild->getMembers('rank'),
-							 	 "ranks"   => $this->guild->ranks,
-							 	 "uri"	   => '/roster'));
+		$this->data['races'] = $this->races;
+		$this->data['classes'] = $this->classes;
+		$this->data['members'] = $this->guild->getMembers('rank');
+		$this->data['ranks'] = $this->guild->ranks;
+		$this->data['uri'] = '/roster';
 
-		$this->theme->data(array("content" => $this->load->view('controllers/Roster/table', $this->theme->data(), true)));
+		$this->data['subview'] = 'controllers/Roster/table';
 
-		$this->theme->view('page');
+		$this->render();
 	}
 
 	/**
@@ -52,9 +51,9 @@ class Table extends UG_Controller
 		$this->load->model('races');
 		$this->load->model('classes');
 
-		$data = array("races"   => $this->races,
-					"classes" => $this->classes,
-					"ranks"   => $this->guild->ranks);
+		$this->data['races'] = $this->races;
+		$this->data['classes'] = $this->classes;
+		$this->data['ranks'] = $this->guild->ranks;
 
 		$params = array();
 		$segments = array_slice($this->uri->segments, 1);
@@ -72,13 +71,14 @@ class Table extends UG_Controller
 			}
 
 		}
-		$data['uri'] = '/'.implode('/', $this->uri->segments);
-		$data['members'] = $this->guild->getMembers('rank');
-		$data['filtered'] = $this->guild->filter($params);
 
-		$this->theme->data($data);
-		$this->theme->data(array("content" => $this->load->view('controllers/Roster/table', $this->theme->data(), true)));
-		$this->theme->view('page');	
+		$this->data['uri'] = '/'.implode('/', $this->uri->segments);
+		$this->data['members'] = $this->guild->getMembers('rank');
+		$this->data['filtered'] = $this->guild->filter($params);
+
+		$this->data['subview'] = 'controllers/Roster/table';
+
+		$this->render();
 	}
 }
 

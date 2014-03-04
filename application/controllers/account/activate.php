@@ -21,10 +21,7 @@ class Activate extends Account
 	{
 		parent::__construct();
 
-		$this->theme->data(array(
-			'page_title' => 'Activate Your Account',
-			'author' => $this->guild->name,
-		));
+		$this->data['page_title'] = 'Activate Your Account';
 	}
 
 	/**
@@ -65,7 +62,7 @@ class Activate extends Account
 		 */
 		if($this->account->email === null) // No -> show error
 		{
-			$this->theme->data(array('content' => $this->load->view('account/activate/error', array(), true)));
+			$this->data['subview'] = 'account/activate/error';
 		}
 		else // Yes -> Account is active?
 		{
@@ -92,7 +89,7 @@ class Activate extends Account
 				else // No -> Show login form
 				{
 					$this->load->helper('form');
-					$this->theme->data(array('content' => $this->load->view('account/login/index', array('email' => '', 'password' => ''), true)));
+					$this->data['subview'] = 'account/login/index';
 				} // END: 2.1. Account is logged in?
 			}
 			else // No -> Continue with activation
@@ -105,7 +102,7 @@ class Activate extends Account
 				 */
 				if($this->account->activation_code !== $this->uri->segment(4)) // No -> Show error
 				{
-					$this->theme->data(array('content' => $this->load->view('account/activate/error', array(), true)));
+					$this->data['subview'] = 'account/activate/error';
 				}
 				else // Yes -> Set account as active
 				{
@@ -121,7 +118,7 @@ class Activate extends Account
 							activation_code = '". md5(time()) ."'
 						WHERE id = '". $this->account->id ."'"))
 					{
-						$this->theme->data(array('content' => $this->load->view('account/activate/error', array(), true)));
+						$this->data['subview'] = 'account/activate/error';
 					}
 					else
 					{
@@ -135,10 +132,10 @@ class Activate extends Account
 						{
 							$this->load->helper('form');
 
-							$this->theme->data(array('content' => $this->load->view('account/activate/password_null', array(
-								'account_id' => $this->account->id,
-								'character_name' => $this->account->get_active_character()->name
-							), true)));
+							$this->data['account_id' = $this->account->id;
+							$this->data['character_name'] = $this->account->get_active_character()->name;
+
+							$this->data['subview'] = 'account/activate/password_null';
 						}
 						else // No -> Set session data
 						{
@@ -148,12 +145,8 @@ class Activate extends Account
 								'character_name' => $this->account->get_active_character()->name
 							));
 
-							$this->theme->data(array(
-								'content' => $this->load->view('account/activate/success', array(
-									'character_name' => $this->account->get_active_character()->name
-							), true),
-								'account' => $this->account));
-
+							$this->data['character_name'] = $this->account->get_active_character()->name;
+							$this->data['content'] = 'account/activate/success';
 						} // END: 5. Is Password field null?
 					} // END: 4. Activate the Account in the database
 				} // END: 3. Activation code matches URI?

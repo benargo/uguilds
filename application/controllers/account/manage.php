@@ -53,20 +53,14 @@ class Manage extends Account
 	 */
 	public function index()
 	{
-		$this->theme->data(array(
-			'page_title' => 'My Account &amp; Characters',
-			'author' => $this->guild->name,
-		));
+		$this->data['page_title'] 		= 'My Account &amp; Characters';
+		$this->data['email']	 		= $this->account->get_email();
+		$this->data['guild_name'] 		= $this->guild->guild_name;
+		$this->data['active_character'] = $this->account->get_active_character()->id;
+		$this->data['members'] 			= $this->guild->get_unlinked_members('name');
 
-		$this->theme->data(array('content' => $this->load->view('account/manage/index', array(
-			'account'			=> $this->account,
-			'email' 	 		=> $this->account->get_email(),
-			'guild_name' 		=> $this->guild->guild_name,
-			'active_character' 	=> $this->account->get_active_character()->id,
-			'members'			=> $this->guild->get_unlinked_members('name'),
-		), true)));
+		$this->data['subview'] = 'account/manage/index';
 
-		// Render the page
-		$this->theme->view('page');
+		$this->render();
 	}
 }

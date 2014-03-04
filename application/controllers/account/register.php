@@ -24,10 +24,7 @@ class Register extends Account
 	{
 		parent::__construct();
 
-		$this->theme->data(array(
-			'page_title' => 'Login',
-			'author' => $this->guild->name,
-		));
+		$this->data['page_title'] = 'Login/Register';
 	}
 
 	/**
@@ -96,14 +93,14 @@ class Register extends Account
 		 */
 		if($this->form_validation->run() === FALSE) // No -> Show registration form with errors
 		{
-			$this->theme->data(array('content' => $this->load->view('account/login/register', array(
-				'character_name' 	=> $this->input->post('character'),
-				'email'			 	=> $this->input->post('email'),
-				'password' 		 	=> '',
-				'password_confirm' 	=> '',
-				'members'		 	=> $this->members,
-				'remainder'		 	=> false
-			), true)));
+			$this->data['character_name']	= $this->input->post('character');
+			$this->data['email']		 	= $this->input->post('email');
+			$this->data['password'] 		= '';
+			$this->data['password_confirm'] = '';
+			$this->data['members']		 	= $this->members;
+			$this->data['remainder']		= false;
+
+			$this->data['subview'] = 'account/login/register';
 		}
 		else // Yes -> Show character verification form
 		{
@@ -183,10 +180,10 @@ class Register extends Account
 
 						$this->_send_activation_email();
 
-						$this->theme->data(array('content' => $this->load->view('account/login/activate', array(
-							'character_name' => $this->character->name,
-							'email' 		 => $this->input->post('email')
-						), true)));
+						$this->data['character_name'] = $this->character->name;
+						$this->data['email']		  = $this->input->post('email');
+
+						$this->data['subview'] = 'account/login/activate';
 		
 					}
 					catch(Exception $e) // No -> Show error
@@ -216,14 +213,15 @@ class Register extends Account
 	{
 		shuffle($items);
 
-		$this->theme->data(array('content' => $this->load->view('account/login/register', array(
-			'character_name' 	=> $this->character->name, 
-			'email' 		 	=> $this->input->post('email'),
-			'password' 		 	=> $this->input->post('password'),
-			'password_confirm' 	=> $this->input->post('password_confirm'),
-			'members'		 	=> $this->members,
-			'remainder'		 	=> true,
-			'items' => array($items[0]['slot'] => $items[0], $items[1]['slot'] => $items[1])), true)));
+		$this->data['character_name'] 	= $this->character->name;
+		$this->data['email'] 		 	= $this->input->post('email');
+		$this->data['password']		 	= $this->input->post('password');
+		$this->data['password_confirm'] = $this->input->post('password_confirm');
+		$this->data['members';		 	= $this->members;
+		$this->data['remainder']		= true;
+		$this->data['items'] 			= array($items[0]['slot'] => $items[0], $items[1]['slot'] => $items[1]);
+
+		$this->data['subview'] = 'account/login/register';
 	}
 }
 
