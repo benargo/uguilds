@@ -4,6 +4,7 @@ class UG_Controller extends CI_Controller {
 
 	protected static $controller_name;
 	protected $account;
+	protected $data;
 
 	/**
 	 * __construct()
@@ -17,42 +18,32 @@ class UG_Controller extends CI_Controller {
 	{
 		parent::__construct();
 
-		if(is_null(self::$controller_name))
-		{
-			self::$controller_name = get_class($this);
-		}
+		self::$controller_name = get_class($this);
 
 		if($this->session->userdata('user_id'))
 		{
 			$this->account = new uGuilds\Account($this->session->userdata('user_id'));
 			$this->theme->data(array('account' => $this->account));
 		}
-	}
 
-	/**
-	 * controller_name()
-	 *
-	 * Returns the controller name
-	 * 
-	 * @access public
-	 * @static
-	 * @return string
-	 */
-	public static function controller_name()
-	{
-		return self::$controller_name;
+		$this->get_includes();
 	}
 
 	/**
 	 * data()
-	 * 
+	 *
+	 * Merges additional data into the $this->data array,
+	 * and then returns the global data array
+	 *
 	 * @access protected
-	 * @param $extra_data
-	 * @return array
+	 * @param array $data
+	 * @return views
 	 */
-	protected function data( array $extra_data = array() )
+	protected function data(array $data = array())
 	{
-		return $this->theme->data($extra_data);
+		$this->data = array_merge($this->data, $data);
+
+		return $this->data;
 	}
 
 	/**
@@ -68,80 +59,23 @@ class UG_Controller extends CI_Controller {
 		$this->theme->view('page');
 	}
 
-
 	/**
-	 * getNamespace()
-	 *
-	 * Gets the namespace of the current namespace
-	 * Can only be called by the child classes
-	 *
+	 * getIncludes()
+	 * 
 	 * @access public
-	 * @return string
+	 * @return void
 	 */
-	public function getNamespace()
-	{
-		if(get_class($this) != 'UG_Controller')
-		{
-			return __NAMESPACE__;
-		}
-	}
-
-	/**
-	 * getControllerCss()
-	 *
-	 * Prints out any additional CSS files neccessary for the controller. 
-	 * This is defined by uGuilds and applies to all themes.
-	 * i.e. All themes have these basic standards for the controllers and they may be overwritten per theme.
-	 *
-	 * @access public
-	 * @return string
-	 */
-	public function getControllerCSS() 
+	private function get_includes()
 	{
 		$ci =& get_instance();
-		$controller_name = get_class($ci);
-		$files = array();
-
-		if(is_dir(FCPATH .'media/css/controller/'. ucwords($this->router->directory) . ucwords($controller_name)))
+		$dir = scandir(APPPATH .'views/includes');
+		foreach($dir as $file)
 		{
-			$files = scandir(FCPATH .'media/css/controller/'. ucwords($this->router->directory) . ucwords($controller_name) .'/');
-			$files = preg_grep('/\.css$/', $files);
-
-			foreach($files as $key => $value)
+			if(preg_match('/.*\.php$/', $file))
 			{
-				$files[$key] = '/media/css/controller/'. ucwords($this->router->directory) . ucwords($controller_name) .'/'. $value;
+				$file = str_replace('.php', '', $file);
+				$this->data[$file] = $ci->load->view('includes/'. $file, $this->data, true);
 			}
 		}
-
-		return $files;
-	}
-
-	/**
-	 * getControllerJS()
-	 *
-	 * Prints out any additional JS files neccessary for the controller. 
-	 * This is defined by uGuilds, applies to all themes and cannot be overwritten.
-	 *
-	 * @access public
-	 * @return string
-	 */
-	public function getControllerJS()
-	{
-		$ci =& get_instance();
-		$controller_name = str_replace('_', '/', get_class($ci));
-		$files = array();
-
-		if(is_dir(FCPATH .'media/js/controller/'. ucwords($this->router->directory) . ucwords($controller_name) .'/'))
-		{
-			$files = scandir(FCPATH .'media/js/controller/'. ucwords($this->router->directory) . ucwords($controller_name) .'/');
-			$files = preg_grep('/\.min\.js/', $files);
-
-			foreach($files as $key => $value)
-			{
-				$files[$key] = '/media/js/controller/'. ucwords($this->router->directory) . ucwords($controller_name) .'/'. $value;
-			}
-		}
-
-		return $files;
 	} 
 }
