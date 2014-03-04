@@ -76,7 +76,7 @@
 		</thead>
 		<tbody>
 		<?php foreach($members as $member): ?>
-		<tr class="character <?php echo $member->name; ?>" <?php echo (isset($filtered) && !in_array($member, $filtered) ? 'style="display:none;"' : ''); ?>>
+		<tr class="character <?php echo $member->name; ?>" id="<?php echo $member->name; ?>" <?php echo (isset($filtered) && !in_array($member, $filtered) ? 'style="display:none;"' : ''); ?>>
 			<!-- Character Name -->
 			<td class="character-name">
 				<a href="/roster/<?php echo strtolower($member->name); ?>" 
