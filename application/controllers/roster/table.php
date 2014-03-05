@@ -12,6 +12,9 @@ class Table extends UG_Controller
 		parent::__construct();
 
 		$this->config->load('battle.net');
+		$this->load->helper('battlenet');
+		$this->load->model('races');
+		$this->load->model('classes');
 
 		header('Last-Modified: '. date('r', $this->guild->getData()['lastModified']/1000));
 		header('Cache-Control: max-age='. $this->config->item('battle.net')['GuildsTTL']);
@@ -27,9 +30,6 @@ class Table extends UG_Controller
 	 */
 	public function index()
 	{
-		$this->load->model('races');
-		$this->load->model('classes');
-
 		$this->data['races'] = $this->races;
 		$this->data['classes'] = $this->classes;
 		$this->data['members'] = $this->guild->getMembers('rank');

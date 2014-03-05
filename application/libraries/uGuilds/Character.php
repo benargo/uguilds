@@ -155,7 +155,7 @@ class Character extends \BattlenetArmory\Character
 	 */
 	public function get_achievements_position()
 	{
-		foreach($this->guild->getMembers('achievementPoints', 'desc') as $position => $member)
+		foreach($this->guild->getMembers('achievementPoints', 'asc') as $position => $member)
 		{
 			if($member->name == $this->name)
 			{

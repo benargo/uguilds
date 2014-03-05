@@ -15,7 +15,7 @@
 			<select name="race">
 				<option value="all" selected>All</option>	
 				<?php foreach($races->getAll($guild->getData()['side']) as $race): ?>
-				<option value="<?php echo $race->id; ?>" data-image="<?php echo $races->getIcon($race->id); ?>"><?php echo $race->name; ?></option>
+				<option value="<?php echo $race->id; ?>" data-image="<?php echo $races->get_icon($race->id); ?>"><?php echo $race->name; ?></option>
 				<?php endforeach; ?>
 			</select>
 		</span>
@@ -26,7 +26,7 @@
 			<select name="class">
 				<option value="all" selected>All</option>
 				<?php foreach($classes->getAll() as $class): ?>
-				<option value="<?php echo $class->id; ?>" data-image="<?php echo $classes->getIcon($class->id); ?>.jpg"><?php echo $class->name; ?></option>	
+				<option value="<?php echo $class->id; ?>" data-image="<?php echo $classes->get_icon($class->id); ?>.jpg"><?php echo $class->name; ?></option>	
 				<?php endforeach; ?>
 			</select>
 		</span>
@@ -87,18 +87,18 @@
 			<!-- Race -->
 			<td class="race">
 				<a href="<?php echo $uri; ?>/race=<?php echo strtolower(preg_replace('/\ /', '-', $races->getRace($member->race, 'name'))); ?>">
-				<img src="<?php echo $races->getIcon($member->race, $member->gender); ?>"
+				<img src="<?php echo $races->get_icon($member->race, $member->gender); ?>"
 					alt="<?php echo $races->getRace($member->race,'name'); ?>" width="18" /></a>
 			</td>
 
 			<!-- Class -->
 			<td class="class">
 				<a href="<?php echo $uri; ?>/class=<?php echo strtolower(preg_replace('/\ /', '-', $classes->getClass($member->class, 'name'))); ?>">
-					<img src="<?php echo $classes->getIcon($member->class, 18); ?>"
+					<img src="<?php echo $classes->get_icon($member->class, 18); ?>"
 						alt="<?php echo $classes->getClass($member->class, 'name'); ?>" width="18" />
 					<?php if(property_exists($member, 'spec'))
 						{
-							?><img src="<?php echo $guild->getIcon($member->spec->icon, 18); ?>" 
+							?><img src="<?php echo get_icon($member->spec->icon, 18); ?>" 
 						alt="<?php echo $member->spec->name; ?>" width="18" class="spec" /><?php
 					} ?>
 				</a>

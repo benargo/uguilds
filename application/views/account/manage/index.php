@@ -51,18 +51,9 @@
 		</a>
 
 	<?php endforeach; ?>
-
-	<h2>Add a Character</h2>
 	
-	<form action="/account/characters/claim" method="post">
-		<p><label for="new-character">Type your other character's name below:</label></p>
-		<p><select name="new-character" id="new-character">
-			<option value=""> </option>
-			<?php foreach($members as $member): ?>
-				<option value="<?php echo strtolower($member->name); ?>"><?php echo $member->name; ?></option>
-			<?php endforeach; ?>
-		</select></p>
-		<p><input type="submit" value="Claim" /></p>
-	</form>
+		<a id="add-new" href="/account/characters/add">
+			<h2>Add New</h2>
+		</a>
 </section>
 

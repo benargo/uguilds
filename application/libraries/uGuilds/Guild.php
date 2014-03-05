@@ -439,7 +439,7 @@ class Guild extends \BattlenetArmory\Guild {
 
         	if(array_key_exists($sort_key, $members[$key]))
         	{
-        		$subtotal = $members[$key][$sort_key];
+        		$subtotal = @$members[$key]->$sort_key;
         	}
 
    			$temp_array[$key] = $subtotal;

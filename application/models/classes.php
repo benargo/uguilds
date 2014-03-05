@@ -109,28 +109,20 @@ class Classes extends CI_Model {
     }
 
 	/**
-	 * getIcon()
+	 * get_icon()
 	 *
 	 * @access public
 	 * @param int $id
 	 * @return string
 	 */
-	public function getIcon($id, $size = 18)
+	public function get_icon($id, $size = 18)
     {
         $name = strtolower(preg_replace('/\ /', '', $this->names[$id]));
 
-        if($size != 18 && $size != 56)
-        {
-            $size = 18;
-        }
+        $ci =& get_instance();
+        $ci->load->helper('battlenet');
 
-        if(!file_exists(FCPATH ."media/images/icons/$size/classicon_$name.jpg"))
-        {
-        	$image = imagecreatefromjpeg("http://media.blizzard.com/wow/icons/$size/classicon_$name.jpg");
-        	imagejpeg($image, FCPATH ."media/images/icons/$size/classicon_$name.jpg", 100);
-        }
-
-    	return "/media/images/icons/$size/classicon_$name.jpg";
+    	return get_icon('classicon_'. $name);
     }
 
     /**

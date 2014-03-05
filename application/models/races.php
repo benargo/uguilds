@@ -88,15 +88,12 @@ class Races extends CI_Model {
 	 * @param bool $gender
 	 * @return string
 	 */
-	public function getIcon($id, $gender = 0) 
+	public function get_icon($id, $gender = 0, $size = 18) 
     {
-        if(!file_exists(FCPATH ."media/images/races/race_". $id . '_'. $gender .'.jpg'))
-        {
-            $image = imagecreatefromjpeg('http://media.blizzard.com/wow/icons/18/race_'. $id .'_'. $gender .'.jpg');
-            imagejpeg($image, FCPATH .'media/images/races/race_'. $id .'_'. $gender .'.jpg', 100);
-        }
+        $ci =& get_instance();
+        $ci->load->helper('battlenet');
 
-        return '/media/images/races/race_'. $id .'_'. $gender .'.jpg';
+        return get_icon('race_'. $id .'_'. $gender, $size);
     }
 
     /**
