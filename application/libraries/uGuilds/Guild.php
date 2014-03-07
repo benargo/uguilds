@@ -31,11 +31,49 @@ class Guild extends \BattlenetArmory\Guild {
 	 * @param string $domain
 	 * @return void
 	 */
-	function __construct($domain = NULL) 
+	function __construct($domain) 
 	{
-		if($domain)
+		$ci =& get_instance();
+
+		$query = $ci->db->query( "SELECT 	
+								`id`,
+								`region`,
+								`realm`,
+								`guild_name`,
+								`domain_name`,
+								`theme`,
+								`locale`
+						FROM `ug_Guilds`
+						WHERE `domain_name` = '$domain'
+						LIMIT 0, 1" );
+
+		// Check we got a result
+		if($query->num_rows() > 0)
 		{
-			$this->_load($domain);
+			// Loop through the rows (there should only be one)
+  			foreach ($query->result() as $row)
+   			{
+	   			// Loop through the columns
+	    		foreach($row as $key => $value)
+	    		{
+	    			$this->$key = $value;
+	    		}
+
+	    		// Load the full guild from battle.net
+	    		parent::_load(strtolower($this->region), $this->realm, $this->guild_name);
+
+	    		// Load the levels and ranks
+	    		$this->_setLowestLevelMember();
+	    		$this->_setHighestLevelMember();
+	    		$this->_setRanks();
+   			}
+
+   			// Encode this object and store it in the cache
+   			file_put_contents(APPPATH .'cache/uGuilds/guild_objects/'. $this->domain_name .'.txt', serialize($this));
+		}
+		else // No result from the database, this guild must not exist
+		{
+			throw new \Exception('This guild does not exist');
 		}
 	}
 
@@ -114,59 +152,6 @@ class Guild extends \BattlenetArmory\Guild {
 	{
 		$ci =& get_instance();
 		return $ci->uguilds->guild;
-	}
-
-	/**
-	 * _load()
-	 *
-	 * @access private
-	 * @param string $domain
-	 * @return uGuilds\Guild object
-	 */
-	protected function _load($domain)
-	{
-		$ci =& get_instance();
-
-		$query = $ci->db->query( "SELECT 	
-								`id`,
-								`region`,
-								`realm`,
-								`guild_name`,
-								`domain_name`,
-								`theme`,
-								`locale`
-						FROM `ug_Guilds`
-						WHERE `domain_name` = '$domain'
-						LIMIT 0, 1" );
-
-		// Check we got a result
-		if($query->num_rows() > 0)
-		{
-			// Loop through the rows (there should only be one)
-  			foreach ($query->result() as $row)
-   			{
-	   			// Loop through the columns
-	    		foreach($row as $key => $value)
-	    		{
-	    			$this->$key = $value;
-	    		}
-
-	    		// Load the full guild from battle.net
-	    		parent::_load(strtolower($this->region), $this->realm, $this->guild_name);
-
-	    		// Load the levels and ranks
-	    		$this->_setLowestLevelMember();
-	    		$this->_setHighestLevelMember();
-	    		$this->_setRanks();
-   			}
-
-   			// Encode this object and store it in the cache
-   			file_put_contents(APPPATH .'cache/uGuilds/guild_objects/'. $this->domain_name .'.txt', serialize($this));
-		}
-		else // No result from the database, this guild must not exist
-		{
-			throw new \Exception('This guild does not exist');
-		}
 	}
 
 	/**

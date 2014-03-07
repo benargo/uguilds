@@ -10,25 +10,18 @@
 
 <section class="my-account" id="my-account">
 
-	<h2>Email Address</h2>
+	<a 	class="button manage" 
+		href="/account/email" 
+		title="Change your email address and manage your preferences">Change Email Address</a>
 
-	<p><?php echo $email; ?> [<a href="/account/email" title="Change your email address and manage your preferences">Edit <i class="fa fa-pencil-square-o"></i></a>]</p>
+	<a 	class="button manage"
+		href="/account/password/change" 
+		title="Change your password to something different">Change Password</a>
 
-	<h2>Password</h2>
-	<p><i class="fa fa-star"></i>
-		<i class="fa fa-star"></i>
-		<i class="fa fa-star"></i>
-		<i class="fa fa-star"></i>
-		<i class="fa fa-star"></i>
-		<i class="fa fa-star"></i>
-		[<a href="/account/password/change" title="Change your password to something different">Edit <i class="fa fa-pencil-square-o"></i></a>]</p>
 
-	<h2>Officers Club</h2>
-	<p>As an officer of <?php echo $guild_name; ?> you can manage the following additional sections:</p>
-	<ul>
-		<li><a href="/officers/ranks" title="Manage guild ranks and permissions">Ranks &amp; Permissions</a></li>
-		<li><a href="/officers/accounts" title="Manage other user accounts">User Accounts</a></li>
-	</ul>
+	<a 	class="button manage officer"
+			href="/officers/ranks" 
+			title="Manage guild ranks and permissions">Ranks &amp; Permissions</a>
 
 </section>
 <!-- #my-account -->
@@ -41,10 +34,10 @@
 
 	<?php foreach($account->get_all_characters() as $character): ?>
 
-		<a id="<?php echo strtolower($character->name); ?>" 
+		<a 	id="<?php echo strtolower($character->name); ?>" 
 			data-character-id="<?php echo $character->id; ?>" 
 			href="/account/characters/switch/<?php echo strtolower($character->name); ?>" 
-			class="set-primary<?php if($character->id === $active_character) echo ' primary'; ?>">
+			class="character set-primary<?php if($character->id === $active_character) echo ' primary'; ?>">
 			<img src="<?php echo $character->getImageURL('thumbnail'); ?>" alt="Character Thumbnail" class="thumbnail" />
 			<h2><?php echo $character->name; ?></h2>
 			<p><?php echo $character->race->name; ?> <?php echo $character->level; ?> <?php echo $character->class->name; ?></p>
@@ -52,8 +45,17 @@
 
 	<?php endforeach; ?>
 	
-		<a id="add-new" href="/account/characters/add">
-			<h2>Add New</h2>
-		</a>
+	<a 	id="add-new" 
+		href="/account/characters/add"
+		class="character">
+		<span class="fa fa-plus"></span>
+		<h2>Add new</h2>
+	</a>
 </section>
+<!-- #my-characters -->
 
+<section class="my-guilds" id="my-guilds">
+
+	
+
+</section>

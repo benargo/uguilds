@@ -28,14 +28,9 @@ class Manage extends Account
 		/**
 		 * 1. Is the user logged in?
 		 *
-		 * if   = Yes -> {additional logic}
-		 * else = No  -> Redirect to the login page
+		 * if   = No -> Redirect to the login page
 		 */
-		if($this->is_logged_in())
-		{
-			
-		}
-		else // No -> Redirect to the login page
+		if(!$this->is_logged_in()) // No -> Redirect to the login page
 		{
 			// Redirect to the login page.
 			$this->load->helper('url');
@@ -54,10 +49,8 @@ class Manage extends Account
 	public function index()
 	{
 		$this->data['page_title'] 		= 'My Account &amp; Characters';
-		$this->data['email']	 		= $this->account->get_email();
 		$this->data['guild_name'] 		= $this->guild->guild_name;
 		$this->data['active_character'] = $this->account->get_active_character()->id;
-		$this->data['members'] 			= $this->guild->get_unlinked_members('name');
 
 		$this->data['subview'] = 'account/manage/index';
 
