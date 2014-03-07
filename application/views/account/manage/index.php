@@ -10,10 +10,6 @@
 
 <section class="my-account" id="my-account">
 
-	<a 	class="button manage" 
-		href="/account/email" 
-		title="Change your email address and manage your preferences">Change Email Address</a>
-
 	<a 	class="button manage"
 		href="/account/password/change" 
 		title="Change your password to something different">Change Password</a>
