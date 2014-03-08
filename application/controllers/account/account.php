@@ -91,7 +91,7 @@ class Account extends UG_Controller
 			$this->load->helper('url');
 
 			$this->email->from('noreply@uguilds.net', $this->guild->name);
-			$this->email->to($this->encrypt->decode($this->account->email));
+			$this->email->to($this->account->get_email());
 
 			$this->email->bcc('logs@uguilds.net');
 

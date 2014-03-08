@@ -29,10 +29,13 @@ if (!defined('BASEPATH')) exit('No direct script access allowed');
  * 6.  set_password()
  * 7.  authenticate()
  *
- * 8.  get_character()
- * 9.  get_active_character()
- * 10. get_all_characters()
- * 11. set_active_character()
+ * 8.  set_active_status()
+ * 9.  set_suspended_status()
+ *
+ * 10.  get_character()
+ * 11.  get_active_character()
+ * 12. get_all_characters()
+ * 13. set_active_character()
  */
 class Account
 {
@@ -238,23 +241,13 @@ class Account
 	 * @param (string) $new_password - The new password to set.
 	 * @return boolean
 	 */
-	public function set_password($new_password = NULL) 
+	public function set_password($new_password) 
 	{
 		$ci =& get_instance();
-		 
-		if($value === NULL) 
-		{
-			return $ci->db->simple_query(
-				"UPDATE Accounts 
-				SET password = NULL, 
-				active = 0 WHERE 
-				_id = ". $this->id);
-		}
 
-		return $ci->db->simple_query(
-			"UPDATE Accounts
-			 SET password = '". password_hash($new_password) ."' 
-			 WHERE _id = ". $this->id);
+		return $ci->db->update_string('Accounts', array(
+			'password' => $new_password
+		), 'id = '. $this->id);
 	}
 
 	/**
@@ -271,7 +264,7 @@ class Account
 	{
 		return password_verify($password, $this->password);
 	}
-	 
+
 	/**************
 	 * CHARACTERS *
 	 **************/

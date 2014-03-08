@@ -25,17 +25,7 @@ class Manage extends Account
 	{
 		parent::__construct();
 
-		/**
-		 * 1. Is the user logged in?
-		 *
-		 * if   = No -> Redirect to the login page
-		 */
-		if(!$this->is_logged_in()) // No -> Redirect to the login page
-		{
-			// Redirect to the login page.
-			$this->load->helper('url');
-			redirect('account/login');
-		}
+		$this->check_login();
 	}
 
 	/**
