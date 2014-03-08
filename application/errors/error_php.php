@@ -6,5 +6,6 @@
 <p>Message:  <?php echo $message; ?></p>
 <p>Filename: <?php echo $filepath; ?></p>
 <p>Line Number: <?php echo $line; ?></p>
+<p>Stack Trace: <pre><?php debug_print_backtrace(); ?></pre></p>
 
 </div>

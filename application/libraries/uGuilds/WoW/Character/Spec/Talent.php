@@ -1,8 +1,8 @@
-<?php namespace uGuilds\Character\Spec;
+<?php namespace uGuilds\WoW\Character\Spec;
 
 if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Talent extends \BattlenetArmory\Battlenet
+class Talent extends \uGuilds\WoW\Battlenet
 {
 	// Talent data
 	private $tier;
@@ -41,7 +41,7 @@ class Talent extends \BattlenetArmory\Battlenet
 		$this->level = $this->talent_levels[ $this->tier ];
 
 		// Handle the spell
-		$this->spell = new \uGuilds\Spell( $this->spell );
+		$this->spell = new \uGuilds\WoW\Spell( $this->spell );
 	}
 
 	/**

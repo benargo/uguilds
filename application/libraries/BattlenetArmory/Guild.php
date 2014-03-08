@@ -1,7 +1,7 @@
 <?php
 namespace BattlenetArmory;
 
-class Guild extends Battlenet {
+class Guild extends \uGuilds\WoW\Battlenet {
 	
 	protected $name;
 	protected $region;
@@ -239,11 +239,11 @@ class Guild extends Battlenet {
   	{
   	    if (!$this->emblemAdd) 
   	    {
-        	$imgfile = APPPATH . "cache/BattlenetArmory/" . $this->region . '_' . $this->realm . '_' . $this->name . ".png";
+        	$imgfile = APPPATH .'cache/WoW/Guild_emblems/'. strtolower($this->region) .'/'. strformat($this->realm, '_') .'/'. strformat($this->guildName, '_') .'.png';
         } 
         else 
         {
-        	$imgfile = APPPATH . "cache/BattlenetArmory/" . $this->region . '_' . $this->realm . '_' . $this->name . '_' . $this->emblemAdd . ".png";
+        	$imgfile = APPPATH .'cache/WoW/Guild_emblems/'. strtolower($this->region) .'/'. strformat($this->realm, '_') .'/'. strformat($this->guildName, '_') .'_'. $this->emblemAdd . ".png";
         }
 
         if (is_file($imgfile)) 
@@ -264,9 +264,9 @@ class Guild extends Battlenet {
     public function saveEmblem($dest) 
     {
         if (!$this->emblemAdd) {
-            $imgfile = APPPATH . "cache/BattlenetArmory/" . $this->region . '_' . $this->realm . '_' . $this->name . ".png";
+            $imgfile = APPPATH .'cache/WoW/Guild_emblems/'. strtolower($this->region) .'/'. strformat($this->realm, '_') .'/'. strformat($this->guildName, '_') .'.png';
         } else {
-            $imgfile = APPPATH . "cache/BattlenetArmory/" . $this->region . '_' . $this->realm . '_' . $this->name . '_' . $this->emblemAdd . ".png";
+            $imgfile = APPPATH .'cache/WoW/Guild_emblems/'. strtolower($this->region) .'/'. strformat($this->realm, '_') .'/'. strformat($this->guildName, '_') .'_'. $this->emblemAdd . ".png";
         }
         if (!copy($imgfile, $dest)) {
             throw new \Exception("Could Not be copied");
@@ -287,11 +287,11 @@ class Guild extends Battlenet {
    	{
    		if (!$this->emblemAdd)
    		{
-   			$imgfile = APPPATH."cache/BattlenetArmory/".$this->region.'_'.$this->realm.'_'.$this->name.".png";
+        $imgfile = APPPATH .'cache/WoW/Guild_emblems/'. strtolower($this->region) .'/'. strformat($this->realm, '_') .'/'. strformat($this->guildName, '_') .'.png';
    		} 
    		else 
    		{
-   			$imgfile = APPPATH."cache/BattlenetArmory/".$this->region.'_'.$this->realm.'_'.$this->name.'_'.$this->emblemAdd.".png";
+        $imgfile = APPPATH .'cache/WoW/Guild_emblems/'. strtolower($this->region) .'/'. strformat($this->realm, '_') .'/'. strformat($this->guildName, '_') .'_'. $this->emblemAdd . ".png";
    		}
 
    		if (file_exists($imgfile) AND $width==(imagesx(imagecreatefrompng($imgfile))) AND (filemtime($imgfile)+86000) > time()) 
@@ -302,6 +302,8 @@ class Guild extends Battlenet {
    		} 
    		else
    		{
+        if(!is_dir(APPPATH .'cache/WoW/Guild_emblems/'. strtolower($this->region) .'/'. strformat($this->realm, '_'))) mkdir(APPPATH .'cache/WoW/Guild_emblems/'. strtolower($this->region) .'/'. strformat($this->realm, '_'), 0777, true);
+
 	   		if ($width > 1 AND $width < 215)
 	   		{
 				$height = ($width/215)*230;

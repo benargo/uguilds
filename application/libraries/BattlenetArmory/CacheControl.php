@@ -1,7 +1,7 @@
 <?php
 namespace BattlenetArmory;
 
-class CacheControl extends Battlenet {
+class CacheControl extends \uGuilds\WoW\Battlenet {
 	
 	private $db;
 	private $CharactersTTL = 600;

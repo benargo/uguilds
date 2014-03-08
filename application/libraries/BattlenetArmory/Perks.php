@@ -1,7 +1,7 @@
 <?php
 namespace BattlenetArmory;
 
-class Perks extends Battlenet {
+class Perks extends \uGuilds\WoW\Battlenet {
 	
 	private $datas;
 	private $guildlevel;

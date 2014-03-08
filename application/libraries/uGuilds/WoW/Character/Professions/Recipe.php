@@ -1,10 +1,10 @@
-<?php namespace uGuilds\Character\Profession;
+<?php namespace uGuilds\WoW\Character\Profession;
 
 if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-require_once(APPPATH .'libraries/uGuilds/Spell.php');
+require_once(APPPATH .'libraries/uGuilds/WoW/Spell.php');
 
-class Recipe extends \BattlenetArmory\Battlenet
+class Recipe extends \uGuilds\WoW\Battlenet
 {
 	// Recipe data
 	protected $id;

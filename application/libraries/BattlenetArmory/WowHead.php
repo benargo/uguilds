@@ -1,7 +1,6 @@
-<?php
-namespace BattlenetArmory;
+<?php namespace BattlenetArmory;
 
-class WowHead extends Battlenet {
+class WowHead extends \uGuilds\WoW\Battlenet {
 	
    	private $cacheEnabled = TRUE;
    	private $cache;

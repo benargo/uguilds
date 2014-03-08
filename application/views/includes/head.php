@@ -10,10 +10,7 @@
 <title><?php echo $page_title; ?></title>
 
 <!-- CSS -->
-<link rel="stylesheet" media="all" href="/media/css/uGuilds.css">
-<?php foreach($controller_css as $file): ?>
-<link rel="stylesheet" media="all" href="<?php echo $file; ?>">
-<?php endforeach; ?>
+<link rel="stylesheet" media="all" href="/theme/css">
 
 <!-- JavaScript -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -24,5 +21,5 @@
 <?php endforeach; ?>
 
 <!-- Shortcut Icons -->
-<link type="image/png" rel="icon" href="<?php echo $guild->getEmblem(FALSE, 64); ?>" />
-<link rel="apple-touch-icon" href="<?php echo $guild->getEmblem(FALSE, 60); ?>" />
+<link type="image/png" rel="icon" href="<?php echo $guild->get_emblem(FALSE, 64); ?>" />
+<link rel="apple-touch-icon" href="<?php echo $guild->get_emblem(FALSE, 60); ?>" />

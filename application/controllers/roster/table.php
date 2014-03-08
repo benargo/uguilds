@@ -15,6 +15,7 @@ class Table extends UG_Controller
 
 		header('Last-Modified: '. date('r', $this->guild->getData()['lastModified']/1000));
 		header('Cache-Control: max-age='. $this->config->item('battle.net')['GuildsTTL']);
+		header('Expires: '. date('r', $this->config->item('battle.net')['GuildsTTL'] + $this->guild->getData()['lastModified']/1000));
 
 		$this->theme->data(array('page_title' => 'Guild Roster',
                                  'author' => $this->guild->name));
@@ -33,13 +34,13 @@ class Table extends UG_Controller
 
 		$this->theme->data(array("races"   => $this->races,
 							 	 "classes" => $this->classes,
-							 	 "members" => $this->guild->getMembers('rank'),
+							 	 "members" => $this->guild->get_members('rank'),
 							 	 "ranks"   => $this->guild->ranks,
 							 	 "uri"	   => '/roster'));
 
 		$this->theme->data(array("content" => $this->load->view('controllers/Roster/table', $this->theme->data(), true)));
 
-		$this->theme->view('page');
+		$this->render();
 	}
 
 	/**
@@ -78,7 +79,7 @@ class Table extends UG_Controller
 
 		$this->theme->data($data);
 		$this->theme->data(array("content" => $this->load->view('controllers/Roster/table', $this->theme->data(), true)));
-		$this->theme->view('page');	
+		$this->render();
 	}
 }
 

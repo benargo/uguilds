@@ -15,12 +15,12 @@ class Theme extends CI_Model
 	// Properties
 	private $_id;
 	private $load;
-	private $guild;
+	public $controller_name;
 
 	// Files
 	private $xml;
-	private $css;
-	private $javascript;
+	private $css = array();
+	private $javascript = array();
 	private $images;
 	private $views = array();
 	private $data = array();
@@ -37,15 +37,13 @@ class Theme extends CI_Model
 		parent::__construct();
 		$ci =& get_instance();
 		$this->load =& $ci->load;
-		$this->guild =& $ci->guild;
+		$this->controller_name = ucwords($ci->router->directory) .'/'. ucwords($ci::controller_name());
 
-		$this->_findById($this->guild->theme);
+		$this->_findById($ci->guild->theme);
 
 		$this->data['theme_path'] = $this->getPath();
-		$this->data['locale'] = $this->guild->locale;
-		$this->data['guild'] =& $this->guild;
-		$this->data['controller_css'] = $ci->getControllerCSS();
-		$this->data['controller_js'] = $ci->getControllerJS();
+		$this->data['locale'] = $ci->guild->locale;
+		$this->data['guild'] =& $ci->guild;
 	}
 
 	/**
@@ -92,8 +90,6 @@ class Theme extends CI_Model
 		if(file_exists(FCPATH .'themes/'. $this->_id .'/theme.xml'))
 		{
 			$this->xml = simplexml_load_file(FCPATH .'themes/'. $this->_id .'/theme.xml');
-			$this->getCssFiles();
-			$this->getJavaScriptFiles();
 			$this->getImages();
 		}
 	}
@@ -125,6 +121,7 @@ class Theme extends CI_Model
 		{
 			$path = FCPATH .'themes/'. $this->_id;
 		}
+
 		return $path;
 	}
 
@@ -138,9 +135,28 @@ class Theme extends CI_Model
 	{
 		if(empty($this->css))
 		{
+			$this->css[] = FCPATH .'media/css/uGuilds.css';
+
 			$files = scandir(FCPATH .'themes/'. $this->_id .'/css');
-			$this->css = preg_grep('/\.css$/', $files);
+			foreach($files as $key => $value)
+			{
+				$files[$key] = FCPATH .'themes/'. $this->_id .'/css/'. $value;
+			}
+
+			$this->css = array_merge($this->css, preg_grep('/\.css$/', $files));
+
+			if(is_dir(FCPATH .'media/css/Controller/'. $this->controller_name))
+			{
+				$files = scandir(FCPATH .'media/css/Controller/'. $this->controller_name);
+				foreach($files as $key => $value)
+				{
+					$files[$key] = FCPATH .'media/css/Controller/'. $this->controller_name .'/'. $value;
+				}
+
+				$this->css = array_merge($this->css, preg_grep('/\.css$/', $files));
+			}
 		}
+
 		return $this->css;
 	}
 
@@ -155,8 +171,15 @@ class Theme extends CI_Model
 		if(empty($this->javascript))
 		{
 			$files = scandir(FCPATH .'themes/'. $this->_id .'/js');
-			$this->javascript = preg_grep('/\.min\.js$/', $files);
+			$this->javascript = array_merge($this->javascript, preg_grep('/\.min\.js$/', $files));
+
+			if(is_dir(FCPATH .'media/js/Controller/'. $this->controller_name))
+			{
+				$files = scandir(FCPATH .'media/js/Controller/'. $this->controller_name);
+				$this->javascript = array_merge($this->javascript, preg_grep('/\.min\.js$/', $files));
+			}
 		}
+
 		return $this->javascript;
 	}
 
@@ -179,12 +202,12 @@ class Theme extends CI_Model
 	}
 
 	/**
-	 * getIncludes()
+	 * get_includes()
 	 * 
 	 * @access public
 	 * @return void
 	 */
-	private function getIncludes()
+	private function get_includes()
 	{
 		$ci =& get_instance();
 		$dir = scandir(APPPATH .'views/includes');
@@ -221,7 +244,7 @@ class Theme extends CI_Model
 	 * @param array $data
 	 * @return \CodeIgniter\View
 	 */
-	public function view($name, array $data = array(), $asData = false)
+	public function view($name, array $data = array(), $as_data = false)
 	{
 		$this->data = array_merge($this->data, $data);
 
@@ -232,19 +255,27 @@ class Theme extends CI_Model
 
 		if(file_exists(readlink(APPPATH .'views/themes/'. $this->_id) .'/'. $name .'.php'))
 		{
-			if(!array_key_exists($name, $this->views))
+			if($name === 'page')
 			{
-				$this->views[$name] = 'themes/'. $this->_id .'/'. $name;
-			}
-
-			if($name == 'page')
-			{
-				$this->getIncludes();
+				$this->get_includes();
 			}
 			
-			$ci =& get_instance();
-			return $ci->load->view($this->views[$name], $this->data, $asData);
+			return $this->load->view('themes/'. $this->_id .'/'. $name, $this->data, $as_data);
 		}
+	}
+
+	/**
+	 * set_controller_name()
+	 *
+	 * Overrides the controller name
+	 *
+	 * @access public
+	 * @param string $name
+	 * @return void
+	 */
+	public function set_controller_name($name)
+	{
+		$this->controller_name = ucwords($name);	
 	}
 
 }

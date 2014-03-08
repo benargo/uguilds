@@ -1,8 +1,8 @@
-<?php namespace uGuilds;
+<?php namespace uGuilds\WoW;
 
 if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Spell extends \BattlenetArmory\Battlenet
+class Spell extends Battlenet
 {
 	protected $id;
 	protected $name;

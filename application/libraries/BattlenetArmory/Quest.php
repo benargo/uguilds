@@ -1,7 +1,7 @@
 <?php
 namespace BattlenetArmory;
 
-class Quest extends Battlenet {
+class Quest extends \uGuilds\WoW\Battlenet {
 	
 	private $datas;
 

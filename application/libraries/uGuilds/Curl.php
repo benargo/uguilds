@@ -25,7 +25,7 @@ require_once(APPPATH .'libraries/oocurl/OOCurl.php');
  * @author Ben Argo <ben@benargo.com>
  * @version 1.0
  * @copyright Copyright © 2013-2014, Ben Argo
- * @license CC-BY-SA-NC
+ * @license GPL v3
  */
 class Curl extends \Curl
 {

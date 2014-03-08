@@ -1,7 +1,7 @@
 <?php
 namespace BattlenetArmory;
 
-class Achievements extends Battlenet {
+class Achievements extends \uGuilds\WoW\Battlenet {
 	
 	private $data;
 	private $datas;
