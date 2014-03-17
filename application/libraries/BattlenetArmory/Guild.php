@@ -148,7 +148,7 @@ class Guild extends Battlenet {
    		$members = $this->guildData['members'];
    		if ($sort)
         {
-			$members = $this->sort($this->guildData['members'], $sort, $sortFlag);
+			$members = self::sort($this->guildData['members'], $sort, $sortFlag);
    		}
    		if (isset($this->guildRankTitles))
         {

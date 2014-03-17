@@ -422,13 +422,15 @@ class Guild extends \BattlenetArmory\Guild {
         {
         	$subtotal = 0;
 
-        	if(array_key_exists($sort_key, $members[$key]))
+        	if(isset($members[$key]->$sort_key))
         	{
-        		$subtotal = @$members[$key]->$sort_key;
+        		$subtotal = $members[$key]->$sort_key;
         	}
 
    			$temp_array[$key] = $subtotal;
    		}
+
+   		dump($temp_array);
 
    		natsort($temp_array);
    		
@@ -517,7 +519,7 @@ class Guild extends \BattlenetArmory\Guild {
 		{
 			foreach($this->getMembers() as $member)
 			{
-				if(!array_key_exists($member->rank, $this->ranks))
+				if(!in_array($member->rank, $this->ranks))
 				{
 					$this->ranks[$member->rank] = $member->rank;
 				}
