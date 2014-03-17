@@ -73,7 +73,7 @@ class Guild extends \BattlenetArmory\Guild {
 		}
 		else // No result from the database, this guild must not exist
 		{
-			throw new \Exception('This guild does not exist');
+			show_404('This guild does not exist');
 		}
 	}
 
@@ -207,11 +207,11 @@ class Guild extends \BattlenetArmory\Guild {
 	{
 		$return = array();
 
-		foreach( $this->features as $key => $value )
+		foreach($this->features as $key => $value)
 		{
-			if( $value )
+			if($value)
 			{
-				$return[ $key ] = (bool) $value;
+				$return[$key] = (bool) $value;
 			}
 		}
 
@@ -328,7 +328,7 @@ class Guild extends \BattlenetArmory\Guild {
 	 */
 	public function get_unlinked_members($sort = false, $sortFlag = 'asc')
 	{
-		$members = $this->getMembers();
+		$members = $this->getMembers($sort, $sortFlag);
 
 		$ci =& get_instance();
 
@@ -356,7 +356,7 @@ class Guild extends \BattlenetArmory\Guild {
 
 		}
 
-		return $this->sort($members, $sort, $sortFlag);
+		return $members;
 	}
 
 	/**
@@ -495,10 +495,10 @@ class Guild extends \BattlenetArmory\Guild {
 	private function _setHighestLevelMember()
 	{
 		// Loop through each of the members
-		foreach( $this->getData()['members'] as $member )
+		foreach($this->getData()['members'] as $member)
 		{
 			// If the member has a higher level than the minimum level
-			if( $member['character']['level'] > $this->levelRange['max'] )
+			if($member['character']['level'] > $this->levelRange['max'])
 			{
 				$this->levelRange['max'] = $member['character']['level'];
 			}
@@ -513,14 +513,18 @@ class Guild extends \BattlenetArmory\Guild {
 	 */
 	private function _setRanks()
 	{
-		$highestRank = $this->getMembers('rank','desc')[0]->rank;
-
-		for( $i = 0; $i <= $highestRank; $i++ )
+		if(empty($this->ranks))
 		{
-			$this->ranks[ $i ] = $i;
-		}
+			foreach($this->getMembers() as $member)
+			{
+				if(!array_key_exists($member->rank, $this->ranks))
+				{
+					$this->ranks[$member->rank] = $member->rank;
+				}
+			}
 
-		$this->setGuildRankTitles();
+			$this->setGuildRankTitles();
+		}
 	}
 
 	/**
