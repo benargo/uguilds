@@ -248,7 +248,10 @@ class Theme extends CI_Model
 
 			foreach($files as $key => $value)
 			{
-				$files[$key] = '/media/js/controller/'. $this->controller .'/'. $value;
+				if(!in_array('/media/js/controller/'. $this->controller .'/'. $value, $files))
+				{
+					$files[$key] = '/media/js/controller/'. $this->controller .'/'. $value;
+				}
 			}
 		}
 
