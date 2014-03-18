@@ -18,7 +18,7 @@ $(function()
 	}).done(function(data, textStatus, jqXHR) {
 
 		// If we received an HTTP 200 OK status code
-		if(jqXHR.status === 200)
+		if(jqXHR.status == 200)
 		{
 			console.log('Updated the local copy of the roster');
 			
@@ -53,7 +53,7 @@ $(function()
 	path = '/roster';
 
 	// Parse the roster
-	roster = JSON.parse(window.localStorage.getItem('roster'));
+	var roster = JSON.parse(window.localStorage.getItem('roster'));
 
 	// On Resize Events
 	$(window).on('resize', function()
