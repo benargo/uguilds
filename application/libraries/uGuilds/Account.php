@@ -81,7 +81,6 @@ class Account
 			FROM ug_Accounts a
 			RIGHT OUTER JOIN ug_Characters c ON c.account_id = a.id
 			WHERE a.id = '". $id ."'
-			AND c.guild_id = ". $ci->guild->id ."
 			LIMIT 0, 1");
 
 		if($result->num_rows() > 0)
