@@ -217,7 +217,7 @@ class Register extends Account
 		$this->data['email'] 		 	= $this->input->post('email');
 		$this->data['password']		 	= $this->input->post('password');
 		$this->data['password_confirm'] = $this->input->post('password_confirm');
-		$this->data['members';		 	= $this->members;
+		$this->data['members']		 	= $this->members;
 		$this->data['remainder']		= true;
 		$this->data['items'] 			= array($items[0]['slot'] => $items[0], $items[1]['slot'] => $items[1]);
 
