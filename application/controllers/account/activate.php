@@ -132,7 +132,7 @@ class Activate extends Account
 						{
 							$this->load->helper('form');
 
-							$this->data['account_id' = $this->account->id;
+							$this->data['account_id'] = $this->account->id;
 							$this->data['character_name'] = $this->account->get_active_character()->name;
 
 							$this->data['subview'] = 'account/activate/password_null';
