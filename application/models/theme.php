@@ -244,7 +244,7 @@ class Theme extends CI_Model
 		if(is_dir(FCPATH .'media/js/controller/'. $this->controller .'/'))
 		{
 			$files = scandir(FCPATH .'media/js/controller/'. $this->controller .'/');
-			$files = preg_grep('/\.js/', $files);
+			$files = preg_grep('/!(\.min\.js)/', $files);
 
 			foreach($files as $key => $value)
 			{
