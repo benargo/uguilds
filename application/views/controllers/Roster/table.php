@@ -1,7 +1,7 @@
 <section>
 	<h1>Guild Roster</h1>
 	<!-- Filter -->
-	<form action="/roster/filter" method="get" id="roster-filter">
+	<form action="/roster" method="get" id="roster-filter">
 		
 		<!-- Character Name -->
 		<span class="field">

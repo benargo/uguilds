@@ -46,7 +46,7 @@ $route['404_override'] = '';
 
 // roster
 $route['roster'] = "roster/table";
-$route['roster(.*)\/(race|class|level|rank)=([\w\-]+)(.*)'] = "roster/table/filter";
+$route['roster(.*)\/(name|race|class|level|rank)=([\w\-]+)(.*)'] = "roster/table/filter";
 $route['roster\/.+\/dump'] = "roster/character/dump";
 $route['roster\/.+\/profile-picture'] = "roster/character/profile_picture";
 $route['roster\/.+\/[a-zA-Z\-]+(\/)?'] = "roster/character/profession";

@@ -222,7 +222,7 @@ class Theme extends CI_Model
 			}
 		}
 
-		$this->javascript = array_merge($this->javascript, $this->get_controller_js());
+		$this->javascript = array_unique(array_merge($this->javascript, $this->get_controller_js()));
 
 		// Return a list of JavaScript files
 		return $this->javascript;
@@ -244,14 +244,11 @@ class Theme extends CI_Model
 		if(is_dir(FCPATH .'media/js/controller/'. $this->controller .'/'))
 		{
 			$files = scandir(FCPATH .'media/js/controller/'. $this->controller .'/');
-			$files = preg_grep('/\.js/', $files);
+			$files = preg_grep('/\.min\.js/', $files);
 
 			foreach($files as $key => $value)
 			{
-				if(!in_array('/media/js/controller/'. $this->controller .'/'. $value, $files))
-				{
-					$files[$key] = '/media/js/controller/'. $this->controller .'/'. $value;
-				}
+				$files[$key] = '/media/js/controller/'. $this->controller .'/'. $value;
 			}
 		}
 
