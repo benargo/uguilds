@@ -29,7 +29,7 @@ function filter(options)
 		if(options.race !== 'all' && options.race !== undefined)
 		{
 			// If the character race matches the filter option
-			if(element.race !== options.race)
+			if(element.race === options.race)
 			{
 				// Add the character to the matches
 				console.log(element.name +' will be shown because its race matches '+ options.race);
@@ -41,7 +41,7 @@ function filter(options)
 		if(options.class !== 'all' && options.class !== undefined)
 		{
 			// If the character's class matches the filter option
-			if(element.class !== options.class)
+			if(element.class === options.class)
 			{
 				// Add the character to the matches
 				console.log(element.name +' will be shown because its class matches '+ options.class);

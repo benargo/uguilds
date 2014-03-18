@@ -63,11 +63,11 @@ class Table extends UG_Controller
 			$params[$key] = $value;
 			if($key == 'race')
 			{
-				$params[$key] = $data['races']->getByName($value)->id;
+				$params[$key] = $this->data['races']->getByName($value)->id;
 			}
 			if($key == 'class')
 			{
-				$params[$key] = $data['classes']->getByName($value)->id;
+				$params[$key] = $this->data['classes']->getByName($value)->id;
 			}
 
 		}
