@@ -154,7 +154,7 @@ class Activate extends Account
 		} // END: 1. Account is valid?
 
 		// Render the page
-		$this->theme->view('page');
+		$this->render();
 	}
 }
 
