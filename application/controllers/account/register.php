@@ -178,7 +178,7 @@ class Register extends Account
 
 						$this->account = uGuilds\Account::factory($this->input->post('email'));
 
-						$this->_send_activation_email();
+						$this->send_activation_email();
 
 						$this->data['character_name'] = $this->character->name;
 						$this->data['email']		  = $this->input->post('email');
