@@ -197,7 +197,7 @@ class Register extends Account
 
 
 		// Render the page
-		$this->theme->view('page');
+		$this->render();
 	}
 
 	/**
