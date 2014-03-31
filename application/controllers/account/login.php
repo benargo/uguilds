@@ -33,12 +33,13 @@ class Login extends Account
 	 * @return output
 	 */
 	public function index()
-	{
+	{	
+
 		if($this->session->userdata('login_locked') >= time())
 		{
 			$this->data['subview'] = 'account/login/locked';
 			$this->render();
-			exit;
+			return;
 		}
 
 		if(isset($_SERVER['HTTP_REFERER']))
@@ -138,14 +139,16 @@ class Login extends Account
 					$this->session->set_userdata(array('login_attempts' => $login_attempts));
 
 					/**
-					 * 3.5. Login Attempts >= 3?
+					 * 3.5. Login Attempts < 3?
 					 *
 					 * if   = No  -> Show login form
 					 * else = Yes -> Lock out for 30 minutes
 					 */
-					if($this->session->userdata('login_attempts') >= 3) // No -> Show login form
+					if($this->session->userdata('login_attempts') < 3) // No -> Show login form
 					{
 						$this->data['authentication_error'] = "<p>Sorry, but either your email address or password was incorrect.</p>";
+						$this->data['email'] = '';
+						$this->data['password'] = '';
 						$this->data['subview'] = 'account/login/index';
 					}
 					else // Yes -> Lock out for 30 minutes
@@ -189,6 +192,8 @@ class Login extends Account
 						}
 						else // Yes -> Log in & set session data
 						{
+							$this->session->unset_userdata('login_attempts');
+
 							$this->session->set_userdata(array(
 								'user_id' => $this->account->id, 
 								'character_name' => $this->account->get_active_character()->name));

@@ -40,45 +40,5 @@ class Table extends UG_Controller
 
 		$this->render();
 	}
-
-	/**
-	 * filter()
-	 *
-	 * @access public
-	 */
-	public function filter()
-	{
-		$this->load->model('races');
-		$this->load->model('classes');
-
-		$this->data['races'] = $this->races;
-		$this->data['classes'] = $this->classes;
-		$this->data['ranks'] = $this->guild->ranks;
-
-		$params = array();
-		$segments = array_slice($this->uri->segments, 1);
-		foreach($segments as $segment)
-		{
-			list($key, $value) = explode("=", $segment);
-			$params[$key] = $value;
-			if($key == 'race')
-			{
-				$params[$key] = $this->data['races']->getByName($value)->id;
-			}
-			if($key == 'class')
-			{
-				$params[$key] = $this->data['classes']->getByName($value)->id;
-			}
-
-		}
-
-		$this->data['uri'] = '/'.implode('/', $this->uri->segments);
-		$this->data['members'] = $this->guild->getMembers('rank');
-		$this->data['filtered'] = $this->guild->filter($params);
-
-		$this->data['subview'] = 'controllers/Roster/table';
-
-		$this->render();
-	}
 }
 

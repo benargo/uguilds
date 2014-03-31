@@ -543,7 +543,7 @@ class Guild extends \BattlenetArmory\Guild {
 								`position`,
 								`title`
 								FROM `ug_GuildRanks`
-								WHERE `guild_id` = '". $this->_id ."'
+								WHERE `guild_id` = '". $this->id ."'
 								ORDER BY `position`" );
 
 		if( $query->num_rows() > 0 )

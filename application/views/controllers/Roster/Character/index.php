@@ -1,5 +1,5 @@
 <div class="<?php echo strtolower($faction); ?> roster character">
-	<a id="character-inset" href="/roster/<?php echo strtolower($character->name); ?>/profile-picture"><img src="<?php echo $inset_image; ?>" alt="<?php echo $character->name; ?>" /></a>
+	<a id="character-inset"><img src="<?php echo $inset_image; ?>" alt="<?php echo $character->name; ?>" /></a>
 
 	<h1><?php echo $character->getCurrentTitle(true); ?></h1>
 	<h2 class="class <?php echo strtolower($character->class->name); ?>"><strong><?php echo $character->level; ?></strong>

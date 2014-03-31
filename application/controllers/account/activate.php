@@ -89,6 +89,8 @@ class Activate extends Account
 				else // No -> Show login form
 				{
 					$this->load->helper('form');
+					$this->data['email'] = '';
+					$this->data['password'] = '';
 					$this->data['subview'] = 'account/login/index';
 				} // END: 2.1. Account is logged in?
 			}
@@ -146,7 +148,7 @@ class Activate extends Account
 							));
 
 							$this->data['character_name'] = $this->account->get_active_character()->name;
-							$this->data['content'] = 'account/activate/success';
+							$this->data['subview'] = 'account/activate/success';
 						} // END: 5. Is Password field null?
 					} // END: 4. Activate the Account in the database
 				} // END: 3. Activation code matches URI?
