@@ -244,9 +244,9 @@ class Account
 	{
 		$ci =& get_instance();
 
-		return $ci->db->update_string('Accounts', array(
-			'password' => $new_password
-		), 'id = '. $this->id);
+		return $ci->db->simple_query("UPDATE `ug_Accounts`
+			SET `password` = '". password_hash($new_password, PASSWORD_DEFAULT) ."'
+			WHERE `id` = '". $this->id ."'");
 	}
 
 	/**
