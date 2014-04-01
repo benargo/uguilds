@@ -171,7 +171,7 @@ class Login extends Account
 					 */
 					if(!$this->account->is_active) // No -> Send activation email
 					{
-						$this->_send_activation_email();
+						$this->send_activation_email();
 
 						$this->data['character_name'] = $this->account->get_active_character()->name;
 						$this->data['email']		  = $this->input->post('email');
