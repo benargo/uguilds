@@ -23,23 +23,6 @@ $(function()
 				
 				// Update the local storage copy of the roster
 				window.localStorage.setItem('roster', JSON.stringify(data));
-				
-				// Empty the table
-				/*
-				$('.guild-roster tbody').empty();
-				
-				data.members.forEach(function(element)
-				{
-					$('.guild-roster tbody').append('<tr class="character '+ element.name +'">'+
-						'<td class="character-name"><a class="'+ data.classes[element.class].name.replace(' ','-').toLowerCase() +'" href="/roster/'+ element.name.toLowerCase() +'">'+ element.name +'</a></td>'+
-						'<td class="race"><a href="'+ path +'/race='+ data.races[element.race].name.replace(' ','-').toLowerCase() +'"><img src="/media/images/races/race_'+ element.race +'_'+ element.gender +'.jpg" alt="'+ data.races[element.race].name.replace(' ','-') +'" width="18" /></a></td>'+
-						'<td class="class"><a href="'+ path +'/class='+ data.classes[element.class].name.replace(' ','-').toLowerCase() +'"><img src="/media/images/icons/56/classicon_'+ data.classes[element.class].name.replace(' ','').toLowerCase() +'.jpg" alt="'+ data.classes[element.class].name.replace(' ','-') +'" width="18" />'+ ('spec' in element ? ' <img src="/media/images/icons/56/'+ element.spec.icon +'.jpg" alt="'+ element.spec.name +'" class="spec" width="18" />' : '') +'</a></td>'+
-						'<td class="level">'+ element.level +'</td>'+
-						'<td class="guild-rank" data-id="'+ element.rank +'"><a href="/roster/rank='+ ('rankname' in element ? element.rankname.replace(' ','-').toLowerCase() : element.rank) +'">'+ ('rankname' in element ? element.rankname : element.rank) +'</a></td>'+
-						'<td class="achievements">'+ element.achievementPoints +' <img src="/media/images/achievements.gif" alt="Achievement Points" width="8" /></td>'+
-						'</tr>');
-				});
-				*/
 
 				$(".guild-roster").trigger("update");
 			}

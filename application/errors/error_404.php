@@ -56,7 +56,8 @@ p {
 <body>
 	<div id="container">
 		<h1><?php echo $heading; ?></h1>
-		<?php echo $message; ?>
+		<p>Unfortunately the requested page cannot be found.</p>
+		<p>If you followed a link here, the page hasn't been made yet and the link has been provided to accommodate future development.</p>
 	</div>
 </body>
 </html>

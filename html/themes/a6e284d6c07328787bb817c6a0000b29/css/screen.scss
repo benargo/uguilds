@@ -814,10 +814,15 @@ span.field {
 		width: 8.5%;
 		vertical-align: middle;
 		text-align: center;
+		white-space: nowrap;
 		font-weight: bold;
 
 		&.sortable {
 			cursor: pointer;
+
+			&:after {
+				content: url(data:image/gif;base64,R0lGODlhFQAJAIAAAP///////yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw==);
+			}
 		}
 	}
 	 

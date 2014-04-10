@@ -10,16 +10,18 @@ function filter(options)
 	var roster = JSON.parse(window.localStorage.roster);
 	var matches = []; // Characters to remove
 
+	console.log(options);
+
 	roster.members.filter(function(element)
 	{
 		// Name
 		if(options.name !== undefined)
 		{
 			// If the character name matches the filter option
-			if(element.name.toLowerCase().search(options.name.toLowerCase()) !== -1)
+			if(element.name.toLowerCase().search(options.name.toLowerCase()) === -1)
 			{
 				// Add the character to the matches
-				console.log(element.name +' will be shown because its name matches '+ options.name);
+				console.log(element.name +' will be hidden because its name does not match '+ options.name);
 				matches.push(element.name);
 			}
 
@@ -29,10 +31,10 @@ function filter(options)
 		if(options.race !== 'all' && options.race !== undefined)
 		{
 			// If the character race matches the filter option
-			if(element.race === options.race)
+			if(element.race != options.race)
 			{
 				// Add the character to the matches
-				console.log(element.name +' will be shown because its race matches '+ options.race);
+				console.log(element.name +' will be hidden because its race does not match '+ options.race);
 				matches.push(element.name);
 			}
 		}
@@ -41,10 +43,10 @@ function filter(options)
 		if(options.class !== 'all' && options.class !== undefined)
 		{
 			// If the character's class matches the filter option
-			if(element.class === options.class)
+			if(element.class != options.class)
 			{
 				// Add the character to the matches
-				console.log(element.name +' will be shown because its class matches '+ options.class);
+				console.log(element.name +' will be hidden because its class does not match '+ options.class);
 				matches.push(element.name);
 			}
 
@@ -55,11 +57,11 @@ function filter(options)
 		{
 			// If the character's level is MORE than the minimum level
 			// OR the character's level is LESS than the maximum level
-			if(element.level > parseInt(options.minLevel, 10) ||
-				element.level < parseInt(options.maxLevel, 10))
+			if(element.level < parseInt(options.minLevel, 10) ||
+				element.level > parseInt(options.maxLevel, 10))
 			{
 				// Add the character to the matches
-				console.log(element.name +' will be shown because it\'s in the level range of '+ options.minLevel +' - '+ options.maxLevel);
+				console.log(element.name +' will be hidden because it\'s not in the level range of '+ options.minLevel +' - '+ options.maxLevel);
 				matches.push(element.name);
 			}
 		}
@@ -68,10 +70,10 @@ function filter(options)
 		if(options.rank !== undefined && options.rank !== 'all')
 		{
 			// If the character's rank matches
-			if(element.rank === options.rank)
+			if(element.rank !== options.rank)
 			{
 				// Add the character to the matches.
-				console.log(element.name +' will be shown because its guild rank matches '+ options.rank);
+				console.log(element.name +' will be hidden because its guild rank does not match '+ options.rank);
 				matches.push(element.name);
 			}
 		}
@@ -82,19 +84,19 @@ function filter(options)
 	$.each(roster.members, function(index,element)
 	{
 		// If the character is in the list of matches
-		if($.inArray(element.name, matches) !== -1 && $('tr.character.'+ element.name).hasClass('hidden'))
+		if($.inArray(element.name, matches) !== -1 && !$('tr.character.'+ element.name).hasClass('hidden'))
 		{
-			// Show this character
-			console.log('Showing '+ element.name);
-			$('tr.character.'+ element.name).removeClass('hidden').fadeIn('medium');
+			// Hide this character
+			console.log('Hiding '+ element.name);
+			$('tr.character.'+ element.name).addClass('hidden').fadeOut('medium');
 		}
 
 		// If the character is NOT in the list of matches
-		if($.inArray(element.name, matches) === -1 && !$('tr.character.'+ element.name).hasClass('hidden'))
+		if($.inArray(element.name, matches) == -1 && $('tr.character.'+ element.name).hasClass('hidden'))
 		{
-			// Hide the character
-			console.log('Hiding '+ element.name);
-			$('tr.character.'+ element.name).addClass('hidden').fadeOut('medium');
+			// Show the character
+			console.log('Showing '+ element.name);
+			$('tr.character.'+ element.name).removeClass('hidden').fadeIn('medium');
 		}
 	});
 
