@@ -39,7 +39,7 @@
 	<a 	id="add-new" 
 		href="/account/characters/add"
 		class="character">
-		<span class="fa fa-plus"></span>
+		<span class="plus">+</span>
 		<h2>Add new</h2>
 	</a>
 </section>
