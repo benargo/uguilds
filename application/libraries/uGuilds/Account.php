@@ -82,29 +82,28 @@ class Account
 				c.name AS character_name
 			FROM ug_Accounts a
 			RIGHT OUTER JOIN ug_Characters c ON c.account_id = a.id
-			WHERE a.id = '". $id ."'
-			LIMIT 0, 1");
+			WHERE a.id = '". $id ."'");
 
 		if($result->num_rows() > 0)
 		{
 			$this->id = $id;
 
-			$row = $result->row();
-			
-			foreach($row as $key => $value)
+			foreach ($result->result() as $row)
 			{
-				// Account parameters
-				if(property_exists($this, $key))
+				foreach($row as $key => $value)
 				{
-					$this->$key = $value;
+					// Account parameters
+					if(property_exists($this, $key))
+					{
+						$this->$key = $value;
+					}
 				}
-			}
 
-			$this->characters[$row->character_id] = array(
-				'name' => $row->character_name, 
-				'region' => $row->character_region,
-				'realm' => $row->character_realm);
-	
+				$this->characters[$row->character_id] = array(
+					'name' => $row->character_name, 
+					'region' => $row->character_region,
+					'realm' => $row->character_realm);
+			}
 		}
 	}
 
