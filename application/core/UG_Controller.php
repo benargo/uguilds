@@ -21,6 +21,7 @@ class UG_Controller extends CI_Controller
 		parent::__construct();
 
 		$this->controller_name = ucwords($this->router->directory) . get_class($this);
+		$this->data['controller_name'] = str_replace('/', ' ', $this->controller_name);
 
 		$this->find_guild();
 		$this->data['locale'] = $this->guild->locale;

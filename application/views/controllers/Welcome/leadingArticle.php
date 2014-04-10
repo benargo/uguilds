@@ -1,5 +1,5 @@
 <section id="leading-article">
-	<h1>No Content (Yet)</h1>
-	<p>Sorry, there's no content here yet. Rest assured we have gnomes chained to their desk back in the Content Factory endlessly working to churn out something relevant to this guild as soon as possible. Hang tight in there, or if you do want to see something now you can go view the <a href="/roster">Guild Roster</a>.</p>
-	<p style="font-size: 0.6em;">*No gnomes were harmed in the making of this website</p>
+	<h1>Welcome</h1>
+	<p>In future iterations of this project, this paragraph will be replaced with a small, customisable introduction about each guild, followed by news articles below. This feature was dropped from the current iteration as it was not deemed neccessary to meet the functional requirements.</p>
+	<p>In the meanwhile, you can either <a href="account/login">login</a> or view the <a href="roster">guild roster</a>.</p>
 </section>

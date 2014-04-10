@@ -54,7 +54,7 @@
 		</span>
 
 		<span>
-			<input type="submit" value="Filter" class="nojs" />
+			<input type="submit" value="Filter" />
 			<input type="reset" value="Clear" />
 		</span>
 	</form>

@@ -77,6 +77,8 @@ class Account
 				a.battletag,
 				a.active_character,
 				c.id AS character_id,
+				c.region AS character_region,
+				c.realm AS character_realm,
 				c.name AS character_name
 			FROM ug_Accounts a
 			RIGHT OUTER JOIN ug_Characters c ON c.account_id = a.id
@@ -98,7 +100,10 @@ class Account
 				}
 			}
 
-			$this->characters[$row->character_id] = $row->character_name;
+			$this->characters[$row->character_id] = array(
+				'name' => $row->character_name, 
+				'region' => $row->character_region,
+				'realm' => $row->character_realm);
 	
 		}
 	}
@@ -118,44 +123,6 @@ class Account
 		{
 			return $this->$param;
 		}
-	}
-
-	/**
-	 * THIS FUNCTION IS NOT PRESENTLY IN USE
-	 *
-	 * factory()
-	 *
-	 * Loads the Account based on a character's name. 
-	 * If the character doesn't exist in the database, 
-	 * create it and initiate the registration protocol.
-	 *
-	 * @access public
-	 * @static true
-	 * @param (string) $character_name
-	 * @return instance of uGuilds\Account OR FALSE
-	 */
-	/*
-	public static function factory($character_name)
-	{
-		$ci =& get_instance();
-
-		$result = $ci->db->query(
-			"SELECT account_id
-			FROM ug_Characters
-			WHERE region = '". $ci->guild->region ."'
-				AND realm = '". $ci->guild->realm ."'
-				AND `name` = '$character_name'
-				AND account_id IS NOT NULL
-			LIMIT 0, 1");
-
-		if($result->num_rows() > 0)
-		{
-			$row = $result->row();
-
-			return new Account($row->account_id);
-		}
-
-		return false;
 	}
 
 	/**
@@ -279,10 +246,15 @@ class Account
 	 */
 	public function get_character($name)
 	{
-		if(array_search($name, $this->characters) !== FALSE)
+		foreach($this->characters as $character)
 		{
-			return new Character($name);
+			if($character['name'] == $name)
+			{
+				
+				return new Character($character['name'], $character['realm'], $character['region']);
+			}
 		}
+		
 
 		return false;
 	}
@@ -299,7 +271,7 @@ class Account
 	{
 		if(isset($this->active_character))
 		{
-			return $this->get_character($this->characters[$this->active_character]);
+			return $this->get_character($this->characters[$this->active_character]['name']);
 		}
 
 		return false;
@@ -319,9 +291,9 @@ class Account
 		{
 			$response = array();
 
-			foreach($this->characters as $character_name)
+			foreach($this->characters as $character)
 			{
-				$response[strtolower($character_name)] = new Character($character_name, true);
+				$response[strtolower($character['name'])] = new Character($character['name'], $character['realm'], $character['region']);
 			}
 
 			return $response;

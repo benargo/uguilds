@@ -14,11 +14,6 @@
 		href="/account/password/change" 
 		title="Change your password to something different">Change Password</a>
 
-
-	<a 	class="button manage officer"
-			href="/officers/ranks" 
-			title="Manage guild ranks and permissions">Ranks &amp; Permissions</a>
-
 </section>
 <!-- #my-account -->
 

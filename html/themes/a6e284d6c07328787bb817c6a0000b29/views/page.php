@@ -4,7 +4,7 @@
 <head>
 	<?php get_include('head'); ?>
 </head>
-<body class="nojs">
+<body class="nojs <?php echo $controller_name; ?>">
 	<div class="container">
 		<!-- Header -->
 		<nav class="menu-bar">

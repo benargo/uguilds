@@ -5,7 +5,6 @@
 	<span class="align right">
 	<?php if(isset($account)): ?>
 		<li><a href="/account">My Account</a></li>
-		<li><a href="/account/characters" class="<?php echo $account->get_active_character()->class->name; ?>"><?php echo $account->get_active_character()->name; ?></a>
 		<li><a href="/account/logout">Log out</a></li>
 	<?php else: ?>
 		<li><a href="/account/login">Login/Register</a></li>

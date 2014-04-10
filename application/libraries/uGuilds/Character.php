@@ -26,33 +26,25 @@ class Character extends \BattlenetArmory\Character
 	 *
 	 * @param string $name
 	 */
-	function __construct($name, $lite = FALSE)
+	function __construct($name, $realm = false, $region = false)
 	{
 		// Load some models
 		$ci =& get_instance();
 		$ci->load->model('Classes');
 		$ci->load->model('Races');
 
-		if($lite)
+		if(!$realm)
 		{
-			$lite = array(
-				'items',
-				'reputation',
-				'professions',
-				'appearance',
-				'companions',
-				'mounts',
-				'achievements',
-				'progression',
-				'pvp',
-				'quests',
-				'pets',
-				'guild'
-			);
+			$realm = $ci->guild->region;
 		}
-		
+
+		if(!$region)
+		{
+			$region = $ci->guild->region;
+		}
+
 		// Construct the character
-		parent::__construct(strtolower($ci->guild->region), $ci->guild->realm, $name, $lite);
+		parent::__construct(strtolower($region), $realm, $name);
 
 		if(empty($this->characterData['class']))
 		{
@@ -67,8 +59,8 @@ class Character extends \BattlenetArmory\Character
 		$result = $ci->db->query(
 			"SELECT id
 			FROM ug_Characters
-			WHERE region = '". $ci->guild->region ."'
-				AND realm = '". $ci->guild->realm ."'
+			WHERE region = '". $this->region ."'
+				AND realm = '". $this->realm ."'
 				AND `name` = '". $this->name ."'
 			LIMIT 0, 1");
 
