@@ -35,7 +35,7 @@ class Character extends \BattlenetArmory\Character
 
 		if(!$realm)
 		{
-			$realm = $ci->guild->region;
+			$realm = $ci->guild->realm;
 		}
 
 		if(!$region)
@@ -53,6 +53,7 @@ class Character extends \BattlenetArmory\Character
 		
 		// Construct some additional data
 		$this->guild =& $ci->guild;
+
 		$this->race  =& $ci->Races->getRace($this->characterData['race']);
 		$this->class =& $ci->Classes->getClass($this->characterData['class']);
 
